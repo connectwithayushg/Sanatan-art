@@ -37,6 +37,8 @@ The app grew release by release inside Claude, so until now there was **no norma
 - Releases: Ayush writes **"publish"** in Claude's "Main Build" thread; Claude bundles the change and redeploys on Vercel. Codex should never deploy.
 - Suggested next step (Ayush's call, not done): make `app-source` the single source of truth for both Claude and Codex, and later connect Vercel to that branch so a merge builds a preview automatically. Moving hosting to Cloudflare Pages is planned before any money feature (see §9).
 
+The repo is public, so the code can be read by anyone (it already was, inside `update.tgz`). Don't make it private without moving the release method first: Vercel downloads `update.tgz` from the public raw GitHub URL.
+
 Secrets: there are none in the code. A Google Gemini API key exists only as a network secret in Ayush's Claude cloud environment settings (used for image tests; Google's free tier gives no image quota, so it is unused). Vercel access is through Claude's Vercel connector. Never put keys in the repo.
 
 ## 4. Tech
