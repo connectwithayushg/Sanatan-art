@@ -1,0 +1,161 @@
+import { useEffect, useState, type ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useStored } from './lib/useStored'
+import { TopBar } from './ui/TopBar'
+import { TabBell, TabBook, TabDiya, TabMandir, TabSun } from './ui/TabIcons'
+import { AajView } from './features/aaj/AajView'
+import { TyoharView } from './features/tyohar/TyoharView'
+import { MandirView } from './features/mandir/MandirView'
+import { BharatView } from './features/bharat/BharatView'
+import { Dvar, doorsDue } from './features/mandir/Dvar'
+import { PathView } from './features/path/PathView'
+import { AartiView } from './features/diwali/AartiView'
+import { AARTIS } from './content/aartis'
+import { AartiLibrary } from './features/aarti/AartiLibrary'
+import { QuickHome } from './features/aaj/QuickHome'
+import { CalendarView } from './features/aaj/CalendarView'
+import { Search } from './features/search/Search'
+import { ProfileView } from './features/profile/ProfileView'
+
+const TABS = ['aaj', 'tyohar', 'mandir', 'aarti', 'path'] as const
+/** The profile is reached from the top bar, not the tab bar. */
+type Tab = (typeof TABS)[number] | 'profile'
+interface Route {
+  tab: Tab
+  /** Path inside the tab, e.g. "diwali/puja" in Festivals */
+  sub: string[]
+}
+
+/** Links shared before the app had tabs (#puja, #aarti, #card) still open the Diwali page. */
+const OLD_DIWALI = ['muhurat', 'puja', 'card']
+
+const parse = (): Route => {
+  const [head = '', ...sub] = location.hash.slice(1).split('/')
+  if (OLD_DIWALI.includes(head) && !sub.length) return { tab: 'tyohar', sub: ['diwali', head] }
+  return head === 'profile' || (TABS as readonly string[]).includes(head) ? { tab: head as Tab, sub } : { tab: 'aaj', sub: [] }
+}
+
+export default function App() {
+  const { t } = useTranslation()
+  const [scale, setScale] = useStored('scale', 1)
+  // The app opens in the Mandir (the logo still goes to Aaj); a link to a page inside the app opens there instead.
+  const [route, setRoute] = useState<Route>(() => {
+    if (location.hash) return parse()
+    history.replaceState(null, '', '#mandir')
+    return { tab: 'mandir', sub: [] }
+  })
+  // The doors open on the first plain visit of each day, not for links to festivals, aartis or paths.
+  const [doors, setDoors] = useState(() => {
+    const r = parse()
+    return r.tab === 'mandir' && !r.sub.length && doorsDue()
+  })
+  const [searching, setSearching] = useState(false)
+
+  useEffect(() => {
+    document.documentElement.style.setProperty('--scale', String(scale))
+  }, [scale])
+  useEffect(() => {
+    const onHash = () => setRoute(parse())
+    addEventListener('hashchange', onHash)
+    return () => removeEventListener('hashchange', onHash)
+  }, [])
+
+  const go = (tab: Tab, sub = '') => {
+    const hash = tab === 'aaj' && !sub ? '' : `#${tab}${sub ? '/' + sub : ''}`
+    // Going deeper adds a history entry so the phone's back button returns; switching tabs replaces it.
+    if (sub) history.pushState(null, '', hash || location.pathname + location.search)
+    else history.replaceState(null, '', hash || location.pathname + location.search)
+    setRoute({ tab, sub: sub ? sub.split('/') : [] })
+    scrollTo({ top: 0 })
+  }
+  /** Aartis and paths opened from the Mandir read inside the Mandir tab; back returns to the same deity. */
+  const openInMandir = (deity: string, sub: string) => {
+    history.replaceState(null, '', `#mandir/${deity}`)
+    go('mandir', `${deity}/${sub}`)
+  }
+  /** Opens any place in the app from a path such as "path/shiv-chalisa" or "tyohar/dhanteras/katha". */
+  const goTo = (to: string) => {
+    const [tab, ...sub] = to.split('/')
+    if (tab === 'profile' || (TABS as readonly string[]).includes(tab)) go(tab as Tab, sub.join('/'))
+  }
+  useEffect(() => {
+    const onPop = () => setRoute(parse())
+    addEventListener('popstate', onPop)
+    return () => removeEventListener('popstate', onPop)
+  }, [])
+
+  const tabs: [Tab, ReactNode, string][] = [
+    ['aaj', <TabSun />, t('nav_aaj')],
+    ['tyohar', <TabDiya />, t('nav_tyohar')],
+    ['mandir', <TabMandir />, t('nav_mandir')],
+    ['aarti', <TabBell />, t('nav_aarti')],
+    ['path', <TabBook />, t('nav_path')],
+  ]
+
+  return (
+    <div className="sky min-h-dvh pb-[120px]">
+      {doors && <Dvar onDone={() => setDoors(false)} />}
+      <TopBar onSearch={() => setSearching(true)} onHome={() => go('aaj')} onProfile={() => go('profile')} band={route.tab === 'aaj' && !route.sub.length} />
+      {searching && <Search onClose={() => setSearching(false)} go={goTo} />}
+      {route.tab === 'aaj' &&
+        (!route.sub.length ? (
+          <QuickHome go={go} />
+        ) : route.sub[0] === 'calendar' ? (
+          <CalendarView openFestival={(id) => go('tyohar', id)} />
+        ) : (
+          <AajView openFestival={(id) => go('tyohar', id)} />
+        ))}
+      {route.tab === 'tyohar' && <TyoharView festival={route.sub[0] || null} part={route.sub[1] || null} open={(p) => go('tyohar', p)} openAarti={(id) => go('aarti', id)} />}
+      {route.tab === 'mandir' && route.sub[0] !== 'bharat' && (route.sub[1] === 'aarti' || route.sub[1] === 'path') && (
+        <MandirReader deity={route.sub[0]} kind={route.sub[1]} rest={route.sub.slice(2)} go={go} goTo={goTo} />
+      )}
+      {route.tab === 'mandir' && route.sub[0] === 'bharat' && <BharatView sub={route.sub.slice(1)} open={(p) => go('mandir', p)} />}
+      {route.tab === 'mandir' && route.sub[0] !== 'bharat' && route.sub[1] !== 'aarti' && route.sub[1] !== 'path' && (
+        <MandirView
+          key={route.sub[0] || ''}
+          initial={route.sub[0]}
+          openAarti={(id, deity) => openInMandir(deity, `aarti/${id}`)}
+          openPath={(p, deity) => openInMandir(deity, p)}
+        />
+      )}
+      {route.tab === 'aarti' && <AartiLibrary id={route.sub[0] || null} open={(id) => go('aarti', id)} />}
+      {route.tab === 'profile' && <ProfileView sub={route.sub} open={(p) => go('profile', p)} scale={scale} setScale={setScale} />}
+      {route.tab === 'path' && <PathView sub={route.sub} open={(p) => go('path', p)} go={goTo} />}
+
+      {/* A floating bar of picture tiles; the open tab's tile turns warm bhagwa and lifts a little. Pixel sizes so A+ never overflows it. */}
+      <nav className="fixed inset-x-0 bottom-0 z-30 px-2.5" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 10px)' }}>
+        <div className="mx-auto grid max-w-xl grid-cols-5 rounded-[24px] bg-white px-1 py-1.5 shadow-[0_6px_20px_rgba(60,30,0,0.18)] ring-1 ring-black/5">
+          {tabs.map(([id, icon, label]) => {
+            const on = route.tab === id
+            return (
+              <button
+                key={id}
+                onClick={() => go(id)}
+                aria-current={on ? 'page' : undefined}
+                className={`flex min-h-[70px] flex-col items-center justify-center gap-1 text-[14px] font-semibold leading-tight transition-colors ${on ? 'text-flame' : 'text-dim'}`}
+              >
+                <span
+                  className={`grid h-[40px] w-[46px] place-items-center rounded-[14px] transition ${
+                    on ? '-translate-y-[3px] bg-gradient-to-b from-[#ffe7cf] to-[#ffd2a8] shadow-[0_0_0_2.5px_#c24e06,0_4px_10px_rgba(194,78,6,0.35)]' : 'bg-[#fdf0e1]'
+                  }`}
+                >
+                  {icon}
+                </span>
+                <span>{label}</span>
+              </button>
+            )
+          })}
+        </div>
+      </nav>
+    </div>
+  )
+}
+
+function MandirReader({ deity, kind, rest, go, goTo }: { deity: string; kind: string; rest: string[]; go: (tab: Tab, sub?: string) => void; goTo: (to: string) => void }) {
+  const { t } = useTranslation()
+  if (kind === 'aarti') {
+    const a = AARTIS.find((x) => x.id === rest[0])
+    if (a) return <AartiView key={a.id} aartis={[a]} onBack={() => history.back()} backLabel={t('nav_mandir')} />
+  }
+  return <PathView sub={rest} open={(p) => go('mandir', `${deity}/path/${p}`)} go={goTo} backLabel={t('nav_mandir')} />
+}

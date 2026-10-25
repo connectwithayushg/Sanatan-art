@@ -1,0 +1,263 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-night: var(--c-night);
+  --color-night2: var(--c-night2);
+  --color-deep: var(--c-deep);
+  --color-flame: var(--c-flame);
+  --color-warm: var(--c-warm);
+  --color-dim: var(--c-dim);
+  --color-clay: var(--c-clay);
+  --color-ember: var(--c-ember);
+  --color-leaf: var(--c-leaf);
+  --font-display: 'Rozha One', 'Noto Serif Devanagari', serif;
+  --font-scripture: 'Noto Serif Devanagari', serif;
+  --font-body: 'Mukta', system-ui, sans-serif;
+}
+
+/* Bright, in the manner of India's quick-commerce apps: cream page, white cards, bhagwa (deep saffron) for the header band and actions.
+   (Ayush picked this over the earlier Amavasya Night palette on 20 Oct 2026.) */
+:root {
+  --c-night: #fbf4e8;
+  --c-night2: #ffffff;
+  --c-deep: #ffffff;
+  --c-flame: #c24e06;
+  --c-warm: #2b1a10;
+  --c-dim: #6b5a4c;
+  --c-clay: #b8582a;
+  --c-ember: #ffffff;
+  --c-leaf: #1d7a43;
+  --scale: 1;
+  color-scheme: light;
+  font-size: calc(19px * var(--scale));
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--c-night);
+  color: var(--c-warm);
+  font-family: var(--font-body);
+  line-height: 1.55;
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1, h2, h3 { text-wrap: balance; }
+
+:focus-visible {
+  outline: 3px solid var(--c-flame);
+  outline-offset: 3px;
+}
+
+/* The sky: a few fixed stars, and the warm light of the diyas rising from below. */
+.sky {
+  background: var(--c-night);
+}
+.lamplight {
+  background: radial-gradient(120% 60% at 50% 100%, #ffd9a0 0%, #ffeccc 40%, var(--c-night) 72%);
+}
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3.5rem;
+    padding: 0 1.6rem;
+    border-radius: 999px;
+    font-weight: 600;
+    transition: transform 0.12s ease-out, background-color 0.15s;
+    white-space: nowrap;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-flame { background: var(--c-flame); color: var(--c-ember); }
+  .btn-ghost { border: 2px solid var(--c-flame); color: var(--c-flame); background: #fff; }
+  .btn-ghost:hover { background: #fff3e6; }
+}
+
+.flame {
+  transform-box: fill-box;
+  transform-origin: 50% 95%;
+  animation: flicker 1.8s ease-in-out infinite alternate;
+}
+@keyframes flicker {
+  0% { transform: scale(1, 1) rotate(-1.2deg); }
+  35% { transform: scale(0.95, 1.06) rotate(1.5deg); }
+  70% { transform: scale(1.02, 0.97) rotate(-0.4deg); }
+  100% { transform: scale(0.98, 1.03) rotate(0.8deg); }
+}
+.breathe { animation: breathe 3.2s ease-in-out infinite alternate; }
+@keyframes breathe {
+  from { opacity: 0.75; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1.03); }
+}
+.glow-in { animation: glowIn 0.6s ease-out; transform-box: fill-box; transform-origin: 50% 100%; }
+@keyframes glowIn {
+  from { opacity: 0; transform: scale(0.6); }
+  to { opacity: 1; transform: scale(1); }
+}
+.rise { animation: rise 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flame, .breathe, .glow-in, .rise { animation: none; }
+}
+
+/* A painting seen by lamplight: its lower edge dissolves into the night. */
+.fade-down {
+  -webkit-mask-image: linear-gradient(#000 62%, transparent);
+  mask-image: linear-gradient(#000 62%, transparent);
+}
+
+/* Sing-along lyrics fade out at the top and bottom of their box. */
+.lyrics-fade {
+  -webkit-mask-image: linear-gradient(transparent, #000 10%, #000 82%, transparent);
+  mask-image: linear-gradient(transparent, #000 10%, #000 82%, transparent);
+}
+
+/* Karwa Chauth: the night sky lit from above by the moon, not from below by diyas. */
+.moonlight {
+  background: radial-gradient(90% 55% at 50% 0%, #dfe3ff 0%, #eef0ff 45%, transparent 75%);
+}
+
+/* Mandir: flower petals offered from above drift down over the deity. */
+.petal {
+  position: absolute;
+  top: -8%;
+  width: 1.1rem;
+  height: 0.8rem;
+  border-radius: 60% 0 60% 0;
+  animation: petal var(--fall, 3.2s) cubic-bezier(0.3, 0.1, 0.6, 1) var(--delay, 0s) forwards;
+  opacity: 0;
+}
+@keyframes petal {
+  0% { opacity: 0; transform: translate(0, 0) rotate(0deg); }
+  10% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--drift, 20px), 32rem) rotate(var(--spin, 300deg)); }
+}
+.bell-swing { animation: bellSwing 0.9s ease-out; transform-origin: 50% 0; }
+@keyframes bellSwing {
+  0% { transform: rotate(0); }
+  20% { transform: rotate(16deg); }
+  45% { transform: rotate(-11deg); }
+  70% { transform: rotate(6deg); }
+  100% { transform: rotate(0); }
+}
+/* Marigolds offered in the mandir: the same fall, as flowers. */
+.petal.marigold { width: auto; height: auto; border-radius: 0; font-size: 1.1rem; line-height: 1; }
+
+/* Mandir: a halo in each deity's colour (set as --h1/--h2/--hr), with soft rays that turn very slowly. */
+.shrine .halo {
+  position: absolute; left: 50%; top: 42%; width: 135%; aspect-ratio: 1; transform: translate(-50%, -50%);
+  border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, var(--h1) 0 28%, var(--h2) 46%, transparent 70%);
+  animation: haloBreathe 6s ease-in-out infinite;
+}
+.shrine .halo::after {
+  content: ''; position: absolute; inset: 0; border-radius: 50%;
+  background: repeating-conic-gradient(var(--hr) 0 2.5deg, transparent 2.5deg 10deg);
+  -webkit-mask: radial-gradient(circle, transparent 30%, #000 42%, transparent 70%);
+  mask: radial-gradient(circle, transparent 30%, #000 42%, transparent 70%);
+  animation: haloTurn 60s linear infinite;
+}
+@keyframes haloBreathe { 50% { opacity: 0.82; } }
+@keyframes haloTurn { to { transform: rotate(360deg); } }
+/* The lit diya's warm light, below it and on the deity. */
+.shrine .shrine-glow { background: radial-gradient(70% 45% at 50% 105%, rgba(255,170,60,.55), transparent 70%); opacity: 0; transition: opacity 1.2s; }
+.shrine .diya-light { background: radial-gradient(50% 50% at 50% 55%, rgba(255,176,60,.55), transparent 70%); opacity: 0; transition: opacity 1.6s; }
+.shrine .diya-flame { opacity: 0; transition: opacity 1.4s; transform-origin: 55px 40px; }
+.shrine.is-lit .shrine-glow, .shrine.is-lit .diya-light { opacity: 1; }
+.shrine.is-lit .diya-flame { opacity: 1; animation: diyaFlicker 3s ease-in-out infinite; }
+@keyframes diyaFlicker { 50% { transform: scale(0.97, 1.03); } }
+
+/* Dhyan: on dark, the halo breathes slowly (4 seconds in, 4 out) and glows brighter. */
+.shrine.dhyan .halo { animation: dhyanBreathe 8s ease-in-out infinite; filter: brightness(1.15) saturate(1.1); }
+.shrine.dhyan .diya-light { opacity: 1; }
+@keyframes dhyanBreathe {
+  0%, 100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.75; }
+  50% { transform: translate(-50%, -50%) scale(1.08); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shrine.dhyan .halo,
+  .shrine .halo, .shrine .halo::after, .shrine.is-lit .diya-flame { animation: none; }
+  .petal { animation-duration: 0.01s; }
+  .bell-swing { animation: none; }
+}
+
+/* Quick home header: a deep bhagwa band holding today's tithi, white text on it.
+   (Ayush picked bhagwa over the earlier yellow band on 20 Oct 2026.) */
+.qh-head {
+  --c-ember: #ffffff;
+  --color-ember: #ffffff;
+  background: linear-gradient(180deg, #d9600b 0%, #c24e06 100%);
+  border-radius: 0 0 1.5rem 1.5rem;
+}
+.qh-city > span {
+  min-height: 0;
+  border-color: var(--c-ember);
+}
+.qh-city svg {
+  color: var(--c-ember);
+}
+
+/* The search box shows its own focus ring around the whole field. */
+.search-input:focus-visible {
+  outline: none;
+}
+
+/* The dhyan icon's soft brass glow, breathing at the same slow pace as the Dhyan halo. */
+.dhyan-glow::before {
+  content: ''; position: absolute; inset: -45%; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,196,80,.55), rgba(255,196,80,0) 65%);
+  animation: dhyanGlow 8s ease-in-out infinite;
+}
+@keyframes dhyanGlow { 0%, 100% { transform: scale(.85); opacity: .55; } 50% { transform: scale(1.12); opacity: 1; } }
+.shrine.dhyan.only-diya .halo { top: 45%; width: 120%; }
+@media (prefers-reduced-motion: reduce) { .dhyan-glow::before { animation: none; } }
+
+/* Mandir offerings: marigolds lie flat on the ground once offered, hints pulse until the first touch. */
+.ground-flower { opacity: 0; transform: scale(.55); transition: opacity .5s ease-out, transform .55s cubic-bezier(.4,1.5,.6,1); }
+.ground-flower.on { opacity: 1; transform: none; }
+.ground-flower::after { content: ''; position: absolute; left: 6%; right: 6%; bottom: -3px; height: 5px; border-radius: 50%; background: rgba(80,40,0,.22); filter: blur(1.5px); z-index: -1; }
+.offer-hint::before { content: ''; position: absolute; left: 50%; top: 50%; width: 150%; aspect-ratio: 1; border-radius: 50%; z-index: -1; pointer-events: none;
+  background: radial-gradient(circle, rgba(255,196,80,.55), rgba(255,196,80,0) 65%); animation: offerHint 2.2s ease-in-out infinite; }
+@keyframes offerHint { 0%, 100% { transform: translate(-50%,-50%) scale(.8); opacity: .35; } 50% { transform: translate(-50%,-50%) scale(1.1); opacity: 1; } }
+.offer-round svg { width: 21px; height: 21px; position: relative; opacity: .85; }
+@media (prefers-reduced-motion: reduce) { .offer-hint::before { animation: none; } .ground-flower { transition: none; } }
+
+/* The Mandir doors: two leaves cut from one carved-door picture, hinged at the outer edges, opening slowly with no bounce. */
+.dvar { position: fixed; inset: 0; z-index: 90; perspective: 1000px; cursor: pointer; background: #1c0d06; transition: background 1.6s ease-out .5s; touch-action: manipulation; }
+.dvar.is-open { background: transparent; pointer-events: none; }
+.dvar-leaf { position: absolute; top: 0; bottom: 0; width: 50%; transform-style: preserve-3d; transition: transform 2.2s cubic-bezier(.5,.02,.22,1) .35s; background-repeat: no-repeat; background-size: auto 100%; animation: dvarBreathe 4s ease-in-out infinite; }
+.dvar-leaf::after { content: ''; position: absolute; inset: 0; background: #000; opacity: 0; transition: opacity 2.2s ease-in .35s; pointer-events: none; }
+.dvar-l { left: 0; transform-origin: 0 50%; background-image: url(/art/doors/dvar-l.webp); background-position: right center; }
+.dvar-r { right: 0; transform-origin: 100% 50%; background-image: url(/art/doors/dvar-r.webp); background-position: left center; }
+.is-open .dvar-l { transform: rotateY(-104deg); }
+.is-open .dvar-r { transform: rotateY(104deg); }
+.is-open .dvar-leaf { animation: none; }
+.is-open .dvar-leaf::after { opacity: .5; }
+.dvar-flood { position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: 0; background: radial-gradient(60% 45% at 50% 52%, rgba(255,214,140,.95), rgba(255,170,60,.35) 55%, transparent 80%); }
+.is-open .dvar-flood { animation: dvarFlood 2.6s ease-out .35s forwards; }
+@keyframes dvarFlood { 0% { opacity: 0; } 35% { opacity: .85; } 100% { opacity: 0; } }
+@keyframes dvarBreathe { 50% { filter: brightness(1.12); } }
+@media (prefers-reduced-motion: reduce) { .dvar-leaf { transition: opacity 1s; animation: none; } .is-open .dvar-leaf { transform: none !important; opacity: 0; } }
+
+/* Mandir tab only: a temple sanctum behind the deity, from the top of the page down to the mala card. */
+
+/* The sanctum picture is enlarged and set so the arch rises above the deity and the floor starts just under the lotus. */
+.sanctum { background-image: linear-gradient(rgba(20,10,5,.35), rgba(20,10,5,0) 22%, rgba(20,10,5,0) 70%, rgba(20,10,5,.35)), url(/art/mandir/sanctum-a.webp); background-size: 100% 100%, auto calc(var(--v) * var(--bs, 1.6)); background-position: center, center calc(var(--v) * var(--bo, -.296)); background-repeat: no-repeat; background-color: #1c0d06; border-radius: 0 0 28px 28px; }
+/* Offered flowers fall from above the deity onto their spots on the floor, then the floor flowers take their place. */
+.fall-flower { opacity: 0; animation: flowerFall 2.6s cubic-bezier(.35,.1,.55,1) both; }
+@keyframes flowerFall {
+  0% { opacity: 0; transform: translate(var(--sx), calc(var(--up) * -1)) rotate(var(--rot)) scale(1.5); }
+  10% { opacity: 1; }
+  45% { transform: translate(calc(var(--sx) * -.4), calc(var(--up) * -.5)) rotate(calc(var(--rot) * -.5)) scale(1.3); }
+  88% { opacity: 1; transform: translate(calc(var(--sx) * .08), -4px) rotate(calc(var(--rot) * .1)) scale(1.05); }
+  100% { opacity: 0; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .fall-flower { animation: none; } }
