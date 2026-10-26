@@ -16,6 +16,7 @@ import { QuickHome } from './features/aaj/QuickHome'
 import { CalendarView } from './features/aaj/CalendarView'
 import { Search } from './features/search/Search'
 import { ProfileView } from './features/profile/ProfileView'
+import { SuprabhatCard } from './features/greet/SuprabhatCard'
 
 const TABS = ['aaj', 'tyohar', 'mandir', 'aarti', 'path'] as const
 /** The profile is reached from the top bar, not the tab bar. */
@@ -100,6 +101,8 @@ export default function App() {
       {route.tab === 'aaj' &&
         (!route.sub.length ? (
           <QuickHome go={go} />
+        ) : route.sub[0] === 'greet' ? (
+          <SuprabhatCard />
         ) : route.sub[0] === 'calendar' ? (
           <CalendarView openFestival={(id) => go('tyohar', id)} />
         ) : (

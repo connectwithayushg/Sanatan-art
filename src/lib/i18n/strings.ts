@@ -1,4 +1,16 @@
 export const hi = {
+  r_goodMorning: 'शुभ प्रभात',
+  r_dailyCompanion: 'आपकी रोज़ की पूजा का साथी',
+  r_darshanAction: 'दर्शन करें',
+  r_readAarti: 'आरती पढ़ें',
+  r_morningCard: 'सुप्रभात कार्ड देखें',
+  r_myMandir: 'मेरा मंदिर',
+  r_mandirIntro: 'अपने आराध्य के साथ कुछ पल',
+  r_offeringDiya: 'दीया',
+  r_offeringFlowers: 'पुष्प',
+  r_readDeityAarti: '{{name}} की आरती पढ़ें',
+  r_jap: 'जप',
+
   r_pathIntro: 'अपनी पसंद का पाठ पढ़ें',
   r_continueReading: 'पढ़ना जारी रखें',
   r_chooseTopic: 'विषय चुनें',
@@ -367,6 +379,18 @@ export const hi = {
 export type Strings = typeof hi
 
 export const en: Strings = {
+  r_goodMorning: 'Good morning',
+  r_dailyCompanion: 'Your companion for daily worship',
+  r_darshanAction: 'Take darshan',
+  r_readAarti: 'Read aarti',
+  r_morningCard: 'Open the morning greeting card',
+  r_myMandir: 'My mandir',
+  r_mandirIntro: 'A few moments with your chosen deity',
+  r_offeringDiya: 'Diya',
+  r_offeringFlowers: 'Flowers',
+  r_readDeityAarti: 'Read the aarti of {{name}}',
+  r_jap: 'Jap',
+
   r_pathIntro: 'Read a text of your choice',
   r_continueReading: 'Continue reading',
   r_chooseTopic: 'Choose a topic',

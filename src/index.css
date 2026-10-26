@@ -370,3 +370,69 @@ button, a, input, select { touch-action: manipulation; }
 .festival-tile > span { min-height: 52px; }
 @media (max-width: 359px) { .topic-grid button { flex-wrap: wrap; } .topic-grid img { width: 40px; height: 46px; } .festival-date { padding: 12px 8px; } .festival-date .primary-action { padding-inline: 7px; } }
 .book-tile img { background: radial-gradient(ellipse at 50% 35%, #ffedc4, #d8a85c); }
+
+/* Today: live panchang, familiar daily worship and all original discovery routes. */
+.panchang-summary { padding: 13px 16px 0; }
+.panchang-summary > p { font-size: .9rem; color: #6b5a4c; }
+.panchang-summary h2 { font-size: 1.1rem; font-weight: 600; margin-top: 3px; }
+.panchang-times { display: grid; grid-template-columns: 1fr 1fr 1.2fr; width: 100%; margin-top: 10px; text-align: left; padding: 10px 0; border: 1px solid #eddfca; border-radius: 14px; background: #fff; }
+.panchang-times > span { padding: 0 9px; }
+.panchang-times > span + span { border-left: 1px solid #ecdfce; }
+.panchang-times small { display: block; font-size: .8rem; color: #6b5a4c; }
+.panchang-times strong { display: block; font-size: .9rem; line-height: 1.4; font-weight: 600; }
+.home-page .page-heading { min-height: 108px; }
+.home-darshan { position: relative; isolation: isolate; display: flex; align-items: center; min-height: 250px; overflow: hidden; border-radius: 18px; background: #f8e8cd; border: 1px solid #e7cfaa; }
+.home-darshan::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, #fbefdbee, #fbefdb44), url('/art/redesign/ivory-shrine.webp') center 35% / cover; }
+.home-darshan > div { width: 48%; padding: 18px 0 18px 15px; z-index: 1; }
+.home-darshan small { color: #98420e; font-size: .88rem; font-weight: 600; }
+.home-darshan h2 { font-family: var(--font-display); font-size: 1.8rem; line-height: 1.4; margin: 5px 0 16px; }
+.home-darshan > img { position: absolute; right: -2%; bottom: 4%; width: 58%; height: 90%; object-fit: contain; object-position: bottom; }
+.home-tiles { margin-top: 15px; }
+.home-tiles .photo-tile > img { aspect-ratio: 1.8; object-position: right center; }
+.home-aarti { margin-top: 15px; }
+.home-shloka { margin: 24px 16px 0; }
+.home-shloka .secondary-action { margin-top: 15px; }
+/* Mandir: the offerings sit on a real marble ledge instead of detached floating controls. */
+.mandir-page .page-heading { min-height: 94px; }
+.mandir-page .page-heading-copy { padding-block: 12px; }
+.mandir-picker { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; padding: 0 16px 12px; }
+.mandir-picker select { min-height: 48px; max-width: 100%; background: #fff; border: 1px solid #dec6a6; border-radius: 12px; padding: 7px 12px; font-weight: 600; }
+.mandir-form-switch { display: flex; padding: 3px; background: #fff; border-radius: 12px; border: 1px solid #eddfca; }
+.mandir-form-switch button { min-height: 44px; padding: 5px 10px; font-size: .9rem; border-radius: 9px; }
+.mandir-form-switch button[aria-pressed=true] { background: #f9e3c6; color: #913900; font-weight: 600; }
+.mandir-shrine { position: relative; height: clamp(360px, calc(100svh - 440px), 540px); overflow: hidden; touch-action: pan-y; background: #f0e1cd url('/art/redesign/ivory-shrine.webp') center / 100% 100%; }
+.mandir-statue { position: absolute; left: 50%; width: auto; max-width: none; z-index: 2; filter: drop-shadow(0 7px 9px #57351640); }
+.mandir-statue-shadow { position: absolute; bottom: 19%; left: 20%; width: 60%; height: 7%; background: radial-gradient(ellipse, #7a5c3555, transparent 70%); }
+.mandir-ground { pointer-events: none; position: absolute; width: 348px; height: 130px; bottom: 12%; left: 50%; transform: translateX(-50%) scale(.85); z-index: 3; }
+.mandir-offerings { position: absolute; inset: auto 0 0; z-index: 5; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 8px 10px 10px; background: linear-gradient(#fff6e400, #f6e8d7cc 30%, #ead6bdcc); }
+.offering-control { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; min-height: 112px; border-radius: 12px; }
+.offering-control:active { background: #fff6dc70; }
+.offering-object { display: block; position: relative; width: 100%; height: 82px; }
+.offering-object > img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 4px 3px #5a3a2633); }
+.offering-control strong { font-size: 1rem; line-height: 1.5; color: #422b19; }
+.offering-flame { display: none; position: absolute; width: 13px; height: 28px; left: calc(50% - 6px); top: 8px; border-radius: 70% 30% 60% 40%; background: radial-gradient(ellipse at bottom, #fffbd4, #ffb31e 55%, #ed7900); box-shadow: 0 0 23px #f9bc48; }
+.offering-lit .offering-flame { display: block; }
+.mandir-mantra { text-align: center; font-family: var(--font-scripture); padding: 12px 0; font-size: 1.1rem; }
+.mandir-actions { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 10px; margin-top: 14px; }
+.mandir-actions > button { padding: 9px; text-align: left; }
+.mandir-actions img { width: 40px; height: 45px; object-fit: cover; object-position: right; border-radius: 6px; }
+.mandir-quiet-actions { display: flex; gap: 12px; justify-content: center; margin: 12px 0; }
+.mandir-quiet-actions button { min-height: 48px; padding: 7px 12px; display: flex; align-items: center; gap: 8px; color: #89400b; font-weight: 600; }
+.mandir-deity-list { display: flex; gap: 12px; overflow-x: auto; padding: 5px 0 10px; }
+.mandir-deity-list li { flex-shrink: 0; }
+.mandir-deity-list button { display: flex; align-items: center; flex-direction: column; width: 76px; gap: 6px; font-size: .8rem; line-height: 1.35; }
+.mandir-deity-list img { width: 64px; height: 64px; object-fit: contain; object-position: bottom; border: 2px solid transparent; border-radius: 50%; background: #f6e6cc; }
+.mandir-deity-list button[aria-pressed=true] img { border-color: #b34700; }
+.mala-card { margin-top: 20px; padding: 18px 12px; background: #fff; border: 1px solid #eddfca; border-radius: 18px; text-align: center; scroll-margin-top: 20px; }
+.mala-card h2, .mandir-paths h2 { font-size: 1.2rem; font-weight: 600; }
+.mala-targets { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.mala-targets button { min-width: 50px; min-height: 46px; padding: 7px; border: 1px solid #dec6a6; border-radius: 12px; }
+.mala-targets button[aria-pressed=true] { background: #b34700; color: #fff; }
+.mala-counter { position: relative; display: block; aspect-ratio: 1; width: min(100%, 300px); margin: 10px auto; }
+.mala-counter > span { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
+.mala-counter strong { font-family: var(--font-display); font-size: 3rem; }
+.mala-counter small { font-size: 1rem; }
+.mandir-paths { margin-top: 24px; }
+.mandir-paths h2 { display: flex; align-items: center; gap: 10px; }
+.mandir-paths .calendar-entry { margin: 10px 0; }
+.sankalp-toast { position: fixed; z-index: 60; top: 35%; left: 50%; transform: translateX(-50%); max-width: calc(100% - 32px); padding: 20px; border: 2px solid #b34700; background: #fff7e9; border-radius: 16px; box-shadow: 0 8px 30px #54311233; color: #8b3504; text-align: center; }

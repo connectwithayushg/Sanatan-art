@@ -9,13 +9,11 @@ import { Dhyan } from './Dhyan'
 import { DhyanIcon } from '../../ui/DhyanIcon'
 import { useStored } from '../../lib/useStored'
 import { offer, type Offering } from '../../lib/darshan'
-import { IconBell } from '../../ui/Ornaments'
-import { FallFlowers, FlowerBowl, GroundFlowers, HangingBell, OfferDefs, RoundButton } from './Offerings'
+import { FallFlowers, GroundFlowers, OfferDefs } from './Offerings'
 import { useCutBox } from './useCutBox'
 import { TabBook } from '../../ui/TabIcons'
-
-/** Widest the deity itself may be, as a share of the screen height, so it stays inside the back arch. */
-const ARCH_W = 0.41
+import { PageHeading } from '../../ui/PageHeading'
+import { BharatHomeCard } from '../bharat/BharatHomeCard'
 
 const MALA = 108
 const TARGETS = [11, 21, 51, 108]
@@ -175,14 +173,20 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
   }
 
   const [h1, h2, hr] = HALO[deity.id] ?? HALO.hanuman
+  const bh = box ? box.b - box.t : 1
+  const bw = box ? box.r - box.l : 1
+  const height = Math.min(sz.h * .65 / bh, sz.w * .74 / (bw * (box?.a ?? 6 / 7)))
+  const aarti = AARTIS.find((a) => a.id === deity.aarti)
   return (
-    <main className="mx-auto max-w-xl px-4 pb-6">
+    <main className="tab-page mandir-page">
       <OfferDefs />
-      <div
-        ref={stage}
-        className={`sanctum shrine relative -mx-4 h-[calc(var(--v)+100px)] touch-pan-y overflow-hidden [container-type:size] ${lit ? 'is-lit' : ''}`}
-        style={{ '--h1': h1, '--h2': h2, '--hr': hr, '--v': 'max(480px, calc(100dvh - 3.75rem - 6.25rem - env(safe-area-inset-bottom, 0px)))' } as CSSProperties}
-        onTouchStart={(e) => (swipeFrom.current = [e.touches[0].clientX, e.touches[0].clientY])}
+      <PageHeading title={t('r_myMandir')} subtitle={t('r_mandirIntro')} image="/art/redesign/ivory-shrine.webp" />
+      <div className="mandir-picker">
+        <label><span className="sr-only">{t('chooseDeity')}</span><select value={deity.id} onChange={(e) => pick(e.target.value)}>{order.map((d) => <option key={d.id} value={d.id}>{hi ? d.name_hi : d.name_en}{d.id === todayId ? ` · ${t('cal_today')}` : ''}</option>)}</select></label>
+        {formSwitch && <div className="mandir-form-switch" role="group" aria-label={t(formSwitch.label)}>{[false, true].map((on) => <button key={String(on)} aria-pressed={formSwitch.on === on} onClick={() => { formSwitch.set(on); setPetals(0) }}>{t(on ? formSwitch.b : formSwitch.a)}</button>)}</div>}
+      </div>
+      <div ref={stage} className={`mandir-shrine shrine ${lit ? 'is-lit' : ''}`} style={{ '--h1': h1, '--h2': h2, '--hr': hr } as CSSProperties}
+        onTouchStart={(e) => { swipeFrom.current = [e.touches[0].clientX, e.touches[0].clientY] }}
         onTouchEnd={(e) => {
           const from = swipeFrom.current
           swipeFrom.current = null
@@ -192,211 +196,31 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
           if (Math.abs(dx) < 60 || Math.abs(dy) > 50) return
           const at = order.findIndex((d) => d.id === deity.id)
           pick(order[(at + (dx < 0 ? 1 : -1) + order.length) % order.length].id)
-        }}
-      >
-        <RoundButton side="l" onClick={music} label={t('music')} pressed={playing}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="url(#ofBrass)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M9 18V5l11-2v13" />
-            <circle cx="6" cy="18" r="3" />
-            <circle cx="17" cy="16" r="3" />
-          </svg>
-        </RoundButton>
-        <RoundButton side="r" onClick={meditate} label={t('dhyan')}>
-          <DhyanIcon size={23} glow />
-        </RoundButton>
-        {formSwitch ? (
-          <div className="absolute inset-x-14 top-3 z-[8] flex h-[38px] items-center justify-center gap-2 font-display text-[1.05rem] [text-shadow:0_1px_6px_rgba(0,0,0,0.7)]" role="group" aria-label={t(formSwitch.label)}>
-            {[false, true].map((g, i) => (
-              <span key={String(g)} className="flex items-center gap-2">
-                {i > 0 && <span aria-hidden="true" className="text-[#e3c068]/60">·</span>}
-                <button
-                  onClick={() => {
-                    formSwitch.set(g)
-                    setPetals(0)
-                  }}
-                  aria-pressed={formSwitch.on === g}
-                  className={`min-h-9 border-b px-1 transition ${formSwitch.on === g ? 'border-[#f2b544] text-[#f2b544]' : 'border-transparent text-[#d9c8ad]'}`}
-                >
-                  {t(g ? formSwitch.b : formSwitch.a)}
-                </button>
-              </span>
-            ))}
-          </div>
-        ) : (
-          <p className="pointer-events-none absolute inset-x-14 top-3 z-[8] flex h-[38px] items-center justify-center font-display text-[1.05rem] text-[#f6e9d6] [text-shadow:0_1px_6px_rgba(0,0,0,0.7)]">{hi ? deity.name_hi : deity.name_en}</p>
-        )}
-
-        <HangingBell side="l" hint={!seen.bell} onRing={bell} label={t('bell')} />
-        <HangingBell side="r" hint={!seen.bell} onRing={bell} label={t('bell')} />
-
-        {/* Halo and glow sit behind the deity; the deity is sized and centred by where it actually is in its picture. */}
-        <div className="absolute bottom-[calc(var(--v)*var(--d,.165)+100px)] left-1/2 h-[calc(var(--v)*.6)] w-[min(80cqw,calc(var(--v)*.56))] -translate-x-1/2" aria-hidden="true">
-          <div className="halo" />
-          <div className="shrine-glow pointer-events-none absolute inset-0" />
+        }}>
+        <div className="mandir-statue-shadow" />
+        <img key={picture} src={picture} alt={hi ? deity.name_hi : deity.name_en} className="mandir-statue" style={{ height, bottom: sz.h * .2 - (1 - (box?.b ?? 1)) * height, transform: `translateX(-${(box?.cx ?? .5) * 100}%)`, opacity: box ? 1 : 0 }} />
+        <div className="mandir-ground" aria-hidden="true"><GroundFlowers on={!!here.flowers} fresh={petals > 0} /><FallFlowers wave={petals} rise={() => sz.h * .55} spread={sz.w * .6} /></div>
+        <div className="mandir-offerings" role="group" aria-label={t('darshanHint')}>
+          <button className={`offering-control ${lit ? 'offering-lit' : ''}`} onClick={light} aria-pressed={lit} aria-label={lit ? t('diyaLit') : t('lightDiya')}><span className="offering-object"><img src="/art/redesign/offering-diya.webp" alt="" /><span className="offering-flame" aria-hidden="true" /></span><strong>{t('r_offeringDiya')}</strong></button>
+          <button className="offering-control" onClick={flowers} aria-pressed={!!here.flowers} aria-label={t('offerFlowers')}><span className="offering-object"><img src="/art/redesign/offering-flowers.webp" alt="" /></span><strong>{t('r_offeringFlowers')}</strong></button>
+          <button className="offering-control" onClick={bell} aria-label={t('ringBell')}><span className="offering-object"><img src="/art/redesign/offering-bell.webp" alt="" /></span><strong>{t('bell')}</strong></button>
         </div>
-        <div className="pointer-events-none absolute bottom-[calc(var(--v)*var(--d,.165)+90px)] left-1/2 z-[1] h-5 w-[50cqw] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(closest-side,rgba(0,0,0,0.45),transparent)]" />
-        {(() => {
-          const bh = box ? box.b - box.t : 1
-          const bw = box ? box.r - box.l : 1
-          const ratio = box?.a ?? 6 / 7
-          const cw = box?.cw ?? 1
-          const h = `min(calc(var(--v) * ${0.6 / bh}), ${84 / (bw * ratio)}cqw, calc(var(--v) * ${ARCH_W / (cw * ratio)}))`
-          return (
-            <img
-              key={picture}
-              src={picture}
-              alt={hi ? deity.name_hi : deity.name_en}
-              className="absolute left-1/2 z-[2] max-w-none drop-shadow-[0_8px_14px_rgba(0,0,0,0.35)] transition-opacity duration-300"
-              style={{
-                height: h,
-                width: 'auto',
-                bottom: `calc(var(--v) * var(--d, .165) + 100px - ${1 - (box?.b ?? 1)} * ${h})`,
-                transform: `translateX(-${(box?.cx ?? 0.5) * 100}%)`,
-                opacity: box ? 1 : 0,
-              }}
-            />
-          )
-        })()}
-
-        {/* The ground: diya, bowl and the marigolds, all on one centre line with the deity. */}
-        {(() => {
-          const vis = sz.h - 100
-          const k = Math.min(1.1, Math.max(0.8, vis / 688))
-          const s = 0.88 * k
-          const top = vis - 18 - 130 * s
-          return (
-            <div
-              className="pointer-events-none absolute bottom-[118px] left-1/2 z-[5] h-[130px] w-[348px] origin-bottom [&>*]:pointer-events-auto"
-              style={{ transform: `translateX(-50%) scale(${s})` }}
-            >
-              <GroundFlowers on={!!here.flowers} fresh={petals > 0} />
-              <button onClick={light} aria-label={lit ? t('diyaLit') : t('lightDiya')} className={`absolute top-0 left-1/2 flex h-[70px] w-[140px] -translate-x-1/2 items-end justify-center ${seen.diya ? '' : 'offer-hint'}`}>
-                <span className="diya-light pointer-events-none absolute -top-[14px] left-1/2 h-[140px] w-[220px] -translate-x-1/2" />
-                <BrassDiya />
-              </button>
-              <FlowerBowl hint={!seen.bowl} onOffer={flowers} label={t('offerFlowers')} />
-              <FallFlowers wave={petals} rise={(y) => (top + y * s - 0.2 * vis) / s} spread={(0.5 * sz.w) / s} />
-            </div>
-          )
-        })()}
-
-        <p className="pointer-events-none absolute inset-x-0 bottom-[72px] z-[6] text-center font-scripture text-[1.3rem] leading-tight font-semibold text-[#f6e9d6] [text-shadow:0_1px_6px_rgba(0,0,0,0.6)]">{deity.mantra}</p>
       </div>
-
-      {dhyan && (
-        <Dhyan
-          src={picture}
-          alt={hi ? deity.name_hi : deity.name_en}
-          dx={deity.dx}
-          halo={[h1, h2, hr]}
-          diya={<BrassDiya />}
-          onClose={() => setDhyan(false)}
-        />
-      )}
-
-      <ul className="-mx-4 flex gap-3 overflow-x-auto px-4 pt-9 pb-2 [scrollbar-width:none]" aria-label={t('chooseDeity')}>
-        {order.map(form).map((d) => {
-          const on = d.id === deity.id
-          return (
-            <li key={d.id} className="shrink-0">
-              <button onClick={() => pick(d.id)} aria-pressed={on} className="relative flex w-[4.2rem] flex-col items-center gap-1">
-                {d.id === todayId && (
-                  <span className="absolute -top-1 right-0 z-[1] rounded-full bg-flame px-1.5 py-px text-[0.7rem] leading-tight font-bold text-white">{t('cal_today')}</span>
-                )}
-                {d.face ? (
-                  <span
-                    className={`block h-[3.4rem] w-[3.4rem] overflow-hidden rounded-full border-[2.5px] transition ${on ? 'border-flame' : 'border-transparent'}`}
-                    style={{ background: `radial-gradient(circle at 50% 40%, ${(HALO[d.id] ?? HALO.hanuman)[0]}, ${(HALO[d.id] ?? HALO.hanuman)[1]})` }}
-                  >
-                    <img src={d.face} alt="" width={56} height={56} className="h-full w-full object-contain object-bottom" />
-                  </span>
-                ) : (
-                  <img
-                    src={d.thumb}
-                    alt=""
-                    width={56}
-                    height={56}
-                    className={`h-[3.4rem] w-[3.4rem] rounded-full border-[2.5px] object-cover object-top transition ${on ? 'border-flame' : 'border-transparent'}`}
-                  />
-                )}
-                <span className={`text-[0.8rem] leading-tight font-semibold ${on ? 'text-flame' : 'text-dim'}`}>{hi ? d.name_hi : d.name_en}</span>
-              </button>
-            </li>
-          )
-        })}
-      </ul>
-
-      <section className="mt-4 rounded-3xl bg-white p-4 text-center shadow-[0_1px_6px_rgba(60,30,0,0.08)]">
-        <h2 className="text-[1rem] font-bold text-warm">{t('malaTitle')}</h2>
-        <div className="mt-2.5 flex justify-center gap-2">
-          {TARGETS.map((n) => (
-            <button
-              key={n}
-              onClick={() => chooseTarget(n)}
-              aria-pressed={n === target}
-              className={`h-10 min-w-[3.2rem] rounded-full border-[1.5px] px-3 text-[0.85rem] font-bold ${n === target ? 'border-flame bg-flame text-ember' : 'border-black/10 bg-white text-warm'}`}
-            >
-              {n}
-            </button>
-          ))}
-        </div>
-        <button onClick={count} aria-label={t('japCount', { count: japToday.count })} className="relative mx-auto mt-2 block aspect-square w-[min(78vw,300px)] touch-manipulation select-none">
-          <Mala count={japToday.count} beads={target} />
-          <span className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-            <span className="font-display text-[3rem] leading-none text-warm">{japToday.count}</span>
-            <span className="text-[0.8rem] font-semibold text-dim">/ {target}</span>
-          </span>
-        </button>
-        <p className="mt-2 text-[0.75rem] text-dim" aria-live="polite">
-          {t('sankalp', { count: target })}
-        </p>
-      </section>
-
-      <section className="mt-4 overflow-hidden rounded-3xl bg-white shadow-[0_1px_6px_rgba(60,30,0,0.08)]">
-        {(() => {
-          const a = AARTIS.find((x) => x.id === deity.aarti)
-          return (
-            a && (
-              <button onClick={() => openAarti?.(a.id, deity.id)} className="flex w-full items-center gap-3 px-4 py-3.5 text-left active:bg-flame/10">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#fff1d6] text-flame">
-                  <IconBell />
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block text-[0.8rem] font-bold text-flame">{t('nav_aarti')}</span>
-                  <span className="block truncate text-[1rem] font-semibold text-warm">{hi ? a.title_hi : a.title_en}</span>
-                </span>
-                <span aria-hidden="true" className="text-xl text-flame">›</span>
-              </button>
-            )
-          )
-        })()}
-      </section>
-
-      <section className="mt-3 overflow-hidden rounded-3xl bg-white shadow-[0_1px_6px_rgba(60,30,0,0.08)]">
-        <div className="flex items-center gap-3 px-4 pt-3.5 pb-1">
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#fff1d6] text-flame">
-            <span className="h-6 w-6 [&>svg]:h-full [&>svg]:w-full"><TabBook /></span>
-          </span>
-          <span className="text-[0.8rem] font-bold text-flame">{t('nav_path')}</span>
-        </div>
-        <ul>
-          {[...(PATHS[deity.id] ?? []), MANTRA_PATH].map((x) => (
-            <li key={x.to}>
-              <button onClick={() => openPath?.(x.to, deity.id)} className="flex w-full items-center gap-3 px-4 py-2.5 text-left active:bg-flame/10">
-                <span className="min-w-0 flex-1 truncate text-[1rem] font-semibold text-warm">{hi ? x.hi : x.en}</span>
-                <span aria-hidden="true" className="text-xl text-flame">›</span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <div
-        role="status"
-        className={`pointer-events-none fixed top-[40%] left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-3xl border-2 border-flame bg-[#fffaf0] px-6 py-4 text-center text-[1.05rem] font-bold text-flame shadow-[0_20px_50px_rgba(60,30,0,0.3)] transition ${done ? 'scale-100 opacity-100' : 'scale-90 opacity-0'}`}
-      >
-        🙏 {t('sankalpDone', { count: target })}
+      <div className="page-content">
+        <div className="mandir-actions">{aarti && <button className="primary-action" onClick={() => openAarti?.(aarti.id, deity.id)}><img src="/art/redesign/path-banner.webp" alt="" /><span>{t('r_readDeityAarti', { name: hi ? deity.name_hi : deity.name_en })}</span><span aria-hidden="true">→</span></button>}<button className="secondary-action" onClick={() => document.getElementById('mandir-mala')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>{t('r_jap')} →</button></div>
+        <p className="mandir-mantra">{deity.mantra}</p>
+        <div className="mandir-quiet-actions"><button onClick={music} aria-pressed={playing}>{t('music')} · {t(playing ? 'pause' : 'play')}</button><button onClick={meditate}><DhyanIcon size={22} /> {t('dhyan')}</button></div>
+        <ul className="mandir-deity-list" aria-label={t('chooseDeity')}>{order.map(form).map((d) => <li key={d.id}><button onClick={() => pick(d.id)} aria-pressed={d.id === deity.id}><img src={d.face ?? d.thumb} alt="" /><span>{hi ? d.name_hi : d.name_en}</span></button></li>)}</ul>
+        <section id="mandir-mala" className="mala-card">
+          <h2>{t('malaTitle')}</h2><div className="mala-targets">{TARGETS.map((n) => <button key={n} onClick={() => chooseTarget(n)} aria-pressed={n === target}>{n}</button>)}</div>
+          <button onClick={count} aria-label={t('japCount', { count: japToday.count })} className="mala-counter"><Mala count={japToday.count} beads={target} /><span><strong>{japToday.count}</strong><small>/ {target}</small></span></button>
+          <p aria-live="polite">{t('sankalp', { count: target })}</p>
+        </section>
+        <section className="mandir-paths"><h2><TabBook /> {t('nav_path')}</h2><ul>{[...(PATHS[deity.id] ?? []), MANTRA_PATH].map((x) => <li key={x.to}><button className="calendar-entry" onClick={() => openPath?.(x.to, deity.id)}><span>{hi ? x.hi : x.en}</span><span aria-hidden="true">›</span></button></li>)}</ul></section>
       </div>
+      <BharatHomeCard onOpen={() => { location.hash = '#mandir/bharat' }} />
+      {dhyan && <Dhyan src={picture} alt={hi ? deity.name_hi : deity.name_en} dx={deity.dx} halo={[h1, h2, hr]} diya={<BrassDiya />} onClose={() => setDhyan(false)} />}
+      {done && <div role="status" className="sankalp-toast">{t('sankalpDone', { count: target })}</div>}
     </main>
   )
 }

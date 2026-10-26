@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { DEITIES, deityOfDay } from '../../content/deities'
@@ -15,12 +15,19 @@ const DIYA_HALO: [string, string, string] = ['rgba(255,170,70,.55)', 'rgba(200,9
  * The home page's way into meditation: a quiet dark bar. The first time it asks which deity and which sound;
  * after that one tap starts with the last choice, and "बदलें" asks again.
  */
-export function DhyanBar() {
+export function DhyanBar({ trigger = 0 }: { trigger?: number }) {
   const { t, i18n } = useTranslation()
   const hi = i18n.language === 'hi'
   const [pick, setPick] = useStored<Pick | null>('dhyanPick', null)
   const [sheet, setSheet] = useState(false)
   const [on, setOn] = useState<Pick | null>(null)
+  const previousTrigger = useRef(0)
+  useEffect(() => {
+    if (trigger <= previousTrigger.current) return
+    previousTrigger.current = trigger
+    if (pick) setOn(pick)
+    else setSheet(true)
+  }, [trigger, pick])
 
   const name = (id: string) => {
     if (id === 'diya') return t('dhyanDiya')
