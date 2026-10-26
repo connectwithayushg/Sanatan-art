@@ -1,4 +1,11 @@
 export const hi = {
+  r_mainNavigation: 'मुख्य नेविगेशन',
+  r_seeAll: 'सभी देखें',
+  r_showLess: 'कम दिखाएँ',
+  r_aartiIntro: 'अपने आराध्य की आरती पढ़ें',
+  r_aartiCollection: 'आरती संग्रह',
+  r_clearFilter: 'सभी आरतियाँ और भजन',
+
   amavasyaNight: 'अमावस्या की रात, रविवार 8 नवंबर',
   startPuja: 'पूजा शुरू करें',
   paintingCaption: 'राजा रवि वर्मा, “लक्ष्मी”, 1896',
@@ -349,6 +356,13 @@ export const hi = {
 export type Strings = typeof hi
 
 export const en: Strings = {
+  r_mainNavigation: 'Main navigation',
+  r_seeAll: 'See all',
+  r_showLess: 'Show less',
+  r_aartiIntro: 'Read the aarti of your chosen deity',
+  r_aartiCollection: 'Choose your deity',
+  r_clearFilter: 'All aartis and bhajans',
+
   amavasyaNight: 'Amavasya night, Sunday 8 November',
   startPuja: 'Begin the puja',
   paintingCaption: 'Raja Ravi Varma, “Lakshmi”, 1896',

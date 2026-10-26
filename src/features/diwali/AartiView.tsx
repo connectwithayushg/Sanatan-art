@@ -7,7 +7,7 @@ import { buzz, ringGhanti } from '../../lib/audio/bell'
 import { YoutubeCard } from './YoutubeCard'
 
 /** The picture for each aarti is the face of its deity from the deity list, the same source the Mandir uses. */
-const DEITY_OF: Record<string, string> = { ganesh: 'ganesh', lakshmi: 'lakshmi', jagdish: 'vishnu', shiv: 'shiv', hanuman: 'hanuman', ambe: 'durga', kunjbihari: 'krishna', govardhan: 'krishna', ram: 'ram', ramstuti: 'ram', kali: 'kali', khatu: 'khatu', achyutam: 'krishna', madhurashtakam: 'krishna', thumak: 'ram', ramdhun: 'ram', chalisa: 'hanuman', mrityunjay: 'shiv', yadevi: 'durga', vakratunda: 'ganesh',
+export const DEITY_OF: Record<string, string> = { ganesh: 'ganesh', lakshmi: 'lakshmi', jagdish: 'vishnu', shiv: 'shiv', hanuman: 'hanuman', ambe: 'durga', kunjbihari: 'krishna', govardhan: 'krishna', ram: 'ram', ramstuti: 'ram', kali: 'kali', khatu: 'khatu', achyutam: 'krishna', madhurashtakam: 'krishna', thumak: 'ram', ramdhun: 'ram', chalisa: 'hanuman', mrityunjay: 'shiv', yadevi: 'durga', vakratunda: 'ganesh',
   sukhkarta: 'ganesh', shendur: 'ganesh', satyanarayan: 'vishnu', brihaspati: 'vishnu', gangadhar: 'shiv', balaji: 'hanuman', vaishno: 'durga', banke: 'krishna', yugal: 'krishna',
   harekrishna: 'krishna', govindhare: 'krishna', maiya: 'krishna', meera: 'krishna', govindbolo: 'krishna', radhamadhav: 'krishna', vasudev: 'krishna',
   payoji: 'ram', raghupati: 'ram', bhayepragat: 'ram', mangalbhavan: 'ram', hanumanashtak: 'hanuman', bajrangbaan: 'hanuman', manojavam: 'hanuman',

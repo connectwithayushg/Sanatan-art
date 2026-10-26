@@ -3,7 +3,10 @@ import { useTranslation } from 'react-i18next'
 import { AARTIS, type Aarti } from '../../content/aartis'
 import { BHAJANS, BHAJAN_INFO } from '../../content/bhajans'
 import { useStored } from '../../lib/useStored'
-import { AartiView, PORTRAIT } from '../diwali/AartiView'
+import { DEITIES } from '../../content/deities'
+import { DeityPhoto } from '../../ui/DeityPhoto'
+import { PageHeading, SectionHeading } from '../../ui/PageHeading'
+import { AartiView, DEITY_OF, PORTRAIT } from '../diwali/AartiView'
 
 /** When each aarti is usually sung (weekdays are 0 = Sunday), and the names people type to find it. */
 const INFO: Record<string, { hi: string; en: string; days: number[]; find: string }> = {
@@ -43,129 +46,72 @@ const INFO: Record<string, { hi: string; en: string; days: number[]; find: strin
   vishwakarma: { hi: 'विश्वकर्मा पूजा', en: 'Vishwakarma Puja', days: [], find: 'vishwakarma puja विश्वकर्मा पूजा' },
 }
 
-/** All aartis as a list with a search box; one opens as a page to read. */
+/** The complete existing library, grouped by deity without a resume-reading pattern. */
 export function AartiLibrary({ id, open }: { id: string | null; open: (id: string) => void }) {
   const { t, i18n } = useTranslation()
   const hi = i18n.language === 'hi'
-  const [last] = useStored<string>('aartiLast', '')
   const [term, setTerm] = useState('')
+  const [deity, setDeity] = useState('')
+  const [showDeities, setShowDeities] = useState(false)
+  const [showAll, setShowAll] = useState(false)
   const [mode, setMode] = useStored<'aarti' | 'bhajan'>('aartiMode', 'aarti')
   const chosen = AARTIS.find((a) => a.id === id) ?? BHAJANS.find((a) => a.id === id)
   if (chosen) return <AartiView key={chosen.id} aartis={[chosen]} onBack={() => history.back()} />
 
-  const today = new Date().getDay()
-  const isToday = (a: Aarti) => INFO[a.id]?.days.includes(today) ?? false
-  const q = term.trim().toLowerCase()
   const bhajans = mode === 'bhajan'
+  const source = bhajans ? BHAJANS : AARTIS
+  const q = term.trim().toLowerCase()
   const haystack = (a: Aarti) => `${a.title_hi} ${a.title_en} ${a.id} ${INFO[a.id]?.find ?? BHAJAN_INFO[a.id]?.find ?? ''} ${a.kind === 'stuti' ? 'stuti स्तुति' : a.kind === 'bhajan' ? 'bhajan भजन' : 'aarti आरती'}`.toLowerCase()
-
-  const row = (a: Aarti, i: number) => {
-    const w = INFO[a.id] ?? BHAJAN_INFO[a.id]
-    const now = isToday(a)
-    return (
-      <li key={a.id} className="rise" style={{ animationDelay: `${i * 30}ms` }}>
-        <button
-          onClick={() => open(a.id)}
-          className={`flex w-full items-center gap-4 rounded-3xl bg-white px-3.5 py-2.5 text-left transition active:scale-[0.99] ${now ? 'ring-2 ring-flame' : 'ring-1 ring-black/10 hover:ring-black/20'}`}
-        >
-          <img
-            src={PORTRAIT[a.id]}
-            alt=""
-            width={64}
-            height={64}
-            loading="lazy"
-            className="size-16 shrink-0 rounded-full object-cover object-top"
-            style={{ background: 'radial-gradient(circle at 50% 40%, #fff3e4, #f6d7b4)', boxShadow: '0 0 0 2px #fff, 0 0 0 3.5px rgba(194,78,6,.45)' }}
-          />
-          <span className="min-w-0 flex-1">
-            {now && <span className="mb-1 inline-block rounded-full bg-flame px-3 py-0.5 text-[0.9rem] font-bold text-ember">{t('aartiToday')}</span>}
-            <span className="block font-display text-[1.4rem] leading-tight text-warm">
-              {hi ? a.title_hi : a.title_en}
-              {a.kind === 'stuti' && <span className="ml-2 rounded-full border border-black/15 px-2 align-middle font-sans text-[0.8rem] text-dim">{t('aartiStuti')}</span>}
-            </span>
-            {w && <span className="block text-[1rem] text-dim">{hi ? w.hi : w.en}</span>}
-          </span>
-          <span aria-hidden="true" className="text-3xl text-flame">›</span>
-        </button>
-      </li>
-    )
-  }
-
-  // Without a search: today's aartis, then the one read last time, then everything else.
-  const todays = AARTIS.filter(isToday)
-  const lastOne = AARTIS.find((a) => a.id === last && !isToday(a))
-  const rest = AARTIS.filter((a) => !isToday(a) && a !== lastOne)
-  const found = (bhajans ? BHAJANS : AARTIS).filter((a) => haystack(a).includes(q))
-  const group = 'mb-2 mt-5 text-[0.9rem] font-bold tracking-wide text-dim'
+  const found = source.filter((a) => (!q || haystack(a).includes(q)) && (!deity || DEITY_OF[a.id] === deity))
+  const todays = AARTIS.filter((a) => INFO[a.id]?.days.includes(new Date().getDay()))
+  const primary = ['shiv', 'ganesh', 'hanuman', 'lakshmi']
+  const deities = [...primary.map((id) => DEITIES.find((d) => d.id === id)!), ...DEITIES.filter((d) => !primary.includes(d.id))]
+  const filtered = !!q || !!deity
+  const visible = filtered || showAll ? found : found.slice(0, 6)
+  const row = (a: Aarti) => (
+    <li key={a.id}>
+      <button className="reading-row" onClick={() => open(a.id)}>
+        <DeityPhoto id={DEITY_OF[a.id]} fallback={PORTRAIT[a.id]} />
+        <span><strong>{hi ? a.title_hi : a.title_en}</strong><small>{a.kind === 'stuti' ? t('aartiStuti') : t('read')}</small></span>
+        <span className="row-arrow" aria-hidden="true">›</span>
+      </button>
+    </li>
+  )
 
   return (
-    <main className="mx-auto max-w-xl px-5 pt-4 pb-6">
-      <h1 className="sr-only">{t(bhajans ? 'bhajanTab' : 'nav_aarti')}</h1>
-      <div className="mx-auto grid w-fit grid-cols-2 gap-1 rounded-full border-[1.5px] border-[#ead9c4] bg-white p-1" role="group" aria-label={t('aartiOrBhajan')}>
-        {(['aarti', 'bhajan'] as const).map((m) => (
-          <button
-            key={m}
-            onClick={() => {
-              setMode(m)
-              setTerm('')
-            }}
-            aria-pressed={mode === m}
-            className={`min-h-10 rounded-full px-6 text-[0.95rem] font-bold transition ${mode === m ? 'bg-flame text-white' : 'text-dim'}`}
-          >
-            {t(m === 'aarti' ? 'nav_aarti' : 'bhajanTab')}
-          </button>
-        ))}
-      </div>
-      <label className="mt-4 flex h-[3.25rem] items-center gap-2.5 rounded-2xl bg-white px-3.5 ring-1 ring-black/15 focus-within:ring-2 focus-within:ring-flame" htmlFor="aarti-search">
-        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" className="shrink-0 text-dim">
-          <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" strokeWidth="2.2" />
-          <path d="M15.5 15.5 L20 20" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-        </svg>
-        <input
-          id="aarti-search"
-          type="text"
-          inputMode="search"
-          enterKeyHint="search"
-          style={{ outline: 'none' }}
-          value={term}
-          onChange={(e) => setTerm(e.target.value)}
-          placeholder={t(bhajans ? 'bhajanSearch' : 'aartiSearch')}
-          autoComplete="off"
-          className="min-w-0 flex-1 bg-transparent text-[1.1rem] text-warm placeholder:text-dim"
-        />
-        {term && (
-          <button type="button" onClick={() => setTerm('')} aria-label="✕" className="grid size-9 shrink-0 place-items-center rounded-full text-xl text-dim active:scale-95">
-            ✕
-          </button>
+    <main className="tab-page aarti-library">
+      <PageHeading title={t(bhajans ? 'bhajanTab' : 'nav_aarti')} subtitle={t('r_aartiIntro')} image="/art/redesign/aarti-banner.webp" />
+      <div className="page-content">
+        <label className="library-search" htmlFor="aarti-search">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="10" cy="10" r="6.5" /><path d="m15 15 5 5" /></svg>
+          <input id="aarti-search" type="search" value={term} onChange={(e) => setTerm(e.target.value)} placeholder={t(bhajans ? 'bhajanSearch' : 'aartiSearch')} />
+          {term && <button onClick={() => setTerm('')} aria-label={t('close')}>×</button>}
+        </label>
+        <div className="library-switch" role="group" aria-label={t('aartiOrBhajan')}>
+          {(['aarti', 'bhajan'] as const).map((m) => <button key={m} aria-pressed={mode === m} onClick={() => { setMode(m); setTerm(''); setDeity(''); setShowAll(false) }}>{t(m === 'aarti' ? 'nav_aarti' : 'bhajanTab')}</button>)}
+        </div>
+        {!filtered && !bhajans && todays.length > 0 && (
+          <section className="today-aarti"><h2>{t('aartiToday')}</h2><ul>{todays.map(row)}</ul></section>
         )}
-      </label>
-
-      {q ? (
-        found.length ? (
-          <ol className="mt-4 grid gap-3">{found.map(row)}</ol>
-        ) : (
-          <p className="mt-8 text-center text-[1.05rem] text-dim">{t(bhajans ? 'bhajanNone' : 'aartiNone')}</p>
-        )
-      ) : (
-        bhajans ? (
-          <>
-            <h2 className={group}>{t('allBhajans')}</h2>
-            <ol className="grid gap-3">{BHAJANS.map(row)}</ol>
-          </>
-        ) : (
-        <>
-          {todays.length > 0 && <ol className="mt-4 grid gap-3">{todays.map(row)}</ol>}
-          {lastOne && (
-            <>
-              <h2 className={group}>{t('aartiLast')}</h2>
-              <ol className="grid gap-3">{row(lastOne, 0)}</ol>
-            </>
-          )}
-          <h2 className={group}>{t('allAartis')}</h2>
-          <ol className="grid gap-3">{rest.map(row)}</ol>
-        </>
-        )
-      )}
+        {!q && !deity && (
+          <section>
+            <SectionHeading title={t('r_aartiCollection')} onAll={() => setShowDeities(!showDeities)} expanded={showDeities} />
+            <ul className="photo-grid deity-grid">
+              {(showDeities ? deities : deities.slice(0, 4)).map((d) => (
+                <li key={d.id}><button className="photo-tile deity-tile" aria-pressed={deity === d.id} onClick={() => { setDeity(deity === d.id ? '' : d.id); setShowAll(true) }}>
+                  <DeityPhoto id={d.id} />
+                  <span>{hi ? d.name_hi : d.name_en}<span aria-hidden="true">›</span></span>
+                </button></li>
+              ))}
+            </ul>
+          </section>
+        )}
+        <section id="aarti-results" aria-live="polite">
+          <SectionHeading title={deity ? (hi ? DEITIES.find((d) => d.id === deity)!.name_hi : DEITIES.find((d) => d.id === deity)!.name_en) : t(bhajans ? 'allBhajans' : 'allAartis')} onAll={!filtered ? () => setShowAll(!showAll) : undefined} expanded={showAll} />
+          {deity && <button className="clear-filter" onClick={() => setDeity('')}>{t('r_clearFilter')} ×</button>}
+          {visible.length ? <ol className="reading-list">{visible.map(row)}</ol> : <p className="empty-state">{t(bhajans ? 'bhajanNone' : 'aartiNone')}</p>}
+        </section>
+      </div>
     </main>
   )
 }

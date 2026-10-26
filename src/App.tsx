@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStored } from './lib/useStored'
 import { TopBar } from './ui/TopBar'
-import { TabBell, TabBook, TabDiya, TabMandir, TabSun } from './ui/TabIcons'
+import { TabBook, TabCalendar, TabDiya, TabMandir, TabSun } from './ui/TabIcons'
 import { AajView } from './features/aaj/AajView'
 import { TyoharView } from './features/tyohar/TyoharView'
 import { MandirView } from './features/mandir/MandirView'
@@ -86,16 +86,16 @@ export default function App() {
 
   const tabs: [Tab, ReactNode, string][] = [
     ['aaj', <TabSun />, t('nav_aaj')],
-    ['tyohar', <TabDiya />, t('nav_tyohar')],
+    ['tyohar', <TabCalendar />, t('nav_tyohar')],
     ['mandir', <TabMandir />, t('nav_mandir')],
-    ['aarti', <TabBell />, t('nav_aarti')],
+    ['aarti', <TabDiya />, t('nav_aarti')],
     ['path', <TabBook />, t('nav_path')],
   ]
 
   return (
-    <div className="sky min-h-dvh pb-[120px]">
+    <div className="sky app-shell min-h-dvh">
       {doors && <Dvar onDone={() => setDoors(false)} />}
-      <TopBar onSearch={() => setSearching(true)} onHome={() => go('aaj')} onProfile={() => go('profile')} band={route.tab === 'aaj' && !route.sub.length} />
+      <TopBar onSearch={() => setSearching(true)} onHome={() => go('aaj')} onProfile={() => go('profile')} />
       {searching && <Search onClose={() => setSearching(false)} go={goTo} />}
       {route.tab === 'aaj' &&
         (!route.sub.length ? (
@@ -122,9 +122,8 @@ export default function App() {
       {route.tab === 'profile' && <ProfileView sub={route.sub} open={(p) => go('profile', p)} scale={scale} setScale={setScale} />}
       {route.tab === 'path' && <PathView sub={route.sub} open={(p) => go('path', p)} go={goTo} />}
 
-      {/* A floating bar of picture tiles; the open tab's tile turns warm bhagwa and lifts a little. Pixel sizes so A+ never overflows it. */}
-      <nav className="fixed inset-x-0 bottom-0 z-30 px-2.5" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 10px)' }}>
-        <div className="mx-auto grid max-w-xl grid-cols-5 rounded-[24px] bg-white px-1 py-1.5 shadow-[0_6px_20px_rgba(60,30,0,0.18)] ring-1 ring-black/5">
+      <nav className="app-tabbar" aria-label={t('r_mainNavigation')}>
+        <div className="tabbar-inner">
           {tabs.map(([id, icon, label]) => {
             const on = route.tab === id
             return (
@@ -132,15 +131,9 @@ export default function App() {
                 key={id}
                 onClick={() => go(id)}
                 aria-current={on ? 'page' : undefined}
-                className={`flex min-h-[70px] flex-col items-center justify-center gap-1 text-[14px] font-semibold leading-tight transition-colors ${on ? 'text-flame' : 'text-dim'}`}
+                className="tabbar-item"
               >
-                <span
-                  className={`grid h-[40px] w-[46px] place-items-center rounded-[14px] transition ${
-                    on ? '-translate-y-[3px] bg-gradient-to-b from-[#ffe7cf] to-[#ffd2a8] shadow-[0_0_0_2.5px_#c24e06,0_4px_10px_rgba(194,78,6,0.35)]' : 'bg-[#fdf0e1]'
-                  }`}
-                >
-                  {icon}
-                </span>
+                {icon}
                 <span>{label}</span>
               </button>
             )
