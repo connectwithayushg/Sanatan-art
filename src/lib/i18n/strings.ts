@@ -1,4 +1,15 @@
 export const hi = {
+  r_pathIntro: 'अपनी पसंद का पाठ पढ़ें',
+  r_continueReading: 'पढ़ना जारी रखें',
+  r_chooseTopic: 'विषय चुनें',
+  r_fullLibrary: 'पूरा पाठ संग्रह',
+  r_festivalIntro: 'तिथि, पूजा और तैयारी',
+  r_festivalSearch: 'त्योहार खोजें',
+  r_festivalMonth: '{{month}} के त्योहार',
+  r_nextFestival: 'आने वाला त्योहार',
+  r_preparation: 'तैयारी देखें',
+  r_fullCalendar: 'पूरा कैलेंडर देखें',
+
   r_mainNavigation: 'मुख्य नेविगेशन',
   r_seeAll: 'सभी देखें',
   r_showLess: 'कम दिखाएँ',
@@ -356,6 +367,17 @@ export const hi = {
 export type Strings = typeof hi
 
 export const en: Strings = {
+  r_pathIntro: 'Read a text of your choice',
+  r_continueReading: 'Continue reading',
+  r_chooseTopic: 'Choose a topic',
+  r_fullLibrary: 'Full scripture library',
+  r_festivalIntro: 'Dates, worship and preparation',
+  r_festivalSearch: 'Find a festival',
+  r_festivalMonth: 'Festivals in {{month}}',
+  r_nextFestival: 'Next festival',
+  r_preparation: 'Prepare for puja',
+  r_fullCalendar: 'Open the full calendar',
+
   r_mainNavigation: 'Main navigation',
   r_seeAll: 'See all',
   r_showLess: 'Show less',

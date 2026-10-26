@@ -105,7 +105,7 @@ export default function App() {
         ) : (
           <AajView openFestival={(id) => go('tyohar', id)} />
         ))}
-      {route.tab === 'tyohar' && <TyoharView festival={route.sub[0] || null} part={route.sub[1] || null} open={(p) => go('tyohar', p)} openAarti={(id) => go('aarti', id)} />}
+      {route.tab === 'tyohar' && <TyoharView festival={route.sub[0] || null} part={route.sub[1] || null} open={(p) => go('tyohar', p)} openAarti={(id) => go('aarti', id)} onCalendar={() => go('aaj', 'calendar')} />}
       {route.tab === 'mandir' && route.sub[0] !== 'bharat' && (route.sub[1] === 'aarti' || route.sub[1] === 'path') && (
         <MandirReader deity={route.sub[0]} kind={route.sub[1]} rest={route.sub.slice(2)} go={go} goTo={goTo} />
       )}

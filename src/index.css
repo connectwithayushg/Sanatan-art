@@ -327,3 +327,46 @@ button, a, input, select { touch-action: manipulation; }
   .photo-grid { gap: 10px; }
   .photo-tile > span { font-size: 1rem; padding-inline: 9px; }
 }
+
+/* Photo shelves and festival preparation preserve the full data behind each entry. */
+.book-tile > span:first-child { display: block; padding: 0; min-height: 0; aspect-ratio: 4/4.5; overflow: hidden; background: #f0d9b1; border-radius: 0; }
+.book-tile > span:first-child > img { width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 0; }
+.book-tile > span:first-child > span { border-radius: 0; }
+.book-tile > span:first-child > img, .book-tile > img { aspect-ratio: 4/4.5; }
+.book-tile > small, .festival-tile > small { display: block; padding: 0 11px 10px; color: #6b5a4c; font-size: .87rem; line-height: 1.4; }
+.continue-reading { margin-top: 16px; }
+.topic-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.topic-grid button { width: 100%; display: flex; align-items: center; gap: 8px; min-height: 75px; padding: 8px; text-align: left; border: 1px solid #eddfca; border-radius: 14px; background: #fff; }
+.topic-grid img { width: 48px; height: 58px; object-fit: cover; object-position: top; border-radius: 9px; }
+.topic-grid button > span { font-size: 1rem; font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; }
+.topic-grid button > span:last-child { margin-left: auto; color: #924017; }
+.daily-shloka-card { margin-top: 24px; padding: 20px 16px; border: 1px solid #e9d8be; border-radius: 18px; background: #fff; }
+.daily-shloka-card h2 { font-size: 1.25rem; font-weight: 600; }
+.shloka-reference { color: #9a4008; font-size: .9rem; margin-bottom: 12px; }
+.daily-verse { white-space: pre-line; font-family: var(--font-scripture); font-size: 1.15rem; line-height: 1.8; margin: 14px 0; }
+.detail-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.primary-action, .secondary-action, .share-action { display: inline-flex; justify-content: center; align-items: center; gap: 7px; min-height: 48px; padding: 10px 15px; border-radius: 12px; font-size: 1rem; font-weight: 600; line-height: 1.35; }
+.primary-action { color: #fff; background: #b34700; }
+.secondary-action { color: #9b3b03; background: #fff; border: 1px solid #dcbf9d; }
+.share-action { color: #176b3b; background: #fff; border: 1px solid #318552; }
+.calendar-entry { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 62px; margin: 22px 0; padding: 14px; background: #fff; border: 1px solid #eddfca; border-radius: 14px; font-weight: 600; text-align: left; }
+.back-link { min-height: 48px; margin-bottom: 12px; color: #a13e00; }
+.festival-feature { overflow: hidden; margin-top: 18px; border: 1px solid #e9d8be; border-radius: 20px; background: #fff; }
+.festival-next { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.3fr); }
+.festival-date { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 15px 12px; gap: 3px; background: #fff4df; }
+.festival-date > span { font-size: .86rem; line-height: 1.35; }
+.festival-date > b { font-family: var(--font-display); font-size: 3.3rem; line-height: 1.1; }
+.festival-date > strong { font-size: 1.15rem; }
+.festival-date .primary-action { margin-top: 8px; padding: 9px 10px; font-size: .9rem; }
+.countdown-chip { display: inline-block; color: #8c3501; background: #ffe5bf; padding: 5px 8px; border-radius: 8px; font-weight: 600; }
+.festival-feature-photo { position: relative; min-height: 245px; text-align: left; overflow: hidden; background: #3f291b; }
+.festival-feature-photo img { width: 100%; height: 100%; position: absolute; inset: 0; object-fit: cover; }
+.festival-feature-photo h2 { position: absolute; left: 0; right: 0; bottom: 0; padding: 36px 12px 14px; color: #fff; font-family: var(--font-display); font-size: 1.6rem; line-height: 1.3; background: linear-gradient(transparent, #241409e6); }
+.festival-key-time { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 12px 14px; border-bottom: 1px solid #eee1cf; font-size: .95rem; }
+.festival-feature > .detail-actions { padding: 0 12px; }
+.festival-feature > .detail-actions button { flex: 1; }
+.festival-greeting { display: block; width: 100%; min-height: 48px; color: #994009; font-size: .95rem; padding: 10px; }
+.festival-tile > img { aspect-ratio: 1.18; }
+.festival-tile > span { min-height: 52px; }
+@media (max-width: 359px) { .topic-grid button { flex-wrap: wrap; } .topic-grid img { width: 40px; height: 46px; } .festival-date { padding: 12px 8px; } .festival-date .primary-action { padding-inline: 7px; } }
+.book-tile img { background: radial-gradient(ellipse at 50% 35%, #ffedc4, #d8a85c); }
