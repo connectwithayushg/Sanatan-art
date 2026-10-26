@@ -17,6 +17,8 @@ import { CalendarView } from './features/aaj/CalendarView'
 import { Search } from './features/search/Search'
 import { ProfileView } from './features/profile/ProfileView'
 import { SuprabhatCard } from './features/greet/SuprabhatCard'
+import { DailyOpener } from './features/daily/DailyOpener'
+import { dailyOpenerDue } from './lib/dailyOpener'
 
 const TABS = ['aaj', 'tyohar', 'mandir', 'aarti', 'path'] as const
 /** The profile is reached from the top bar, not the tab bar. */
@@ -49,6 +51,10 @@ export default function App() {
   const [doors, setDoors] = useState(() => {
     const r = parse()
     return r.tab === 'mandir' && !r.sub.length && doorsDue()
+  })
+  const [daily, setDaily] = useState(() => {
+    const r = parse()
+    return r.tab === 'mandir' && !r.sub.length && dailyOpenerDue()
   })
   const [searching, setSearching] = useState(false)
 
@@ -95,7 +101,8 @@ export default function App() {
 
   return (
     <div className="sky app-shell min-h-dvh">
-      {doors && <Dvar onDone={() => setDoors(false)} />}
+      {daily && <DailyOpener onClose={() => setDaily(false)} />}
+      {doors && !daily && route.tab === 'mandir' && !route.sub.length && <Dvar onDone={() => setDoors(false)} />}
       <TopBar onSearch={() => setSearching(true)} onHome={() => go('aaj')} onProfile={() => go('profile')} />
       {searching && <Search onClose={() => setSearching(false)} go={goTo} />}
       {route.tab === 'aaj' &&

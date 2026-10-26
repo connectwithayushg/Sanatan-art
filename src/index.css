@@ -498,3 +498,37 @@ button, a, input, select { touch-action: manipulation; }
 .mandir-paths h2 { display: flex; align-items: center; gap: 10px; }
 .mandir-paths .calendar-entry { margin: 10px 0; }
 .sankalp-toast { position: fixed; z-index: 60; top: 35%; left: 50%; transform: translateX(-50%); max-width: calc(100% - 32px); padding: 20px; border: 2px solid #b34700; background: #fff7e9; border-radius: 16px; box-shadow: 0 8px 30px #54311233; color: #8b3504; text-align: center; }
+
+/* The daily opener is a native modal for keyboard/focus support, with an immediate exit. */
+.daily-dialog { position: fixed; inset: auto 0 0; margin: 0 auto; width: min(100%, 560px); max-width: 100%; max-height: 94svh; padding: 0; border: 0; border-radius: 24px 24px 0 0; background: #fbf4e8; color: #382316; overflow: hidden; }
+.daily-dialog::backdrop { background: #2f1b0b77; }
+.daily-sheet { display: flex; flex-direction: column; max-height: 94svh; }
+.daily-sheet-header { display: flex; align-items: center; gap: 12px; justify-content: space-between; padding: 18px 16px 12px; border-bottom: 1px solid #ecdbc3; }
+.daily-sheet-header p { font-size: .8rem; color: #815a3c; }
+.daily-sheet-header h2 { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.3; margin-top: 3px; }
+.daily-sheet-header > button { min-height: 48px; min-width: 88px; padding: 8px 10px; border: 1px solid #c5a680; border-radius: 12px; background: #fff; color: #954009; font-weight: 600; flex-shrink: 0; }
+.daily-track { display: flex; width: 100%; min-height: 0; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
+.daily-panel { flex: 0 0 100%; width: 100%; min-width: 0; padding: 16px; scroll-snap-align: start; overflow-y: auto; max-height: 65svh; }
+.daily-panel-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.daily-panel-title h3 { font-size: 1.2rem; font-weight: 600; }
+.daily-panel-title button { display: grid; place-items: center; min-width: 44px; min-height: 44px; background: #fff; border: 1px solid #dec7a6; border-radius: 50%; color: #9b3d02; }
+.daily-shloka-photo { width: 100%; height: 124px; object-fit: cover; object-position: right; border-radius: 14px; margin: 10px 0 18px; }
+.daily-meaning { font-size: 1.05rem; line-height: 1.65; }
+.daily-temple-photo { width: 100%; aspect-ratio: 1.6; object-fit: cover; border-radius: 16px; margin: 12px 0; }
+.daily-panel h4 { font-family: var(--font-display); font-size: 1.8rem; }
+.daily-state { color: #9b3d02; font-weight: 600; margin-bottom: 12px; }
+.daily-panel .secondary-action { margin-top: 20px; }
+.daily-wallpaper { display: block; height: 48svh; max-width: 100%; margin: 12px auto 0; object-fit: contain; border-radius: 16px; }
+.daily-tithi { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.5; }
+.daily-panchang > div { padding: 16px 0; border-bottom: 1px solid #e2cfb5; }
+.daily-panchang dt { color: #775134; font-size: .9rem; }
+.daily-panchang dd { font-size: 1.1rem; font-weight: 600; margin-top: 4px; }
+.daily-sheet-footer { display: flex; justify-content: space-between; align-items: center; padding: 8px 16px max(12px, env(safe-area-inset-bottom)); border-top: 1px solid #ecdbc3; }
+.daily-sheet-footer > button { min-height: 44px; min-width: 44px; font-size: 1.8rem; color: #9b3d02; border-radius: 50%; background: #fff; }
+.daily-sheet-footer button:disabled { opacity: .3; }
+.daily-dots { display: flex; }
+.daily-dots button { width: 38px; height: 44px; display: grid; place-items: center; }
+.daily-dots span { width: 8px; height: 8px; border-radius: 50%; background: #ceb48d; }
+.daily-dots button[aria-current=step] span { width: 20px; border-radius: 6px; background: #b34700; }
+.daily-notice { padding: 4px 16px 12px; font-size: .9rem; text-align: center; color: #8b3b05; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }
