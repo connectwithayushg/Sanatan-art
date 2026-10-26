@@ -5,7 +5,7 @@ import { diwaliMuhurat } from '../../lib/panchang/diwali'
 import { festivalTimes, karwaChauthTimes } from '../../lib/panchang/festivalTimes'
 import type { City } from '../../lib/panchang/astro'
 import { useCity } from '../../ui/CityPicker'
-import { FESTIVALS, daysUntil, type Festival } from '../../content/festivals'
+import { FESTIVALS, daysUntil, festivalToday, type Festival } from '../../content/festivals'
 import { DiwaliFestival, type DiwaliPart } from './DiwaliFestival'
 import { KarwaChauth, type KcPart } from './KarwaChauth'
 import { FestivalDay, type DayPart } from './FestivalDay'
@@ -54,6 +54,7 @@ function FestivalList({ open, onCalendar }: { open: (path: string) => void; onCa
   const hi = i18n.language === 'hi'
   const lang = hi ? 'hi-IN' : 'en-IN'
   const [city] = useCity()
+  const celebration = festivalToday()
   const [query, setQuery] = useState('')
   const [expanded, setExpanded] = useState<string[]>([])
   const upcoming = FESTIVALS.filter((f) => daysUntil(f) >= 0)
@@ -74,6 +75,7 @@ function FestivalList({ open, onCalendar }: { open: (path: string) => void; onCa
       <PageHeading title={t('festivals')} subtitle={t('r_festivalIntro')} image="/art/redesign/aarti-banner.webp" />
       <div className="page-content">
         <label className="library-search"><span aria-hidden="true">⌕</span><input type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder={t('r_festivalSearch')} aria-label={t('r_festivalSearch')} />{query && <button onClick={() => setQuery('')} aria-label={t('close')}>×</button>}</label>
+        {celebration && !term && <button className="festival-today-entry" onClick={() => open(`${celebration.id}/card`)}><img src={photo(celebration)} alt="" /><span><strong>{t('festivalToday')} · {name(celebration)}</strong><small>{t('ft_greet')} →</small></span></button>}
         {next && !term && <section className="festival-feature">
           <div className="festival-next">
             <div className="festival-date"><span>{t('r_nextFestival')}</span><b>{date(next).toLocaleDateString(lang, { day: 'numeric', timeZone: 'Asia/Kolkata' })}</b><strong>{date(next).toLocaleDateString(lang, { month: 'long', timeZone: 'Asia/Kolkata' })}</strong><span>{date(next).toLocaleDateString(lang, { weekday: 'long', timeZone: 'Asia/Kolkata' })}</span><span className="countdown-chip">{daysUntil(next) === 0 ? t('festivalToday') : t('festivalIn', { count: daysUntil(next) })}</span><button className="primary-action" onClick={() => open(next.id)}>{t('r_preparation')} →</button></div>

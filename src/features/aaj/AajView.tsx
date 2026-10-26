@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { daysUntil, nextFestival, todayIST } from '../../content/festivals'
 import { dayPanchang } from '../../lib/panchang/daily'
 import { formatClock } from '../../lib/format'
-import { CityPicker, useCity } from '../../ui/CityPicker'
+import { useCity } from '../../ui/CityPicker'
 import { Diya } from '../../ui/Diya'
 
 export function AajView({ openFestival }: { openFestival: (id: string) => void }) {
@@ -45,7 +45,7 @@ export function AajView({ openFestival }: { openFestival: (id: string) => void }
         </p>
         <p className="mt-1 text-[1.05rem] text-dim">{t('tithiTill', { time: formatClock(p.tithi.end, lang) })}</p>
         <p className="mt-3 text-[1.1rem] text-warm">
-          {t('panchangFor')} <CityPicker />
+          {t('panchangFor')} {lang === 'hi' ? city.name_hi : city.name_en}
         </p>
       </section>
 

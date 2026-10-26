@@ -1,5 +1,13 @@
 export const hi = {
   r_mandirReadAarti: '{{name}} आरती पढ़ें',
+  searchNone: 'कोई परिणाम नहीं मिला। दूसरे नाम से खोजें।',
+  r_whatsapp: 'WhatsApp',
+  r_nativeShare: 'और भेजें',
+  r_savedForShare: 'कार्ड सहेज दिया गया। WhatsApp में चित्र जोड़कर भेजें।',
+  r_openWhatsapp: 'WhatsApp खोलें',
+  r_milestoneShare: '{{count}} दिन का दर्शन कार्ड',
+  r_milestoneMessage: 'श्रद्धा और भक्ति के साथ दर्शन के ये दिन पूरे हुए।',
+  r_templeShare: 'मंदिर का कार्ड भेजें',
   r_dailyWelcome: 'आज का शुभ आरंभ',
   r_later: 'बाद में',
   r_dailyCards: 'आज के चार कार्ड',
@@ -395,6 +403,14 @@ export type Strings = typeof hi
 
 export const en: Strings = {
   r_mandirReadAarti: 'Read {{name}} Aarti',
+  searchNone: 'No results. Try another name.',
+  r_whatsapp: 'WhatsApp',
+  r_nativeShare: 'More sharing',
+  r_savedForShare: 'Card saved. Attach the image in WhatsApp to send it.',
+  r_openWhatsapp: 'Open WhatsApp',
+  r_milestoneShare: '{{count}} days of darshan card',
+  r_milestoneMessage: 'These days of darshan were completed with faith and devotion.',
+  r_templeShare: 'Share temple card',
   r_dailyWelcome: 'A thoughtful start to today',
   r_later: 'Later',
   r_dailyCards: 'Today’s four cards',

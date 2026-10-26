@@ -4,7 +4,7 @@ import { FESTIVALS, todayIST } from '../../content/festivals'
 import { formatClock } from '../../lib/format'
 import { dayPanchang } from '../../lib/panchang/daily'
 import { monthMasas, monthPanchang, type Mark } from '../../lib/panchang/month'
-import { CityPicker, useCity } from '../../ui/CityPicker'
+import { useCity } from '../../ui/CityPicker'
 
 const WEEK = [
   ['रवि', 'Sun'],
@@ -87,7 +87,7 @@ export function CalendarView({ openFestival }: { openFestival: (id: string) => v
 
       <div className="mt-2 flex items-center justify-between text-[0.9rem]">
         <span className="text-dim">
-          <CityPicker />
+          <span>{hi ? city.name_hi : city.name_en}</span>
         </span>
         {!(ym.y === today.y && ym.m === today.m) && (
           <button

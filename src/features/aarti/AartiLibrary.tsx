@@ -84,7 +84,7 @@ export function AartiLibrary({ id, open }: { id: string | null; open: (id: strin
       <div className="page-content">
         <label className="library-search" htmlFor="aarti-search">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="10" cy="10" r="6.5" /><path d="m15 15 5 5" /></svg>
-          <input id="aarti-search" type="search" value={term} onChange={(e) => setTerm(e.target.value)} placeholder={t(bhajans ? 'bhajanSearch' : 'aartiSearch')} />
+          <input id="aarti-search" type="search" value={term} onChange={(e) => setTerm(e.target.value)} placeholder={t(bhajans ? 'bhajanSearch' : 'aartiSearch')} aria-label={t(bhajans ? 'bhajanSearch' : 'aartiSearch')} />
           {term && <button onClick={() => setTerm('')} aria-label={t('close')}>×</button>}
         </label>
         <div className="library-switch" role="group" aria-label={t('aartiOrBhajan')}>

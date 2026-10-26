@@ -5,6 +5,10 @@ import { GROUPS, GROUP_ORDER, PHOTO_CREDITS, SOON, TEMPLE_BY_ID, type Nearby, ty
 import { StateMap } from './StateMap'
 import { TempleVideo } from './TempleVideo'
 import { TempleSearch } from './TempleSearch'
+import { ShareCardDialog } from '../greet/ShareCardDialog'
+import { CARD_MARK } from '../../lib/share/card'
+import { ShareIcon } from '../../ui/ShareIcon'
+import { STATE_NAMES } from './stateNames'
 
 /** Everything under #mandir/bharat: categories, a category's list, the state map and a temple page. */
 export function BharatView({ sub, open }: { sub: string[]; open: (path: string) => void }) {
@@ -204,11 +208,12 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 function TemplePage({ temple: t, done, toggle, open }: { temple: Temple; done: boolean; toggle: () => void; open: (p: string) => void }) {
-  const { i18n } = useTranslation()
+  const { t: tr, i18n } = useTranslation()
   const hi = i18n.language === 'hi'
   const p = (a: { hi: string; en: string }) => (hi ? a.hi : a.en)
   const h = (a: string, b: string) => (hi ? a : b)
   const [near, setNear] = useState<Nearby | null>(null)
+  const [sharing, setSharing] = useState(false)
   const facts: [string, string][] = [
     [h('सबसे अच्छा समय', 'Best time'), p(t.best)],
     [h('नियम', 'Rules'), p(t.rules)],
@@ -236,6 +241,8 @@ function TemplePage({ temple: t, done, toggle, open }: { temple: Temple; done: b
           ))}
         </div>
 
+        <button className="share-action mt-4" onClick={() => setSharing(true)}><ShareIcon /> {tr('r_templeShare')}</button>
+        {sharing && <ShareCardDialog input={{ title: p(t.name), message: p(t.importance), source: STATE_NAMES[t.state] ? p(STATE_NAMES[t.state]) : p(t.place), name: '', footer: CARD_MARK, lang: hi ? 'hi' : 'en', picture: `/art/bharat/${t.id}.webp`, pictureFit: 'cover' }} filename={`sanatan-${t.id}.png`} onClose={() => setSharing(false)} />}
         <Section title={h('महत्व', 'Importance')}>{p(t.importance)}</Section>
         <Section title={h('पौराणिक कथा', 'Legend')}>{p(t.katha)}</Section>
         <Section title={h('इतिहास', 'History')}>{p(t.history)}</Section>

@@ -6,6 +6,8 @@ import { CHAPTERS, MEANINGS } from '../../content/gita/meanings'
 import { useStored } from '../../lib/useStored'
 import { Credits } from '../../ui/Credits'
 import { PageHeading, SectionHeading } from '../../ui/PageHeading'
+import { ShareCardDialog } from '../greet/ShareCardDialog'
+import { CARD_MARK } from '../../lib/share/card'
 import { useDailyShloka, useSanskrit } from '../../lib/dailyShloka'
 
 const DEV = '०१२३४५६७८९'
@@ -29,13 +31,10 @@ function PathHome({ open, go }: { open: (path: string) => void; go: (to: string)
   const [last] = useStored('gitaLast', 0)
   const [q, setQ] = useState('')
   const shloka = useDailyShloka()
+  const [sharing, setSharing] = useState(false)
   const topics = ['chalisa', 'katha', 'stotra', 'mantra'].map((id) => SHELVES.find((s) => s.id === id)!)
   const loved = SHELVES[0]
   const featured = [loved.covers.find((c) => c.to === 'path/chalisa')!, loved.covers.find((c) => c.to === 'path/gita')!]
-  const share = () => {
-    const text = `${shloka.text}\n\n${shloka.meaning[l]}\n\n${t('gitaRef', { ch: num(shloka.chapter, hi), v: num(shloka.verse, hi) })}`
-    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank', 'noopener')
-  }
   return (
     <main className="tab-page">
       <PageHeading title={t('nav_path')} subtitle={t('r_pathIntro')} image="/art/redesign/path-banner.webp" />
@@ -57,11 +56,12 @@ function PathHome({ open, go }: { open: (path: string) => void; go: (to: string)
           <section className="daily-shloka-card">
             <h2>{t('verseOfDay')}</h2><p className="shloka-reference">{t('gitaRef', { ch: num(shloka.chapter, hi), v: num(shloka.verse, hi) })}</p>
             <p className="daily-verse">{shloka.text}</p><p>{shloka.meaning[l]}</p>
-            <div className="detail-actions"><button className="primary-action" onClick={() => open(`gita/${shloka.chapter}`)}>{t('readChapter')}</button><button className="share-action" onClick={share} disabled={!shloka.text}><WhatsAppLogo size={20} /> {t('share')}</button></div>
+            <div className="detail-actions"><button className="primary-action" onClick={() => open(`gita/${shloka.chapter}`)}>{t('readChapter')}</button><button className="share-action" onClick={() => setSharing(true)} disabled={!shloka.text}><WhatsAppLogo size={20} /> {t('share')}</button></div>
           </section>
           {SHELVES.filter((s) => s.id === 'granth' || s.id === 'tyohar').map((s) => <section key={s.id}><SectionHeading title={s.title[l]} onAll={() => open(`topics/${s.id}`)} /><ul className="photo-grid book-grid">{s.covers.slice(0, 2).map((c) => <li key={c.to}><CoverButton c={c} go={go} /></li>)}</ul></section>)}
           <button className="calendar-entry" onClick={() => open('topics/all')}>{t('r_fullLibrary')} <span aria-hidden="true">→</span></button>
         </>}
+        {sharing && <ShareCardDialog input={{ title: t('verseOfDay'), message: `${shloka.text}\n\n${shloka.meaning[l]}`, source: t('gitaRef', { ch: shloka.chapter, v: shloka.verse }), name: '', footer: CARD_MARK, lang: l, compact: true, picture: '/art/redesign/path-banner.webp' }} filename="sanatan-shloka.png" onClose={() => setSharing(false)} />}
         <Credits />
       </div>
     </main>

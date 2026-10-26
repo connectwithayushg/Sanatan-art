@@ -532,3 +532,25 @@ button, a, input, select { touch-action: manipulation; }
 .daily-dots button[aria-current=step] span { width: 20px; border-radius: 6px; background: #b34700; }
 .daily-notice { padding: 4px 16px 12px; font-size: .9rem; text-align: center; color: #8b3b05; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+
+.share-card-dialog { position: fixed; inset: 0; margin: auto; width: min(100% - 24px, 520px); max-height: 94svh; border: 0; padding: 0; border-radius: 20px; background: #fbf4e8; color: #382316; }
+.share-card-dialog::backdrop { background: #2f1b0baa; }
+.share-card-preview { padding: 12px; }
+.share-card-preview header { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 10px; }
+.share-card-preview h2 { font-size: 1.2rem; font-weight: 600; }
+.share-card-preview header button { min-width: 44px; min-height: 44px; border-radius: 50%; background: #fff; font-size: 1.5rem; }
+.share-card-image { max-height: 65svh; overflow-y: auto; background: #f1e3cd; border-radius: 12px; }
+.share-card-image img { display: block; width: 100%; height: auto; }
+.share-card-image > p { padding: 40px; text-align: center; }
+.share-card-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.share-card-buttons > button { flex: 1; }
+.share-card-preview > p { margin-top: 12px; font-size: .9rem; }
+.share-card-preview > p a { display: flex; margin-top: 8px; }
+.greeting-detail { padding: 18px 16px; }
+.greeting-detail h1 { font-family: var(--font-display); font-size: 2rem; }
+.greeting-detail .morning-preview { width: min(100%, 320px); display: block; margin: 18px auto; }
+.greeting-detail .morning-preview img { width: 100%; height: auto; border-radius: 16px; border: 1px solid #e5cfad; }
+.festival-today-entry { display: flex; align-items: center; gap: 12px; margin: 14px 0; padding: 12px; background: #fff; border: 1px solid #edcfa7; border-radius: 16px; text-align: left; width: 100%; }
+.festival-today-entry img { width: 64px; height: 64px; object-fit: cover; border-radius: 10px; }
+.festival-today-entry strong, .festival-today-entry small { display: block; }
+.festival-today-entry small { color: #96420f; margin-top: 3px; }
