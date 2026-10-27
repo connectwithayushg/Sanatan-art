@@ -1,4 +1,5 @@
 export const hi = {
+  r_mandirReadAarti: '{{name}} आरती पढ़ें',
   r_goodMorning: 'शुभ प्रभात',
   r_dailyCompanion: 'आपकी रोज़ की पूजा का साथी',
   r_darshanAction: 'दर्शन करें',
@@ -379,6 +380,7 @@ export const hi = {
 export type Strings = typeof hi
 
 export const en: Strings = {
+  r_mandirReadAarti: 'Read {{name}} Aarti',
   r_goodMorning: 'Good morning',
   r_dailyCompanion: 'Your companion for daily worship',
   r_darshanAction: 'Take darshan',

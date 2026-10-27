@@ -12,7 +12,6 @@ import { offer, type Offering } from '../../lib/darshan'
 import { FallFlowers, GroundFlowers, OfferDefs } from './Offerings'
 import { useCutBox } from './useCutBox'
 import { TabBook } from '../../ui/TabIcons'
-import { PageHeading } from '../../ui/PageHeading'
 import { BharatHomeCard } from '../bharat/BharatHomeCard'
 
 const MALA = 108
@@ -53,7 +52,9 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
   const hi = i18n.language === 'hi'
   // Picker order: the deity worshipped last, then today's deity, then everyone else in a fixed order from Ganesh ji.
   const [last, setLast] = useStored('lastDeity', '')
-  const todayId = deityOfDay(new Date().getDay()).id
+  const today = ymd(new Date())
+  const weekday = new Date(today + 'T12:00:00Z').getUTCDay()
+  const todayId = deityOfDay(weekday).id
   const [order] = useState(() => {
     const first = [last, todayId].filter((id, i, a) => DEITIES.some((d) => d.id === id) && a.indexOf(id) === i)
     return [...first.map((id) => DEITIES.find((d) => d.id === id)!), ...DEITIES.filter((d) => !first.includes(d.id))]
@@ -61,7 +62,7 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
   const [chosen, setChosen] = useState(() => (DEITIES.some((d) => d.id === initial) ? initial! : order[0].id))
   const [gopal, setGopal] = useStored('balGopal', false)
   const [ling, setLing] = useStored('shivLing', false)
-  const form = (d: (typeof DEITIES)[number]) => (d.id === 'krishna' && gopal ? { ...d, ...BAL_GOPAL } : d.id === 'shiv' && ling ? { ...d, ...SHIVLING } : d)
+  const form = (d: (typeof DEITIES)[number]) => (d.id === 'krishna' && gopal ? { ...d, ...BAL_GOPAL } : d.id === 'shiv' && ling ? { ...d, ...SHIVLING, shrineWeek: undefined } : d)
   const deity = form(DEITIES.find((d) => d.id === chosen) ?? DEITIES[0])
   // What has been offered to each deity today (diya lit, flowers on the ground); it resets at midnight.
   const [offered_, setOffered] = useStored<{ day: string; d: Record<string, { lit?: boolean; flowers?: boolean }> }>('offerings', { day: '', d: {} })
@@ -90,9 +91,8 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
       : deity.id === 'shiv'
         ? { label: 'shivForm', a: 'formShiv', b: 'formLing', on: ling, set: setLing }
         : null
-  const picture = deity.week?.[new Date().getDay()] ?? deity.cutout ?? deity.photo
+  const picture = deity.shrineWeek?.[weekday] ?? deity.week?.[weekday] ?? deity.cutout ?? deity.photo
   const box = useCutBox(picture)
-  const today = ymd(new Date())
   const here = (offered_.day === today ? offered_.d : {})[deity.id] ?? {}
   const lit = !!here.lit
   const mark = (patch: { lit?: boolean; flowers?: boolean }) => setOffered({ day: today, d: { ...(offered_.day === today ? offered_.d : {}), [deity.id]: { ...here, ...patch } } })
@@ -175,16 +175,16 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
   const [h1, h2, hr] = HALO[deity.id] ?? HALO.hanuman
   const bh = box ? box.b - box.t : 1
   const bw = box ? box.r - box.l : 1
-  const height = Math.min(sz.h * .65 / bh, sz.w * .74 / (bw * (box?.a ?? 6 / 7)))
+  const height = Math.min(sz.h * .59 / bh, sz.w * .86 / (bw * (box?.a ?? 6 / 7)))
   const aarti = AARTIS.find((a) => a.id === deity.aarti)
+  const aartiName = hi ? deity.name_hi.replace(/(?: जी| माँ)$/, '') : deity.name_en.replace(/ (?:ji|Maa)$/, '')
   return (
     <main className="tab-page mandir-page">
       <OfferDefs />
-      <PageHeading title={t('r_myMandir')} subtitle={t('r_mandirIntro')} image="/art/redesign/ivory-shrine.webp" />
-      <div className="mandir-picker">
-        <label><span className="sr-only">{t('chooseDeity')}</span><select value={deity.id} onChange={(e) => pick(e.target.value)}>{order.map((d) => <option key={d.id} value={d.id}>{hi ? d.name_hi : d.name_en}{d.id === todayId ? ` · ${t('cal_today')}` : ''}</option>)}</select></label>
-        {formSwitch && <div className="mandir-form-switch" role="group" aria-label={t(formSwitch.label)}>{[false, true].map((on) => <button key={String(on)} aria-pressed={formSwitch.on === on} onClick={() => { formSwitch.set(on); setPetals(0) }}>{t(on ? formSwitch.b : formSwitch.a)}</button>)}</div>}
-      </div>
+      <header className="mandir-heading">
+        <h1>{t('r_myMandir')}</h1>
+        <label className="mandir-current-deity"><span className="sr-only">{t('chooseDeity')}</span>{deity.id === 'shiv' ? <svg width="20" height="26" viewBox="0 0 24 30" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M12 2v26M5 4v6a7 7 0 0 0 14 0V4M3 5l2-3 2 3m10 0 2-3 2 3M10 5l2-3 2 3" /></svg> : <img src={deity.face ?? deity.thumb} alt="" />}<select value={deity.id} onChange={(e) => pick(e.target.value)}>{order.map((d) => <option key={d.id} value={d.id}>{hi ? d.name_hi : d.name_en}{d.id === todayId ? ` · ${t('cal_today')}` : ''}</option>)}</select><span aria-hidden="true">⌄</span></label>
+      </header>
       <div ref={stage} className={`mandir-shrine shrine ${lit ? 'is-lit' : ''}`} style={{ '--h1': h1, '--h2': h2, '--hr': hr } as CSSProperties}
         onTouchStart={(e) => { swipeFrom.current = [e.touches[0].clientX, e.touches[0].clientY] }}
         onTouchEnd={(e) => {
@@ -198,16 +198,20 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
           pick(order[(at + (dx < 0 ? 1 : -1) + order.length) % order.length].id)
         }}>
         <div className="mandir-statue-shadow" />
-        <img key={picture} src={picture} alt={hi ? deity.name_hi : deity.name_en} className="mandir-statue" style={{ height, bottom: sz.h * .2 - (1 - (box?.b ?? 1)) * height, transform: `translateX(-${(box?.cx ?? .5) * 100}%)`, opacity: box ? 1 : 0 }} />
-        <div className="mandir-ground" aria-hidden="true"><GroundFlowers on={!!here.flowers} fresh={petals > 0} /><FallFlowers wave={petals} rise={() => sz.h * .55} spread={sz.w * .6} /></div>
+        <img key={picture} src={picture} alt={hi ? deity.name_hi : deity.name_en} className="mandir-statue" style={{ height, bottom: sz.h * .30 - (1 - (box?.b ?? 1)) * height, transform: `translateX(-${(box?.cx ?? .5) * 100}%)`, opacity: box ? 1 : 0 }} />
+        <div className="mandir-ground" style={{ bottom: sz.h * .30 - 45 }} aria-hidden="true"><GroundFlowers on={!!here.flowers} fresh={petals > 0} /><FallFlowers wave={petals} rise={() => sz.h * .55} spread={sz.w * .6} /></div>
         <div className="mandir-offerings" role="group" aria-label={t('darshanHint')}>
-          <button className={`offering-control ${lit ? 'offering-lit' : ''}`} onClick={light} aria-pressed={lit} aria-label={lit ? t('diyaLit') : t('lightDiya')}><span className="offering-object"><img src="/art/redesign/offering-diya.webp" alt="" /><span className="offering-flame" aria-hidden="true" /></span><strong>{t('r_offeringDiya')}</strong></button>
+          <button className={`offering-control ${lit ? 'offering-lit' : ''}`} onClick={light} aria-pressed={lit} aria-label={lit ? t('diyaLit') : t('lightDiya')}><span className="offering-object"><img src="/art/redesign/mandir-brass-diya-v2.webp" alt="" /><span className="offering-flame" aria-hidden="true" /></span><strong>{t('r_offeringDiya')}</strong></button>
           <button className="offering-control" onClick={flowers} aria-pressed={!!here.flowers} aria-label={t('offerFlowers')}><span className="offering-object"><img src="/art/redesign/offering-flowers.webp" alt="" /></span><strong>{t('r_offeringFlowers')}</strong></button>
           <button className="offering-control" onClick={bell} aria-label={t('ringBell')}><span className="offering-object"><img src="/art/redesign/offering-bell.webp" alt="" /></span><strong>{t('bell')}</strong></button>
         </div>
       </div>
+      <div className="mandir-actions">
+        {aarti && <button className="mandir-aarti-action" onClick={() => openAarti?.(aarti.id, deity.id)}><img src="/art/redesign/path-banner.webp" alt="" /><span>{t('r_mandirReadAarti', { name: aartiName })}</span><span aria-hidden="true">→</span></button>}
+        <button className="mandir-jap-action" onClick={() => document.getElementById('mandir-mala')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}><img src="/art/redesign/jap-mala.webp" alt="" /><span>{t('r_jap')}</span><span aria-hidden="true">→</span></button>
+      </div>
       <div className="page-content">
-        <div className="mandir-actions">{aarti && <button className="primary-action" onClick={() => openAarti?.(aarti.id, deity.id)}><img src="/art/redesign/path-banner.webp" alt="" /><span>{t('r_readDeityAarti', { name: hi ? deity.name_hi : deity.name_en })}</span><span aria-hidden="true">→</span></button>}<button className="secondary-action" onClick={() => document.getElementById('mandir-mala')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>{t('r_jap')} →</button></div>
+        {formSwitch && <div className="mandir-form-switch" role="group" aria-label={t(formSwitch.label)}>{[false, true].map((on) => <button key={String(on)} aria-pressed={formSwitch.on === on} onClick={() => { formSwitch.set(on); setPetals(0) }}>{t(on ? formSwitch.b : formSwitch.a)}</button>)}</div>}
         <p className="mandir-mantra">{deity.mantra}</p>
         <div className="mandir-quiet-actions"><button onClick={music} aria-pressed={playing}>{t('music')} · {t(playing ? 'pause' : 'play')}</button><button onClick={meditate}><DhyanIcon size={22} /> {t('dhyan')}</button></div>
         <ul className="mandir-deity-list" aria-label={t('chooseDeity')}>{order.map(form).map((d) => <li key={d.id}><button onClick={() => pick(d.id)} aria-pressed={d.id === deity.id}><img src={d.face ?? d.thumb} alt="" /><span>{hi ? d.name_hi : d.name_en}</span></button></li>)}</ul>

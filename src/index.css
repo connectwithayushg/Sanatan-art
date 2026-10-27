@@ -392,30 +392,41 @@ button, a, input, select { touch-action: manipulation; }
 .home-aarti { margin-top: 15px; }
 .home-shloka { margin: 24px 16px 0; }
 .home-shloka .secondary-action { margin-top: 15px; }
-/* Mandir: the offerings sit on a real marble ledge instead of detached floating controls. */
-.mandir-page .page-heading { min-height: 94px; }
-.mandir-page .page-heading-copy { padding-block: 12px; }
-.mandir-picker { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; padding: 0 16px 12px; }
-.mandir-picker select { min-height: 48px; max-width: 100%; background: #fff; border: 1px solid #dec6a6; border-radius: 12px; padding: 7px 12px; font-weight: 600; }
-.mandir-form-switch { display: flex; padding: 3px; background: #fff; border-radius: 12px; border: 1px solid #eddfca; }
-.mandir-form-switch button { min-height: 44px; padding: 5px 10px; font-size: .9rem; border-radius: 9px; }
+/* Mandir follows option 5: one title row, uninterrupted shrine, attached marble ledge. */
+.mandir-heading { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 12px; min-height: 56px; padding: 5px 14px; background: #fff8ec; }
+.mandir-heading h1 { font-family: var(--font-display); font-size: 1.7rem; line-height: 1.25; }
+.mandir-current-deity { position: relative; display: flex; align-items: center; gap: 5px; justify-self: end; max-width: 100%; min-height: 44px; padding: 0 10px; border: 1px solid #e8cfa9; border-radius: 24px; background: #fffaf3; }
+.mandir-current-deity > svg { flex-shrink: 0; color: #d85b07; }
+.mandir-current-deity > img { width: 24px; height: 29px; object-fit: contain; flex-shrink: 0; }
+.mandir-current-deity select { appearance: none; min-width: 0; width: 115px; max-width: 100%; padding: 7px 0; font-size: 1rem; font-weight: 600; color: #382316; background: transparent; }
+.mandir-current-deity > span:last-child { pointer-events: none; font-size: 1.1rem; }
+.mandir-form-switch { display: flex; width: fit-content; margin: 16px auto 0; padding: 3px; background: #fff; border-radius: 12px; border: 1px solid #eddfca; }
+.mandir-form-switch button { min-height: 44px; padding: 5px 14px; font-size: .95rem; border-radius: 9px; }
 .mandir-form-switch button[aria-pressed=true] { background: #f9e3c6; color: #913900; font-weight: 600; }
-.mandir-shrine { position: relative; height: clamp(360px, calc(100svh - 440px), 540px); overflow: hidden; touch-action: pan-y; background: #f0e1cd url('/art/redesign/ivory-shrine.webp') center / 100% 100%; }
-.mandir-statue { position: absolute; left: 50%; width: auto; max-width: none; z-index: 2; filter: drop-shadow(0 7px 9px #57351640); }
-.mandir-statue-shadow { position: absolute; bottom: 19%; left: 20%; width: 60%; height: 7%; background: radial-gradient(ellipse, #7a5c3555, transparent 70%); }
-.mandir-ground { pointer-events: none; position: absolute; width: 348px; height: 130px; bottom: 12%; left: 50%; transform: translateX(-50%) scale(.85); z-index: 3; }
-.mandir-offerings { position: absolute; inset: auto 0 0; z-index: 5; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 8px 10px 10px; background: linear-gradient(#fff6e400, #f6e8d7cc 30%, #ead6bdcc); }
-.offering-control { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; min-height: 112px; border-radius: 12px; }
+.mandir-shrine { position: relative; height: clamp(380px, calc(100svh - 292px), 700px); overflow: hidden; touch-action: pan-y; background: #f4dfbe url('/art/redesign/mandir-sunlit-v2.webp') center top / 100% 118% no-repeat; }
+.mandir-statue { position: absolute; left: 50%; width: auto; max-width: none; z-index: 2; filter: drop-shadow(0 8px 5px #6b411943); }
+.mandir-statue-shadow { position: absolute; bottom: 28%; left: 17%; width: 66%; height: 5%; background: radial-gradient(ellipse, #70432270, transparent 70%); }
+.mandir-ground { pointer-events: none; position: absolute; width: 348px; height: 90px; left: 50%; transform: translateX(-50%) scale(.85); z-index: 3; }
+.mandir-offerings { position: absolute; inset: auto 0 0; z-index: 5; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: end; gap: 7px; padding: 8px 18px 9px; background: linear-gradient(#fff6e400, #fff4dd15); }
+.offering-control { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; min-height: 110px; border-radius: 12px; }
 .offering-control:active { background: #fff6dc70; }
-.offering-object { display: block; position: relative; width: 100%; height: 82px; }
-.offering-object > img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 4px 3px #5a3a2633); }
-.offering-control strong { font-size: 1rem; line-height: 1.5; color: #422b19; }
-.offering-flame { display: none; position: absolute; width: 13px; height: 28px; left: calc(50% - 6px); top: 8px; border-radius: 70% 30% 60% 40%; background: radial-gradient(ellipse at bottom, #fffbd4, #ffb31e 55%, #ed7900); box-shadow: 0 0 23px #f9bc48; }
+.offering-object { display: block; position: relative; width: 100%; height: 84px; }
+.offering-object > img { width: 100%; height: 100%; object-fit: contain; object-position: center bottom; filter: drop-shadow(0 4px 3px #5a3a2655); }
+.offering-control:first-child .offering-object > img { padding: 5px 1px 0; }
+.offering-control:nth-child(2) .offering-object > img { padding-top: 18px; }
+.offering-control:nth-child(3) .offering-object > img { padding-inline: 7px; }
+.offering-control strong { font-size: 1.05rem; line-height: 1.5; color: #422b19; text-shadow: 0 1px #fff6e9; }
+.offering-flame { display: none; position: absolute; width: 12px; height: 29px; left: 87%; top: 1%; transform: translateX(-50%) rotate(8deg); border-radius: 75% 25% 65% 35%; background: radial-gradient(ellipse at 50% 80%, #fffef0 25%, #ffe58b 45%, #ffb31e 67%, #ed7900); box-shadow: 0 0 18px 5px #ffcf5a88; }
 .offering-lit .offering-flame { display: block; }
 .mandir-mantra { text-align: center; font-family: var(--font-scripture); padding: 12px 0; font-size: 1.1rem; }
-.mandir-actions { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 10px; margin-top: 14px; }
-.mandir-actions > button { padding: 9px; text-align: left; }
-.mandir-actions img { width: 40px; height: 45px; object-fit: cover; object-position: right; border-radius: 6px; }
+.mandir-actions { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr); gap: 8px; padding: 8px 14px; background: #fff8ec; border-top: 1px solid #e8d7bd; }
+.mandir-actions > button { display: flex; align-items: center; gap: 7px; min-height: 64px; min-width: 0; padding: 6px 9px 6px 0; border: 1px solid #e9d8bc; border-radius: 12px; text-align: left; overflow: hidden; font-size: 1rem; line-height: 1.35; font-weight: 600; }
+.mandir-actions > .mandir-aarti-action { color: #fff; border-color: #da5a07; background: linear-gradient(115deg, #e56308, #cf4a00); }
+.mandir-actions > .mandir-jap-action { color: #422b19; background: #fff; }
+.mandir-actions img { width: 68px; height: 54px; object-fit: cover; object-position: right; border-radius: 0 5px 5px 0; flex-shrink: 0; }
+.mandir-actions .mandir-jap-action img { width: 48px; height: 50px; object-fit: contain; margin-left: 3px; }
+.mandir-actions > button > span:last-child { margin-left: auto; font-size: 1.25rem; }
+@media (max-width: 359px) { .mandir-heading { gap: 6px; padding-inline: 10px; } .mandir-heading h1 { font-size: 1.45rem; } .mandir-current-deity { padding-inline: 6px; } .mandir-current-deity > img { display: none; } .mandir-current-deity select { width: 104px; } .mandir-actions { padding-inline: 10px; } .mandir-actions img { width: 53px; } .mandir-actions .mandir-jap-action img { width: 35px; } .mandir-actions > button { gap: 4px; padding-right: 6px; } }
 .mandir-quiet-actions { display: flex; gap: 12px; justify-content: center; margin: 12px 0; }
 .mandir-quiet-actions button { min-height: 48px; padding: 7px 12px; display: flex; align-items: center; gap: 8px; color: #89400b; font-weight: 600; }
 .mandir-deity-list { display: flex; gap: 12px; overflow-x: auto; padding: 5px 0 10px; }
