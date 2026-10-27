@@ -23,6 +23,6 @@ Only bounded repairs from the generated full-scene edits are used. No generated 
 - Before: ../mandir-fidelity/final.png. After: lit.png / flowers-settled.png. interaction.gif records actual working-app frames, including lighting, flowers and both bells.
 - Browser checks cover gradual ignition, delayed corner lamps, centred diya, both bells, flower fall/settle, cumulative darshan counting once after a gap, saved state, original Shivling/Khatu pictures, 320/390 px enlarged Hindi/English, reduced motion and no app exceptions.
 - TypeScript, existing tests and production build are run for each affected review stage. Offline production checks cover the new art and offering actions after installation.
-- No existing storage key, prayer, festival/temple fact, hosting setting or deployment is changed. The complete offline installation is now approximately 49 MB; the existing main JavaScript bundle warning remains.
+- No existing storage key, prayer, festival/temple fact, hosting setting or deployment is changed. The complete offline installation is now approximately 50 MB; the existing main JavaScript bundle warning remains.
 
 These changes belong to the Today/Mandir review stage, inherited by the daily-opener and sharing stages. GitHub authentication remains required to publish the review PRs; no release is authorised.
