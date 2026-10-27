@@ -25,14 +25,18 @@ Five dependent review branches, beginning at app-source commit eabb21d. PRs shou
 
 New original generated decorative assets: lamp banner, closed unlabelled book banner, Karwa Chauth still life, empty ivory marble shrine, and transparent offering-object photographs. Existing deity identities / colours and original weekday sets remain in use. Actual temple cards use the existing temple photographs and credits, not the fictional shrine.
 
-No devotional content files changed. Existing known text issues in HANDOVER.md are intentionally untouched. No new katha, ritual, history or festival date was invented.
+No devotional text changed. The deity catalogue adds only an optional shrineWeek image field for the corrected Mandir artwork. Existing known text issues in HANDOVER.md are intentionally untouched. No new katha, ritual, history or festival date was invented.
 
 Still missing from the original catalogue: Durga and Khatu weekday sets; seven day-wise Shivling pictures (the existing placeholder remains); individual pictures for Shani, Santoshi, Saraswati and other reader deities that currently show a diya; improved real photos for several temple pages. Gita meanings remain the original chapters 2 and 12 only. The dated festival dataset ends on 24 November 2026; future festivals require independently checked content, not fabricated dates.
 
-The build retains its existing large-main-bundle warning (~1.7 MB). Offline caching now includes WebP and full card photos, so the first complete offline download is ~37 MB. After installation the daily cards and share rendering work without the network. External YouTube playback still requires connectivity and a user tap.
+The build retains its existing large-main-bundle warning (~1.7 MB). Offline caching now includes WebP and full card photos, so the first complete offline download is ~39 MB. After installation the daily cards and share rendering work without the network. External YouTube playback still requires connectivity and a user tap.
 
 Native file sharing depends on browser support. Desktop fallback saves the card, then presents an explicit WhatsApp link and attachment instruction. Actual transmission remains the user's action.
 
 ## Validation
 
 Every stage was checked with Node 22 TypeScript, Vitest and production build. Final suite: 20 tests. Phone checks cover 320 / 390 px, enlarged text, five tabs, readers, saved state, offers, mala and offline production reload. Screenshots and per-stage notes are in pr-1 through pr-5.
+
+## Mandir correction, 27 October
+
+The first implementation diverged from option 5. The Today/Mandir stage now includes the compact title/picker row, a taller sunlit lattice shrine, seated Shiva daily set, integrated marble offerings and photo-backed Aarti/Jap actions. Original deity fields and card photos remain unchanged. See `mandir-correction/comparison.png` and `mandir-correction/artwork-prompts.md`. This correction is included in branches 3, 4 and 5 before any PR publication.
