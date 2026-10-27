@@ -208,6 +208,35 @@ function ChapterList({ open }: { open: Open }) {
   )
 }
 
+/** One block of a chapter: heading, shloka box, lesson box, picture slot, source line or paragraph (see Chapter in content/learn.ts). */
+function Block({ p, pic, hi }: { p: string; pic: string; hi: boolean }) {
+  if (p === '@pic') return <LearnPic name={pic} />
+  if (p.startsWith('## ')) return <h3 className="mt-3 font-display text-[1.3rem] leading-snug text-flame">{p.slice(3)}</h3>
+  if (p.startsWith('!! '))
+    return (
+      <div className="rounded-2xl bg-[#fff1d6] px-4 py-3">
+        <b className="block text-[0.8rem] tracking-wide text-flame">{hi ? 'आज की सीख' : 'Today’s lesson'}</b>
+        <span className="mt-1 block text-[1.05rem] font-semibold leading-[1.6] text-warm">{p.slice(3)}</span>
+      </div>
+    )
+  if (p.startsWith('> ')) {
+    const [sa, meaning, ref] = p.slice(2).split('‖')
+    return (
+      <blockquote className="rounded-2xl bg-[#fff1d6] px-4 py-3 text-center">
+        <span className="block whitespace-pre-line font-scripture text-[1.1rem] leading-[1.7] text-flame">{sa}</span>
+        {meaning && <span className="mt-1 block text-[0.9rem] text-warm">{meaning}</span>}
+        {ref && <span className="mt-1 block text-[0.78rem] text-dim">{ref}</span>}
+      </blockquote>
+    )
+  }
+  if (p.startsWith('~ ')) return <p className="text-[0.8rem] italic leading-snug text-dim">{p.slice(2)}</p>
+  return (
+    <p className="text-[1.02rem] leading-[1.75] text-warm">
+      <Rich text={p} />
+    </p>
+  )
+}
+
 function ChapterPage({ index, open }: { index: number; open: Open }) {
   const { t } = useTranslation()
   const hi = useHi()
@@ -215,7 +244,7 @@ function ChapterPage({ index, open }: { index: number; open: Open }) {
   const c: Chapter | undefined = CHAPTERS[index]
   if (!c) return <ChapterList open={open} />
   const next = CHAPTERS[index + 1]
-  const body = hi ? c.body.hi : c.body.en
+  const body = hi || !c.body.en.length ? c.body.hi : c.body.en
   const finish = () => {
     if (!read.includes(c.id)) setRead([...read, c.id])
     open(next ? `sanatan/${index + 2}` : 'sanatan')
@@ -227,9 +256,7 @@ function ChapterPage({ index, open }: { index: number; open: Open }) {
       <article className="mt-4 grid gap-3.5">
         <h2 className="font-display text-[1.7rem] leading-tight text-warm">{hi ? c.title.hi : c.title.en}</h2>
         {body.map((p, i) => (
-          <p key={i} className="text-[1.02rem] leading-[1.75] text-warm">
-            <Rich text={p} />
-          </p>
+          <Block key={i} p={p} pic={`ch${index + 1}-${body.slice(0, i).filter((x) => x === '@pic').length + 1}`} hi={hi} />
         ))}
         {c.verse && (
           <blockquote className="rounded-2xl bg-[#fff1d6] px-4 py-3 text-center">
@@ -276,7 +303,11 @@ function AboutPage({ open }: { open: Open }) {
       </ul>
       <section className="mt-4 rounded-2xl bg-[#fff1d6] p-4">
         <h3 className="font-bold text-warm">{t('whyApp')}</h3>
-        <p className="mt-1 text-[1rem] leading-[1.7] text-warm">{hi ? ABOUT.why.hi : ABOUT.why.en}</p>
+        {(hi ? ABOUT.why.hi : ABOUT.why.en).split('\n\n').map((para, i) => (
+          <p key={i} className="mt-2 text-[1rem] leading-[1.7] text-warm first:mt-1">
+            {para}
+          </p>
+        ))}
       </section>
       <button onClick={share} className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl border-[1.5px] border-[#1f8f4e] bg-white py-3 text-[1rem] font-bold text-[#1f8f4e] active:scale-[0.98]">
         <WhatsAppLogo /> {t('shareFamily')}

@@ -403,21 +403,30 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
 
 /** The mala has as many beads as the chosen count, so a mala of 11 is smaller and its beads larger. The strand turns clockwise one bead per jap; beads already counted are darker. */
 function Mala({ count, beads }: { count: number; beads: number }) {
+  const R = 118
   const C = 140
-  const R = { 11: 62, 21: 84, 51: 108, 108: 124 }[beads] ?? 124
-  const r = Math.min(11, ((2 * Math.PI * R) / beads) * 0.4)
+  const Y = C + 10
+  const r = Math.min(20, ((Math.PI * 2 * R) / beads) * 0.52)
   const k = count % beads
   return (
-    <svg viewBox="0 0 280 280" className="h-full w-full" aria-hidden="true">
-      <g style={{ transform: `rotate(${(k * 360) / beads}deg)`, transformOrigin: '140px 140px', transition: 'transform .25s' }}>
+    <svg viewBox="0 0 280 290" className="h-full w-full" aria-hidden="true">
+      <circle cx={C} cy={Y} r={R} fill="none" stroke="#c9a24a" strokeWidth={1.6} />
+      <g style={{ transform: `rotate(${(k * 360) / beads}deg)`, transformOrigin: `${C}px ${Y}px`, transition: 'transform .25s' }}>
         {Array.from({ length: beads }, (_, i) => {
           const a = (i / beads) * Math.PI * 2 - Math.PI / 2
-          return <circle key={i} cx={C + R * Math.cos(a)} cy={C + R * Math.sin(a)} r={r} fill={k && i >= beads - k ? '#6e2a0a' : '#b0672f'} stroke="#5a2d0c" strokeWidth={0.8} />
+          const done = k > 0 && i >= beads - k
+          return (
+            <g key={i} transform={`translate(${C + R * Math.cos(a)} ${Y + R * Math.sin(a)}) rotate(${(a * 180) / Math.PI + 180})`}>
+              <image href="/art/rudraksh.webp" x={-r} y={-r} width={r * 2} height={r * 2} />
+              {done && <circle r={r * 0.94} fill="#1e0d04" opacity={0.45} />}
+            </g>
+          )
         })}
       </g>
-      <circle cx={C} cy={C - R - r - 3} r={Math.min(9, r + 2)} fill="#7a3b12" stroke="#e8b44a" strokeWidth={2} />
-      <path d={`M140 ${C - R - r - 12} v-8`} stroke="#e8b44a" strokeWidth={3} strokeLinecap="round" />
-      <circle cx={C} cy={C} r={R - r - 6} fill="#fffaf0" />
+      <path d={`M${C} ${Y - R - 2} v-14`} stroke="#e8b44a" strokeWidth={3} strokeLinecap="round" />
+      <circle cx={C} cy={Y - R - 18} r={10} fill="#8a4a22" stroke="#e8b44a" strokeWidth={2.4} />
+      <circle cx={C} cy={Y - R - 18} r={3} fill="#e8b44a" />
+      <circle cx={C} cy={Y} r={R - r - 8} fill="#fffaf0" />
     </svg>
   )
 }
