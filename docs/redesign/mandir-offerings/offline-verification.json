@@ -1,0 +1,14 @@
+{
+  "production": "http://127.0.0.1:5174",
+  "serviceWorkerControlled": true,
+  "networkDisabled": true,
+  "checks": [
+    "new scene and transparent photo assets loaded",
+    "diya lighting and both corner lamps",
+    "flower offering",
+    "hanging bell action",
+    "darshan saved once",
+    "offline reload restores lit state without ignition"
+  ],
+  "passed": true
+}
