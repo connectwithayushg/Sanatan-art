@@ -23,13 +23,13 @@ Five dependent review branches, beginning at app-source commit eabb21d. PRs shou
 
 ## Assets and retained limitations
 
-New original generated decorative assets: lamp banner, closed unlabelled book banner, Karwa Chauth still life, empty ivory marble shrine, and transparent offering-object photographs. Existing deity identities / colours and original weekday sets remain in use. Actual temple cards use the existing temple photographs and credits, not the fictional shrine.
+New decorative assets include the lamp banner, closed unlabelled book banner and Karwa Chauth still life. Mandir now uses the approved option-5 scene itself, losslessly extracted; local lamp and flower patches provide interactive/daily states. Other deities retain their original weekday cutouts in the reconstructed empty niche. Rejected generated Shiva replacements were removed. Actual temple cards use the existing temple photographs and credits, not the fictional shrine.
 
-No devotional text changed. The deity catalogue adds only an optional shrineWeek image field for the corrected Mandir artwork. Existing known text issues in HANDOVER.md are intentionally untouched. No new katha, ritual, history or festival date was invented.
+No devotional text changed. The deity catalogue adds only an optional shrineScene / shrineScenes fields for the corrected Mandir artwork. Existing known text issues in HANDOVER.md are intentionally untouched. No new katha, ritual, history or festival date was invented.
 
 Still missing from the original catalogue: Durga and Khatu weekday sets; seven day-wise Shivling pictures (the existing placeholder remains); individual pictures for Shani, Santoshi, Saraswati and other reader deities that currently show a diya; improved real photos for several temple pages. Gita meanings remain the original chapters 2 and 12 only. The dated festival dataset ends on 24 November 2026; future festivals require independently checked content, not fabricated dates.
 
-The build retains its existing large-main-bundle warning (~1.7 MB). Offline caching now includes WebP and full card photos, so the first complete offline download is ~39 MB. After installation the daily cards and share rendering work without the network. External YouTube playback still requires connectivity and a user tap.
+The build retains its existing large-main-bundle warning (~1.7 MB). Offline caching now includes WebP and full card photos, so the first complete offline download is ~45 MB. After installation the daily cards and share rendering work without the network. External YouTube playback still requires connectivity and a user tap.
 
 Native file sharing depends on browser support. Desktop fallback saves the card, then presents an explicit WhatsApp link and attachment instruction. Actual transmission remains the user's action.
 
@@ -39,4 +39,6 @@ Every stage was checked with Node 22 TypeScript, Vitest and production build. Fi
 
 ## Mandir correction, 27 October
 
-The first implementation diverged from option 5. The Today/Mandir stage now includes the compact title/picker row, a taller sunlit lattice shrine, seated Shiva daily set, integrated marble offerings and photo-backed Aarti/Jap actions. Original deity fields and card photos remain unchanged. See `mandir-correction/comparison.png` and `mandir-correction/artwork-prompts.md`. This correction is included in branches 3, 4 and 5 before any PR publication.
+Two reconstructions diverged from option 5. The current Today/Mandir stage uses the actual approved scene, with original Shiva pixels, architecture and foreground objects preserved. Native labels and hit areas operate the diya, flowers and bell. The unlit state changes only the front flame region; six daily variants change only a narrow decorative flower strip, and Monday preserves the full approved scene. Aarti and Jap thumbnails also come from the approved reference.
+
+Original deity fields, daily cutouts and safe share-card photos remain unchanged. See `mandir-fidelity/comparison.png`, README, pixel-verification.json and artwork-edits.json. The earlier `mandir-correction` folder is historical rejected evidence. The correction is included in branches 3, 4 and 5 before PR publication. Corrected stages pass TypeScript, their 11 / 15 / 20 tests and production builds; the final scene and diya state also work offline.

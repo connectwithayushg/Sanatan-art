@@ -14,6 +14,6 @@ Final consistency fixes keep the city selector in Profile, retain saved-city cal
 - Browser: morning, festival, shloka, temple and 21-day milestone image previews; PNG native sharing; cancelled share; daily-sheet preview and return; and automatic Karwa Chauth greeting on 29 October 2026 passed. No actual messages were sent; browser sharing was stubbed for these checks.
 - Offline production PWA: morning and festival cards regenerated with the network disabled.
 - Phone screenshots include before/after morning and festival screens and the new shloka, temple and milestone previews. Exported card samples are also included.
-- Main bundle remains approximately 1.7 MB; full offline installation about 39 MB. Existing content gaps and picture gaps are summarized in `../HANDOFF.md`.
+- Main bundle remains approximately 1.7 MB; full offline installation about 45 MB. Existing content gaps and picture gaps are summarized in `../HANDOFF.md`.
 
-Depends on PRs 1–4 in order; target `app-source`. No devotional text, existing storage keys, deployments or hosting changed. The inherited Mandir correction adds only its optional artwork field.
+Depends on PRs 1–4 in order; target `app-source`. No devotional text, existing storage keys, deployments or hosting changed. The inherited Mandir correction adds only its optional scene metadata.
