@@ -11,7 +11,7 @@ The doors now check 4 am India time and record their existing storage key only w
 - Node 22: TypeScript, 15 tests and production build passed.
 - Browser: four cards, explicit skip, doors after dismissal, same-day reload suppression and deep links passed.
 - Production service worker installed, network disabled, then a fresh reload: verse, meaning and all four card images remained available. `offline.png` records the check.
-- The PWA now caches WebP assets, previously omitted, including all 94 rotating temple photographs and card assets. The complete offline download is about 37 MB; first installation needs connectivity.
+- The PWA now caches WebP assets, previously omitted, including all 94 rotating temple photographs and card assets. The complete offline download is about 45 MB; first installation needs connectivity.
 - Before: Mandir with no daily sheet. After: all four daily panels at 390 × 844.
 
 Depends on PRs 1–3 in order. No religious content, live site or hosting changes.
