@@ -13,3 +13,7 @@ Mandir follows option 5 with an ivory marble shrine and integrated, large labell
 - Religious content files and existing storage keys are unchanged. Existing missing weekday sets and Shivling placeholder remain listed in HANDOVER.md.
 
 Depends on PRs 1 and 2, in that order. Review into `app-source`; no deployment or hosting changes.
+
+## Mandir visual correction, 27 October
+
+The initial Mandir implementation did not match the selected option 5 closely enough. It has been corrected to use the compact title / picker row, uninterrupted sunlit lattice shrine, seated Shiva daily set, integrated offering ledge and photo-backed Aarti / Jap actions. Original deity data is preserved; only an optional Mandir image field is added. The previous attempt, chosen reference and corrected app are shown together in `../mandir-correction/comparison.png`. Stage-3 TypeScript, 11 tests and production build were re-run successfully after the correction.
