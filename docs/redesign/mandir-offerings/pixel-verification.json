@@ -1,0 +1,88 @@
+{
+  "source": "/Users/falcon/Documents/ChatGPT/SanatanGpt/docs/redesign/mandir-fidelity/approved-scene.png",
+  "protectedArea": {
+    "left": 85,
+    "top": 85,
+    "width": 330,
+    "height": 360
+  },
+  "protectedShivaPixelsIdenticalAcrossSevenScenes": true,
+  "edits": [
+    {
+      "rectangle": {
+        "left": 0,
+        "top": 514,
+        "width": 504,
+        "height": 110
+      },
+      "feather": 1,
+      "source": "clear-ledge"
+    },
+    {
+      "rectangle": {
+        "left": 76,
+        "top": 496,
+        "width": 40,
+        "height": 53
+      },
+      "feather": 4,
+      "source": "clear-ledge"
+    },
+    {
+      "rectangle": {
+        "left": 406,
+        "top": 463,
+        "width": 48,
+        "height": 101
+      },
+      "feather": 3,
+      "source": "clear-ledge"
+    },
+    {
+      "rectangle": {
+        "left": 418,
+        "top": 0,
+        "width": 86,
+        "height": 197
+      },
+      "feather": 3,
+      "source": "unlit-corners-and-clear-bell"
+    },
+    {
+      "rectangle": {
+        "left": 24,
+        "top": 276,
+        "width": 60,
+        "height": 61
+      },
+      "feather": 4,
+      "source": "unlit-corners-and-clear-bell"
+    },
+    {
+      "rectangle": {
+        "left": 428,
+        "top": 270,
+        "width": 70,
+        "height": 66
+      },
+      "feather": 4,
+      "source": "unlit-corners-and-clear-bell"
+    }
+  ],
+  "cornerRectangles": [
+    {
+      "left": 24,
+      "top": 276,
+      "width": 60,
+      "height": 61
+    },
+    {
+      "left": 428,
+      "top": 270,
+      "width": 70,
+      "height": 66
+    }
+  ],
+  "encoding": "lossless WebP",
+  "generatedDeityPixelsUsed": false
+}

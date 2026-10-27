@@ -1,0 +1,21 @@
+{
+  "base": "http://127.0.0.1:5173",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "checks": [
+    "centred diya",
+    "gradual wick ignition",
+    "delayed corner lamps",
+    "two hanging photo bells",
+    "matching falling and settled flowers",
+    "cumulative count once per day after a gap",
+    "saved lit and offered states",
+    "original Shivling and Khatu cutouts",
+    "320/390 px Hindi and English with enlarged text",
+    "reduced motion",
+    "no browser exceptions"
+  ],
+  "passed": true
+}

@@ -1,0 +1,21 @@
+{
+  "tool": "built-in image_gen",
+  "source": "/Users/falcon/.codex/generated_images/01a1765e-7261-7670-9451-25c492ead8b3/exec-f3cca78d-143a-4a76-9442-db004bf50c81.png",
+  "prompt": "Use case: background-extraction. Source reference: attached photographic brass flower thali. Extract a production sprite atlas of SIX individual flower heads matching THIS thali exactly: orange gerbera/daisy, yellow gerbera/daisy, white daisy with golden centre in the first row, then tilted views of the same three colours in the second row. Their elongated many-layered petals, centres, cream-white colour and polished photographic depth MUST match the flowers already in the bowl; do not substitute spherical marigolds. Six separate isolated complete blossoms in equal square cells, 3 columns × 2 rows, generous transparent gutters. IMPORTANT: actual RGBA TRANSPARENT background, alpha zero outside each flower and in all gutters. Absolutely NO coloured backdrop, glow, vignette, shadow cloud or background gradient. Retain self-shadow within petals; no cast floor shadow, no bowl, no stem, no text. This is a texture atlas for falling offerings in the actual app.",
+  "generatedOutput": "/Users/falcon/.codex/generated_images/01a1765e-7261-7670-9451-25c492ead8b3/exec-733b1c60-6883-468b-a8f4-29fd9d83f828.png",
+  "selected": true,
+  "sourceAtlasRectangles": {
+    "columns": [
+      0,
+      528,
+      1024,
+      1536
+    ],
+    "rows": [
+      0,
+      512,
+      1024
+    ]
+  },
+  "production": "public/art/redesign/mandir-offerings-v2/flower-{1..6}.webp"
+}

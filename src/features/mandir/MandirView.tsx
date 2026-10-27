@@ -9,7 +9,7 @@ import { Dhyan } from './Dhyan'
 import { DhyanIcon } from '../../ui/DhyanIcon'
 import { useStored } from '../../lib/useStored'
 import { offer, type Offering } from '../../lib/darshan'
-import { FallFlowers, GroundFlowers, OfferDefs } from './Offerings'
+import { FallFlowers, GroundFlowers, HangingBell, OfferingLedge, ShrineLamps } from './Offerings'
 import { useCutBox } from './useCutBox'
 import { TabBook } from '../../ui/TabIcons'
 import { BharatHomeCard } from '../bharat/BharatHomeCard'
@@ -68,6 +68,9 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
   const [offered_, setOffered] = useStored<{ day: string; d: Record<string, { lit?: boolean; flowers?: boolean }> }>('offerings', { day: '', d: {} })
   const [seen, setSeen] = useStored<{ diya?: boolean; bell?: boolean; bowl?: boolean }>('offerHints', {})
   const [petals, setPetals] = useState(0)
+  const [ignition, setIgnition] = useState('')
+  const ignitionTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => () => { if (ignitionTimer.current) clearTimeout(ignitionTimer.current) }, [])
   const [jap, setJap] = useStored('jap', { date: '', count: 0, malas: 0 })
   const [target, setTarget] = useStored('japTarget', MALA)
   const [done, setDone] = useState(false)
@@ -96,7 +99,8 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
   const box = useCutBox(picture)
   const here = (offered_.day === today ? offered_.d : {})[deity.id] ?? {}
   const lit = !!here.lit
-  const scenePhoto = scene ? (lit ? scene.lit : scene.unlit) : `/art/redesign/approved-mandir/empty${lit ? '' : '-unlit'}.webp`
+  const scenePhoto = scene?.base ?? '/art/redesign/mandir-offerings-v2/empty.webp'
+  const igniting = ignition === `${today}/${deity.id}`
   const mark = (patch: { lit?: boolean; flowers?: boolean }) => setOffered({ day: today, d: { ...(offered_.day === today ? offered_.d : {}), [deity.id]: { ...here, ...patch } } })
   const hinted = (k: 'diya' | 'bell' | 'bowl') => {
     if (!seen[k]) setSeen({ ...seen, [k]: true })
@@ -113,8 +117,13 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
   const pick = (id: string) => {
     setChosen(id)
     setPetals(0)
+    setIgnition('')
   }
   const light = () => {
+    if (lit) return
+    if (ignitionTimer.current) clearTimeout(ignitionTimer.current)
+    setIgnition(`${today}/${deity.id}`)
+    ignitionTimer.current = setTimeout(() => setIgnition(''), 2800)
     mark({ lit: true })
     hinted('diya')
     buzz(20)
@@ -182,12 +191,11 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
   const aartiName = hi ? deity.name_hi.replace(/(?: जी| माँ)$/, '') : deity.name_en.replace(/ (?:ji|Maa)$/, '')
   return (
     <main className="tab-page mandir-page">
-      <OfferDefs />
       <header className="mandir-heading">
         <h1>{t('r_myMandir')}</h1>
         <label className="mandir-current-deity"><span className="sr-only">{t('chooseDeity')}</span>{deity.id === 'shiv' ? <svg width="20" height="26" viewBox="0 0 24 30" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M12 2v26M5 4v6a7 7 0 0 0 14 0V4M3 5l2-3 2 3m10 0 2-3 2 3M10 5l2-3 2 3" /></svg> : <img src={deity.face ?? deity.thumb} alt="" />}<select value={deity.id} onChange={(e) => pick(e.target.value)}>{order.map((d) => <option key={d.id} value={d.id}>{hi ? d.name_hi : d.name_en}{d.id === todayId ? ` · ${t('cal_today')}` : ''}</option>)}</select><span aria-hidden="true">⌄</span></label>
       </header>
-      <div ref={stage} className={`mandir-shrine shrine ${lit ? 'is-lit' : ''}`} style={{ '--h1': h1, '--h2': h2, '--hr': hr } as CSSProperties}
+      <div ref={stage} className={`mandir-shrine shrine ${lit ? 'is-lit' : ''}`} style={{ '--h1': h1, '--h2': h2, '--hr': hr, '--flower-rise': `${sz.h * .63}px` } as CSSProperties}
         onTouchStart={(e) => { swipeFrom.current = [e.touches[0].clientX, e.touches[0].clientY] }}
         onTouchEnd={(e) => {
           const from = swipeFrom.current
@@ -201,14 +209,14 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
         }}>
         <div className="mandir-photo">
           <img className="mandir-scene" src={scenePhoto} alt={scene ? (hi ? deity.name_hi : deity.name_en) : ''} />
+          <ShrineLamps lit={lit} igniting={igniting} />
           {!scene && <><div className="mandir-statue-shadow" /><img key={picture} src={picture} alt={hi ? deity.name_hi : deity.name_en} className="mandir-statue" style={{ height, bottom: sz.h * .255 - (1 - (box?.b ?? 1)) * height, transform: `translateX(-${(box?.cx ?? .5) * 100}%)`, opacity: box ? 1 : 0 }} /></>}
         </div>
-        <div className="mandir-ground" style={{ bottom: sz.h * .255 - 45 }} aria-hidden="true"><GroundFlowers on={!!here.flowers} fresh={petals > 0} /><FallFlowers wave={petals} rise={() => sz.h * .55} spread={sz.w * .6} /></div>
-        <div className="mandir-offerings" role="group" aria-label={t('darshanHint')}>
-          <button className={`offering-control ${lit ? 'offering-lit' : ''}`} onClick={light} aria-pressed={lit} aria-label={lit ? t('diyaLit') : t('lightDiya')}><strong>{t('r_offeringDiya')}</strong></button>
-          <button className="offering-control" onClick={flowers} aria-pressed={!!here.flowers} aria-label={t('offerFlowers')}><strong>{t('r_offeringFlowers')}</strong></button>
-          <button className="offering-control" onClick={bell} aria-label={t('ringBell')}><strong>{t('bell')}</strong></button>
-        </div>
+        <GroundFlowers key={`${deity.id}-${petals}`} on={!!here.flowers} fresh={petals > 0} />
+        <FallFlowers wave={petals} />
+        <HangingBell side="left" onRing={bell} label={t('bell')} />
+        <HangingBell side="right" onRing={bell} label={t('bell')} />
+        <OfferingLedge lit={lit} igniting={igniting} flowers={!!here.flowers} light={light} offerFlowers={flowers} flowerLabel={t('r_offeringFlowers')} diyaLabel={t('r_offeringDiya')} lightLabel={lit ? t('diyaLit') : t('lightDiya')} />
       </div>
       <div className="mandir-actions">
         {aarti && <button className="mandir-aarti-action" onClick={() => openAarti?.(aarti.id, deity.id)}><img src="/art/redesign/approved-mandir/aarti-book.png" alt="" /><span>{t('r_mandirReadAarti', { name: aartiName })}</span><span aria-hidden="true">→</span></button>}
