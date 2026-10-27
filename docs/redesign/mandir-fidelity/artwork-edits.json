@@ -1,0 +1,50 @@
+[
+  {
+    "key": "empty",
+    "source": "/Users/falcon/Documents/ChatGPT/SanatanGpt/public/art/redesign/approved-mandir/shiv-scene.png",
+    "prompt": "Use case: precise-object-edit. Edit target is this exact approved shrine photo. Remove ONLY the seated Shiva statue, its small stone/tiger-skin seat and its trishul/damru, and reconstruct the matching empty ivory niche and low marble pedestal behind it. Preserve camera, framing, image aspect ratio 504:624, perspective, scale, lighting, lattice window, carved arch, garlands, all standing lamps, hanging bell, surrounding flowers, rear flower bowl, marble floor and ALL THREE foreground offering objects exactly. No new objects, text or different temple. This is an empty scene plate for overlaying the app's other existing deities. Keep the foreground absolutely identical and do not crop or recompose.",
+    "generatedPath": "/Users/falcon/.codex/generated_images/01a1765e-7261-7670-9451-25c492ead8b3/exec-2b3b8db1-b03f-4013-8f02-ef85b0a71369.png"
+  },
+  {
+    "key": "unlit",
+    "source": "/Users/falcon/Documents/ChatGPT/SanatanGpt/public/art/redesign/approved-mandir/diya-flame-context.png",
+    "prompt": "Use case: precise-object-edit. This is a close-up crop from an approved shrine photo. Remove ONLY the bright flame and its glow above the front brass diya. Leave the black cotton wick UNLIT at exactly the same position. Reconstruct the ivory marble stair behind the flame with the same lines, colour, texture, perspective and illumination. Preserve the entire brass bowl/rim/oil, wick, crop/framing and every other part. Keep the same 70:92 aspect ratio. Do not add anything, relight the whole scene or recompose.",
+    "generatedPath": "/Users/falcon/.codex/generated_images/01a1765e-7261-7670-9451-25c492ead8b3/exec-abaff91e-989e-4a60-8fe2-6c4a0bf8e645.png"
+  },
+  {
+    "key": "day-1",
+    "source": "/Users/falcon/Documents/ChatGPT/SanatanGpt/public/art/redesign/approved-mandir/shiv-scene.png",
+    "prompt": "Use case: precise-object-edit. This is the EXACT approved Mandir photo and must remain the same photo. For daily variation 1, change ONLY a few loose flowers in the NARROW flower strip immediately in front of the statue's stone seat, around y=72%-77% of the photo, in the central half. Use a few white jasmine blossoms, with natural soft photographic texture. Keep this subtle. Absolutely preserve the same Shiva face, body, hands, clothes, pose, trishul, all proportions, all lighting, camera, sculpture material and photographic identity; no garland on the deity. Preserve the arch, lamps, architecture, foreground diya/bowl/bell, every floor step and rear flower bowl position. No new text, symbols, objects, crop or recomposition. Exact original 504:624 aspect ratio. The only change is a few loose flowers in that small lower strip; all other pixels should remain unchanged.",
+    "generatedPath": "/Users/falcon/.codex/generated_images/01a1765e-7261-7670-9451-25c492ead8b3/exec-5d0c8198-63a9-4e8c-86f1-f4a572e0a5f7.png"
+  },
+  {
+    "key": "day-3",
+    "source": "/Users/falcon/Documents/ChatGPT/SanatanGpt/public/art/redesign/approved-mandir/shiv-scene.png",
+    "prompt": "Use case: precise-object-edit. This is the EXACT approved Mandir photo and must remain the same photo. For daily variation 3, change ONLY a few loose flowers in the NARROW flower strip immediately in front of the statue's stone seat, around y=72%-77% of the photo, in the central half. Use a few fresh orange marigolds, with natural soft photographic texture. Keep this subtle. Absolutely preserve the same Shiva face, body, hands, clothes, pose, trishul, all proportions, all lighting, camera, sculpture material and photographic identity; no garland on the deity. Preserve the arch, lamps, architecture, foreground diya/bowl/bell, every floor step and rear flower bowl position. No new text, symbols, objects, crop or recomposition. Exact original 504:624 aspect ratio. The only change is a few loose flowers in that small lower strip; all other pixels should remain unchanged.",
+    "generatedPath": "/Users/falcon/.codex/generated_images/01a1765e-7261-7670-9451-25c492ead8b3/exec-0e5cd20f-5d7a-46ca-b89e-18205b4c8a3c.png"
+  },
+  {
+    "key": "day-4",
+    "source": "/Users/falcon/Documents/ChatGPT/SanatanGpt/public/art/redesign/approved-mandir/shiv-scene.png",
+    "prompt": "Use case: precise-object-edit. This is the EXACT approved Mandir photo and must remain the same photo. For daily variation 4, change ONLY a few loose flowers in the NARROW flower strip immediately in front of the statue's stone seat, around y=72%-77% of the photo, in the central half. Use a few white jasmine and yellow marigold blossoms, with natural soft photographic texture. Keep this subtle. Absolutely preserve the same Shiva face, body, hands, clothes, pose, trishul, all proportions, all lighting, camera, sculpture material and photographic identity; no garland on the deity. Preserve the arch, lamps, architecture, foreground diya/bowl/bell, every floor step and rear flower bowl position. No new text, symbols, objects, crop or recomposition. Exact original 504:624 aspect ratio. The only change is a few loose flowers in that small lower strip; all other pixels should remain unchanged.",
+    "generatedPath": "/Users/falcon/.codex/generated_images/01a1765e-7261-7670-9451-25c492ead8b3/exec-bd3dbd6d-c94f-42cf-97ff-4489dca58a53.png"
+  },
+  {
+    "key": "day-5",
+    "source": "/Users/falcon/Documents/ChatGPT/SanatanGpt/public/art/redesign/approved-mandir/shiv-scene.png",
+    "prompt": "Use case: precise-object-edit. This is the EXACT approved Mandir photo and must remain the same photo. For daily variation 5, change ONLY a few loose flowers in the NARROW flower strip immediately in front of the statue's stone seat, around y=72%-77% of the photo, in the central half. Use a slightly fuller scattering of yellow marigolds, with natural soft photographic texture. Keep this subtle. Absolutely preserve the same Shiva face, body, hands, clothes, pose, trishul, all proportions, all lighting, camera, sculpture material and photographic identity; no garland on the deity. Preserve the arch, lamps, architecture, foreground diya/bowl/bell, every floor step and rear flower bowl position. No new text, symbols, objects, crop or recomposition. Exact original 504:624 aspect ratio. The only change is a few loose flowers in that small lower strip; all other pixels should remain unchanged.",
+    "generatedPath": "/Users/falcon/.codex/generated_images/01a1765e-7261-7670-9451-25c492ead8b3/exec-a6b3043f-59c3-4aa6-8405-574224e5e5e7.png"
+  },
+  {
+    "key": "day-6",
+    "source": "/Users/falcon/Documents/ChatGPT/SanatanGpt/public/art/redesign/approved-mandir/shiv-scene.png",
+    "prompt": "Use case: precise-object-edit. This is the EXACT approved Mandir photo and must remain the same photo. For daily variation 6, change ONLY a few loose flowers in the NARROW flower strip immediately in front of the statue's stone seat, around y=72%-77% of the photo, in the central half. Use a few white jasmine blossoms and two small red roses, with natural soft photographic texture. Keep this subtle. Absolutely preserve the same Shiva face, body, hands, clothes, pose, trishul, all proportions, all lighting, camera, sculpture material and photographic identity; no garland on the deity. Preserve the arch, lamps, architecture, foreground diya/bowl/bell, every floor step and rear flower bowl position. No new text, symbols, objects, crop or recomposition. Exact original 504:624 aspect ratio. The only change is a few loose flowers in that small lower strip; all other pixels should remain unchanged.",
+    "generatedPath": "/Users/falcon/.codex/generated_images/01a1765e-7261-7670-9451-25c492ead8b3/exec-74567836-b957-408f-a814-d7029ad4c5d2.png"
+  },
+  {
+    "key": "day-7",
+    "source": "/Users/falcon/Documents/ChatGPT/SanatanGpt/public/art/redesign/approved-mandir/shiv-scene.png",
+    "prompt": "Use case: precise-object-edit. This is the EXACT approved Mandir photo and must remain the same photo. For daily variation 7, change ONLY a few loose flowers in the NARROW flower strip immediately in front of the statue's stone seat, around y=72%-77% of the photo, in the central half. Use a few orange marigold and white jasmine blossoms, with natural soft photographic texture. Keep this subtle. Absolutely preserve the same Shiva face, body, hands, clothes, pose, trishul, all proportions, all lighting, camera, sculpture material and photographic identity; no garland on the deity. Preserve the arch, lamps, architecture, foreground diya/bowl/bell, every floor step and rear flower bowl position. No new text, symbols, objects, crop or recomposition. Exact original 504:624 aspect ratio. The only change is a few loose flowers in that small lower strip; all other pixels should remain unchanged.",
+    "generatedPath": "/Users/falcon/.codex/generated_images/01a1765e-7261-7670-9451-25c492ead8b3/exec-1341f46c-705c-4ac0-b341-e064bee66924.png"
+  }
+]

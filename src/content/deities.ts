@@ -12,8 +12,9 @@ export interface Deity {
   home?: string
   /** One cut-out per weekday (0 = Sunday), so the darshan changes every day; falls back to cutout. */
   week?: string[]
-  /** Mandir-only artwork matched to the selected shrine; original weekday and safe card photos are retained. */
-  shrineWeek?: string[]
+  /** Approved complete Mandir scene; daily variants preserve the same deity and architecture. */
+  shrineScene?: { lit: string; unlit: string }
+  shrineScenes?: { lit: string; unlit: string }[]
   /** Sideways nudge of the cut-out, in % of its width, so the deity's face sits on the halo's centre line. */
   dx?: number
   /** Head and shoulders from the cut-out, for the round picker */
@@ -33,7 +34,7 @@ export const SHIVLING = { name_hi: 'शिवलिंग', name_en: 'Shivling',
 
 export const DEITIES: Deity[] = [
   { id: 'ganesh', name_hi: 'गणेश जी', name_en: 'Ganesh ji', photo: '/art/deity/ganesh-cut.webp', thumb: '/art/deity/ganesh-face.webp', cutout: '/art/deity/ganesh-cut.webp', week: [1, 2, 3, 4, 5, 6, 7].map((n) => `/art/deity/ganesh/${n}.webp`), face: '/art/deity/ganesh-face.webp', home: '/art/deity/ganesh-home.webp', card: '/art/photo/fv3EpXA6jCA.jpg', aarti: 'ganesh', mantra: 'ॐ गं गणपतये नमः', days: [3] },
-  { id: 'shiv', shrineWeek: [1, 2, 3, 4, 5, 6, 7].map((n) => `/art/redesign/shiv/${n}.webp`), name_hi: 'शिव जी', name_en: 'Shiv ji', photo: '/art/deity/shiv-cut.webp', thumb: '/art/deity/shiv-face.webp', cutout: '/art/deity/shiv-cut.webp', week: [1, 2, 3, 4, 5, 6, 7].map((n) => `/art/deity/shiv/${n}.webp`), face: '/art/deity/shiv-face.webp', home: '/art/deity/shiv-home.webp', card: '/art/photo/JxJ15qeVisk.jpg', aarti: 'shiv', mantra: 'ॐ नमः शिवाय', days: [1] },
+  { id: 'shiv', shrineScene: { lit: '/art/redesign/approved-mandir/shiv-2.webp', unlit: '/art/redesign/approved-mandir/shiv-2-unlit.webp' }, shrineScenes: [1, 2, 3, 4, 5, 6, 7].map((n) => ({ lit: `/art/redesign/approved-mandir/shiv-${n}.webp`, unlit: `/art/redesign/approved-mandir/shiv-${n}-unlit.webp` })), name_hi: 'शिव जी', name_en: 'Shiv ji', photo: '/art/deity/shiv-cut.webp', thumb: '/art/deity/shiv-face.webp', cutout: '/art/deity/shiv-cut.webp', week: [1, 2, 3, 4, 5, 6, 7].map((n) => `/art/deity/shiv/${n}.webp`), face: '/art/deity/shiv-face.webp', home: '/art/deity/shiv-home.webp', card: '/art/photo/JxJ15qeVisk.jpg', aarti: 'shiv', mantra: 'ॐ नमः शिवाय', days: [1] },
   { id: 'hanuman', name_hi: 'हनुमान जी', name_en: 'Hanuman ji', photo: '/art/deity/hanuman-cut.webp', thumb: '/art/deity/hanuman-face.webp', cutout: '/art/deity/hanuman-cut.webp', week: [1, 2, 3, 4, 5, 6, 7].map((n) => `/art/deity/hanuman/${n}.webp`), face: '/art/deity/hanuman-face.webp', home: '/art/deity/hanuman-home.webp', card: '/art/photo/1qvWMJv_NUU.jpg', aarti: 'hanuman', mantra: 'ॐ हं हनुमते नमः', days: [2, 6] },
   { id: 'vishnu', name_hi: 'विष्णु जी', name_en: 'Vishnu ji', photo: '/art/deity/vishnu-cut.webp', thumb: '/art/deity/vishnu-face.webp', cutout: '/art/deity/vishnu-cut.webp', week: [1, 2, 3, 4, 5, 6, 7].map((n) => `/art/deity/vishnu/${n}.webp`), face: '/art/deity/vishnu-face.webp', home: '/art/deity/vishnu-home.webp', card: '/art/photo/99DGEk5yHqg.jpg', aarti: 'jagdish', mantra: 'ॐ नमो भगवते वासुदेवाय', days: [4] },
   { id: 'lakshmi', name_hi: 'लक्ष्मी माँ', name_en: 'Lakshmi Maa', photo: '/art/deity/lakshmi-cut.webp', thumb: '/art/deity/lakshmi-face.webp', cutout: '/art/deity/lakshmi-cut.webp', week: [1, 2, 3, 4, 5, 6, 7].map((n) => `/art/deity/lakshmi/${n}.webp`), face: '/art/deity/lakshmi-face.webp', home: '/art/deity/lakshmi-home.webp', card: '/art/lakshmi-1896.jpg', aarti: 'lakshmi', mantra: 'ॐ श्रीं महालक्ष्म्यै नमः', days: [5] },

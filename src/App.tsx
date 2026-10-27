@@ -88,7 +88,7 @@ export default function App() {
   const tabs: [Tab, ReactNode, string][] = [
     ['aaj', <TabSun />, t('nav_aaj')],
     ['tyohar', <TabCalendar />, t('nav_tyohar')],
-    ['mandir', <TabMandir />, t('nav_mandir')],
+    ['mandir', <TabMandir filled={route.tab === 'mandir'} />, t('nav_mandir')],
     ['aarti', <TabDiya />, t('nav_aarti')],
     ['path', <TabBook />, t('nav_path')],
   ]

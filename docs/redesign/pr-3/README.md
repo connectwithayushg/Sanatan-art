@@ -2,7 +2,7 @@
 
 Today uses the chosen option-4 composition: a large daily deity photograph, four photo tiles, a compact live panchang strip, and the existing calendar, mantra, daily Gita verse, meditation and discovery links. Sharing stays on the greeting detail screen, reached from a quiet home entry.
 
-Mandir follows option 5 with an ivory marble shrine and integrated, large labelled Diya / Flowers / Bell controls. Existing deity cutouts and weekday pictures remain the source of identity; the generated background is an empty decorative shrine. The new decorative offering photographs are generated assets. Aarti and Jap are adjacent, with the original form switches, swipe, clockwise mala, music, meditation and all 94 temple pages preserved.
+Mandir uses the actual approved option-5 scene, with large live Diya / Flowers / Bell controls. The Shiva figure, architecture and foreground objects retain the original reference pixels. Other deities use their original weekday cutouts inside a locally reconstructed empty niche. Aarti and Jap are adjacent, with the original form switches, swipe, clockwise mala, music, meditation and all 94 temple pages preserved.
 
 ## Verification
 
@@ -16,4 +16,6 @@ Depends on PRs 1 and 2, in that order. Review into `app-source`; no deployment o
 
 ## Mandir visual correction, 27 October
 
-The initial Mandir implementation did not match the selected option 5 closely enough. It has been corrected to use the compact title / picker row, uninterrupted sunlit lattice shrine, seated Shiva daily set, integrated offering ledge and photo-backed Aarti / Jap actions. Original deity data is preserved; only an optional Mandir image field is added. The previous attempt, chosen reference and corrected app are shown together in `../mandir-correction/comparison.png`. Stage-3 TypeScript, 11 tests and production build were re-run successfully after the correction.
+The earlier reconstructions did not match option 5. This correction uses the approved scene itself, losslessly extracted. The primary Shiva pixels remain identical across seven daily decorative flower variants; a small local patch supplies the unlit diya state. Labels, offerings, navigation and Aarti/Jap actions are live HTML. Original deity fields and safe share-card photos remain unchanged; only optional scene metadata is added.
+
+See `../mandir-fidelity/comparison.png`, its README and pixel-verification.json. Historical `mandir-correction` images show the rejected attempt and are superseded. Production offline reload and diya state changes pass. Stage-3 TypeScript, 11 tests and build are re-run before PR publication.

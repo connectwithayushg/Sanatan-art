@@ -35,12 +35,13 @@ export function TopBar({ onSearch, onHome, onProfile }: { onSearch: () => void; 
             void i18n.changeLanguage(next)
           }}>{t('lang')}</button>
           <button className={round} onClick={onSearch} aria-label={t('searchTitle')}>
-            <SearchGlyph size={21} />
+            <SearchGlyph size={24} />
           </button>
           <button className={round} onClick={onProfile} aria-label={t('profileBtn')}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-              <circle cx="12" cy="8.5" r="4" />
-              <path d="M4.5 20c1.2-4 4.2-6 7.5-6s6.3 2 7.5 6" />
+            <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
+              <circle cx="16" cy="16" r="15" fill="#fff4df" />
+              <circle cx="16" cy="11" r="5" fill="#d9600b" />
+              <path d="M6.5 26c.8-5.5 4.5-8 9.5-8s8.7 2.5 9.5 8c-5.6 3.4-13.4 3.4-19 0Z" fill="#d9600b" />
             </svg>
           </button>
         </div>
