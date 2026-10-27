@@ -31,3 +31,12 @@ The master statue's face, hands, posture, traditional colours, trishul, serpent,
 
 Day 2 uses the unadorned master. These are devotional app illustrations derived from the selected mockup; they do not depict a named temple or assert a weekday ritual rule.
 
+
+## Saved production assets
+
+- `/Users/falcon/Documents/ChatGPT/SanatanGpt/public/art/redesign/mandir-sunlit-v2.webp`
+- `/Users/falcon/Documents/ChatGPT/SanatanGpt/public/art/redesign/mandir-brass-diya-v2.webp`
+- `/Users/falcon/Documents/ChatGPT/SanatanGpt/public/art/redesign/jap-mala.webp`
+- `/Users/falcon/Documents/ChatGPT/SanatanGpt/public/art/redesign/shiv/1.webp` through `7.webp` (Sunday through Saturday).
+
+The built-in image tool produced the originals; Sharp resized / encoded them as WebP without repainting or changing the subjects.
