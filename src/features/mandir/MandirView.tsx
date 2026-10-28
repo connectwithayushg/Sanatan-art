@@ -9,7 +9,7 @@ import { Dhyan } from './Dhyan'
 import { DhyanIcon } from '../../ui/DhyanIcon'
 import { useStored } from '../../lib/useStored'
 import { offer, type Offering } from '../../lib/darshan'
-import { ApprovedTableBell, FallFlowers, HangingBell, OfferingLedge, ShrineLamps } from './Offerings'
+import { ApprovedTableBell, FallFlowers, HangingBell, OfferingLedge, ShrineLamps, ShrineOfferingTargets } from './Offerings'
 import { useCutBox } from './useCutBox'
 import { TabBook } from '../../ui/TabIcons'
 import { BharatHomeCard } from '../bharat/BharatHomeCard'
@@ -215,6 +215,7 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
         <FallFlowers wave={petals} />
         <HangingBell side="left" onRing={bell} label={t('bell')} />
         <HangingBell side="right" onRing={bell} label={t('bell')} />
+        <ShrineOfferingTargets lit={lit} flowers={!!here.flowers} light={light} offerFlowers={flowers} lightLabel={lit ? t('diyaLit') : t('lightDiya')} flowerLabel={t('r_offeringFlowers')} />
         <OfferingLedge lit={lit} igniting={igniting} flowers={!!here.flowers} light={light} offerFlowers={flowers} flowerLabel={t('r_offeringFlowers')} diyaLabel={t('r_offeringDiya')} lightLabel={lit ? t('diyaLit') : t('lightDiya')} ring={bell} bellLabel={t('bell')} />
         <ApprovedTableBell />
       </div>

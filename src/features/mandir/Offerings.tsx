@@ -50,6 +50,21 @@ export function ShrineLamps({ lit, igniting }: { lit: boolean; igniting: boolean
   </div>
 }
 
+/** Photograph hit areas share the labelled controls' actions and saved offering state. */
+export function ShrineOfferingTargets({ lit, flowers, light, offerFlowers, lightLabel, flowerLabel }: {
+  lit: boolean
+  flowers: boolean
+  light: () => void
+  offerFlowers: () => void
+  lightLabel: string
+  flowerLabel: string
+}) {
+  return <>
+    <button className="shrine-object-target large-thali-hotspot" onClick={offerFlowers} aria-label={flowerLabel} aria-pressed={flowers} />
+    {(['left', 'right'] as const).map((side) => <button key={side} className={`shrine-object-target side-diya-hotspot side-diya-${side}`} onClick={light} aria-label={lightLabel} aria-pressed={lit} />)}
+  </>
+}
+
 export function OfferingLedge({ lit, igniting, flowers, light, offerFlowers, flowerLabel, diyaLabel, lightLabel, ring, bellLabel }: {
   lit: boolean
   igniting: boolean

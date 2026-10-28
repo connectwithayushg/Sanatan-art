@@ -23,3 +23,7 @@ The convenient original working copy remains at `/Users/falcon/Downloads/Sanatan
 Layout 1 is applied in `src/features/mandir/Offerings.tsx`, `MandirView.tsx` and the Mandir section of `src/index.css`. Layout 2 stays in the archive and interactive comparison, with no hidden date trigger or production setting. To adopt Layout 2 later, port only its layout/flower hit-area changes after Ayush reviews them again. Existing storage keys and devotional content remain unchanged.
 
 This decision supersedes the earlier natural-offerings notes where those mention permanent flower pieces, hanging-bell labels or the separately generated flame. No live deployment was performed.
+
+## Direct object taps — approved by Ayush, 28 October 2026
+
+Layout 1 also accepts taps on the large flower thali near the deity and either side diya. The large thali uses the same flower action as the labelled पुष्प button. Either side diya uses the same saved lighting state as the central diya, lighting all three together. Both top bells retain the existing sound and swing. The labelled controls remain available. There are no separate counters for the added tap areas, and darshan still counts only once per day. Invisible native button targets have Hindi/English accessible names, keyboard focus indicators and generous tap areas. Both interactive previews include these shared actions; the originally approved image/source snapshot remains preserved unchanged.
