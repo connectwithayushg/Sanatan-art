@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "checks": [
+    "final production service worker installed",
+    "offline thali, side diya and top bell actions work",
+    "offline darshan counted once",
+    "shared offering state survives offline reload",
+    "approved photo layers decode offline"
+  ],
+  "base": "2a5f7d0171e9f666330a46fb57d38d783ee8019f"
+}

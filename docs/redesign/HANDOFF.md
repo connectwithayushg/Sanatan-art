@@ -2,6 +2,8 @@
 
 ## Latest Mandir choice — 28 October 2026
 
+The large thali near the deity and both side lamps are also directly tappable in Layout 1. They reuse the labelled offering handlers and saved state, with 44px minimum native button targets and keyboard focus. Both top bells remain clickable. All five review branches now include the latest app-source (2a5f7d0), retaining its seven learning chapters, 40 learning pictures and photographic rudraksh mala. No upstream text or learning-page code was rewritten.
+
 Ayush selected Layout 1 for current use: labelled पुष्प · दीया · घंटी controls, diya centred, both unlabelled hanging bells. The actual approved photo jyoti fades in without changing shape; the shrine brightens, corner lamps light, and 13 photographic flowers fall without an extra permanent floor layer. Layout 2 is saved for a possible change after six months of actual app use, subject to Ayush’s later decision; there is no automatic switch or scheduled rollout. Both approved references and the complete working source for both designs are preserved in `mandir-layouts/`. This supersedes older offering notes below where they differ.
 
 ## Decisions implemented
@@ -17,7 +19,7 @@ Ayush selected Layout 1 for current use: labelled पुष्प · दीय�
 
 ## Merge order
 
-Five dependent review branches, beginning at app-source commit eabb21d. PRs should be reviewed and merged 1 → 2 → 3 → 4 → 5. All target app-source, as requested. Later branches include the preceding commits until those are merged. No merge or deployment was performed.
+Five dependent review branches, beginning at app-source commit 2a5f7d0. PRs should be reviewed and merged 1 → 2 → 3 → 4 → 5. All target app-source, as requested. Later branches include the preceding commits until those are merged. No merge or deployment was performed.
 
 1. `codex/redesign-01-shared-aarti`
 2. `codex/redesign-02-path-festivals`
@@ -33,7 +35,7 @@ No devotional text changed. The deity catalogue adds only an optional shrineScen
 
 Still missing from the original catalogue: Durga and Khatu weekday sets; seven day-wise Shivling pictures (the existing placeholder remains); individual pictures for Shani, Santoshi, Saraswati and other reader deities that currently show a diya; improved real photos for several temple pages. Gita meanings remain the original chapters 2 and 12 only. The dated festival dataset ends on 24 November 2026; future festivals require independently checked content, not fabricated dates.
 
-The build retains its existing large-main-bundle warning (~1.7 MB). Offline caching now includes WebP and full card photos, so the first complete offline download is ~51 MB. After installation the daily cards and share rendering work without the network. External YouTube playback still requires connectivity and a user tap.
+The build retains its existing large-main-bundle warning (~1.7 MB). Offline caching now includes WebP and full card photos, so the first complete offline download is ~58 MB. After installation the daily cards and share rendering work without the network. External YouTube playback still requires connectivity and a user tap.
 
 Native file sharing depends on browser support. Desktop fallback saves the card, then presents an explicit WhatsApp link and attachment instruction. Actual transmission remains the user's action.
 

@@ -31,3 +31,7 @@ Layout 1 also accepts taps on the large flower thali near the deity and either s
 ## Verification
 
 TypeScript, Vitest and production builds pass for the updated Today/Mandir, daily opener and share-card review stages (11 / 15 / 20 tests respectively). `validation.json` records the production-browser check: offerings/audio, gradual light, original photo flame, 13 flowers disappearing, saved state, cumulative darshan, reader/back, jap, deity and Shivling switching, Hindi/English at 320/390 px with enlarged text, minimum tap areas and reduced motion. `app-before-selection.png` and `app-layout-1-{unlit,lit}.png` are the before/after phone screenshots.
+
+`object-taps-validation.json` records native touch, actual hit-target visibility, keyboard, shared saved state, repeat offers, 320/390 px, Hindi/English and both comparison layouts. `object-taps-offline-validation.json` verifies the new actions and reload persistence offline in the final production build. `object-taps-hindi-after.png` is the final Hindi phone screenshot. Updated review stages 1–5 pass TypeScript, their 11 / 11 / 11 / 15 / 20 tests and production builds on app-source 2a5f7d0. The new upstream learning content and profile reader match app-source exactly, as does its photographic Mala function.
+
+PR upload is still blocked locally: GitHub CLI has no authenticated host and a non-interactive branch push reports that it cannot read a GitHub username. All code, reviews and checks are saved locally; no PR was created and no deployment was performed.
