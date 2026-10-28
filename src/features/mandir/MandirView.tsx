@@ -62,7 +62,7 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
   const [chosen, setChosen] = useState(() => (DEITIES.some((d) => d.id === initial) ? initial! : order[0].id))
   const [gopal, setGopal] = useStored('balGopal', false)
   const [ling, setLing] = useStored('shivLing', false)
-  const form = (d: (typeof DEITIES)[number]) => (d.id === 'krishna' && gopal ? { ...d, ...BAL_GOPAL } : d.id === 'shiv' && ling ? { ...d, ...SHIVLING, shrineScene: undefined, shrineScenes: undefined } : d)
+  const form = (d: (typeof DEITIES)[number]) => (d.id === 'krishna' && gopal ? { ...d, ...BAL_GOPAL } : d.id === 'shiv' && ling ? { ...d, ...SHIVLING } : d)
   const deity = form(DEITIES.find((d) => d.id === chosen) ?? DEITIES[0])
   // What has been offered to each deity today; it resets at midnight.
   const [offered_, setOffered] = useStored<{ day: string; d: Record<string, { lit?: boolean; flowers?: boolean }> }>('offerings', { day: '', d: {} })
@@ -95,7 +95,7 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
         ? { label: 'shivForm', a: 'formShiv', b: 'formLing', on: ling, set: setLing }
         : null
   const picture = deity.week?.[weekday] ?? deity.cutout ?? deity.photo
-  const scene = deity.shrineScenes?.[weekday] ?? deity.shrineScene
+  const scene = deity.shrineScene
   const box = useCutBox(picture)
   const here = (offered_.day === today ? offered_.d : {})[deity.id] ?? {}
   const lit = !!here.lit
