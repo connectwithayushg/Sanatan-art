@@ -143,3 +143,22 @@ These live in Ayush's Claude project, not in GitHub. Ask Ayush for any file you 
 - `tools/marketingskills/` — Corey Haines marketing skills (MIT).
 - `ayush-learn/` — Ayush's design skills and notes.
 - `uploads/` — files Ayush sent in chat.
+
+
+## 11. Mandir choice — Ayush, 28 October 2026
+
+Use **Layout 1 now**: labelled पुष्प · दीया · घंटी controls, centred diya, and two unlabelled hanging bells. Use the exact approved photo jyoti and lower bell, gently dim the unlit shrine and brighten it on lighting, and let 13 matching photographic flowers fall without an extra permanent floor layer.
+
+Keep **Layout 2** saved for a possible switch once the app has been live for six months and people know the controls. It uses the large flower thali near the deity as the flower control, with no lower labels or separate flower-thali button. This is an option for Ayush to review later, not an automatic or scheduled change. No exact launch/review date has been assumed.
+
+Both approved PNG references, the isolated interactive source for both versions and the decision record are saved in `docs/redesign/mandir-layouts/`. This choice supersedes older Mandir offering descriptions where they differ. Changes remain on local review branches; nothing has been deployed.
+
+Layout 1 also supports direct taps on the large flower thali near the deity and on either side diya. The large thali shares the labelled flower action; either side diya lights the central and both side lamps using the same saved state. Both top bells remain clickable. Keep the three labelled controls too; repeated taps must not count a second day’s darshan.
+
+
+## Home and Aaj, Option 4 (28 Oct 2026)
+- Five tabs are now होम · आज · मंदिर · आरती · पाठ. `src/features/home/HomeView.tsx` is Home (compact greeting, ivory shrine hero for the day's deity, 2x2 photo shortcuts, today's aarti, festivals strip, "सब कुछ यहाँ" tiles, भारत के मंदिर, calendar / सनातन क्या है / disabled wallpaper row). `src/features/aaj/AajToday.tsx` is Aaj (date, next festival note, ivory panchang panel with sun arc, verse, today's shrine, live suprabhat card preview, daily links, "आज क्या करें?", the weekday mantra card kept at the bottom). Full panchang is still `#aaj/panchang`.
+- Festivals live inside Home: `#tyohar...` routes are unchanged and the Home tab stays lit. The सनातन wordmark goes to `#home`.
+- The daily opener (DailyOpener, `dailyOpener.ts`) was REMOVED on Ayush's word ("mandir only, no other opener"). Cold launch still opens the Mandir (doors once a day). The `dailyOpenerDay` storage key is no longer written. Wallpaper save stays off.
+- Hero pictures: `public/art/home/hero.webp` is the original Option 4 Shiva; `hero-<id>.webp` for the other forms are crops of the approved Mandir shrine scenes (same ivory frame). Missing: no Shiv weekday variants, no new art was generated.
+- Removed: QuickHome, MonthCard (home calendar tile). New: `useSuprabhat` hook shared by the card page and Aaj; `nextEkadashi` in `lib/panchang/month.ts`.

@@ -1,8 +1,8 @@
-import { WhatsAppLogo } from '../../ui/WhatsAppLogo'
+import { ShareControls } from '../greet/ShareControls'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { GREETINGS, type Bi } from '../../content/diwaliVidhi'
-import { ALWAYS_GROUPS, CARD_PICTURES, PICTURE_GROUPS, canvasToFile, renderCard } from '../../lib/share/card'
+import { CARD_MARK, ALWAYS_GROUPS, CARD_PICTURES, PICTURE_GROUPS, canvasToFile, renderCard } from '../../lib/share/card'
 import { dailyOrder, page } from '../../lib/share/daily'
 import { useStored } from '../../lib/useStored'
 import { hi, en } from '../../lib/i18n/strings'
@@ -52,34 +52,37 @@ export function CardMaker({ title, greetings = GREETINGS, blessing, groups, defa
   const [typing, setTyping] = useState(false)
   const [toast, setToast] = useState('')
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const [busy, setBusy] = useState(false)
+  const [file, setFile] = useState<File | null>(null)
   const s = cardLang === 'hi' ? hi : en
   const cardTitle = title ? title[cardLang] : s.diwaliTitle
 
   useEffect(() => {
     let cancelled = false
+    setFile(null)
     const id = setTimeout(async () => {
-      const canvas = await renderCard({
-        title: cardTitle,
-        message: greetings[msg][cardLang],
-        blessing,
-        name: name.trim() ? s.from.replace('{{name}}', name.trim()) : '',
-        footer: `ॐ ${s.app}`,
-        lang: cardLang,
-        picture: current.src,
-      })
-      if (cancelled) return
-      canvasRef.current = canvas
-      setPreview((old) => {
-        if (old) setFlash(true)
-        return canvas.toDataURL('image/jpeg', 0.75)
-      })
+      try {
+        const canvas = await renderCard({
+          title: cardTitle,
+          message: greetings[msg][cardLang],
+          blessing,
+          name: name.trim() ? s.from.replace('{{name}}', name.trim()) : '',
+          footer: CARD_MARK,
+          lang: cardLang,
+          picture: current.src,
+        })
+        const nextFile = await canvasToFile(canvas, fileName)
+        if (cancelled) return
+        setFile(nextFile)
+        canvasRef.current = canvas
+        setFlash(true)
+        setPreview(canvas.toDataURL('image/jpeg', 0.85))
+      } catch { if (!cancelled) setToast(t('r_shareError')) }
     }, 200)
     return () => {
       cancelled = true
       clearTimeout(id)
     }
-  }, [name, msg, cardLang, current.src, cardTitle, greetings, blessing, s])
+  }, [name, msg, cardLang, current.src, cardTitle, greetings, blessing, s, fileName, t])
 
   useEffect(() => {
     if (!flash) return
@@ -92,25 +95,6 @@ export function CardMaker({ title, greetings = GREETINGS, blessing, groups, defa
     const id = setTimeout(() => setToast(''), 2200)
     return () => clearTimeout(id)
   }, [toast])
-
-  // The message goes without a link: people forward a plain card more readily.
-  const share = async () => {
-    if (!canvasRef.current) return
-    setBusy(true)
-    try {
-      const file = await canvasToFile(canvasRef.current, fileName)
-      if (file && navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], text: cardTitle })
-      } else {
-        download()
-        window.open(`https://wa.me/?text=${encodeURIComponent(cardTitle)}`, '_blank', 'noopener')
-      }
-    } catch {
-      /* user cancelled */
-    } finally {
-      setBusy(false)
-    }
-  }
 
   const download = () => {
     if (!canvasRef.current) return
@@ -140,7 +124,7 @@ export function CardMaker({ title, greetings = GREETINGS, blessing, groups, defa
   const addons = t('nameAddons').split('|')
 
   return (
-    <main className="mx-auto max-w-xl pb-28">
+    <main className="mx-auto max-w-xl pb-80">
       <div className="sticky top-16 z-10 bg-night px-4 pt-2 shadow-[0_8px_14px_-12px_rgba(80,40,10,0.35)]">
         <div className="relative flex justify-center">
           {preview ? (
@@ -148,7 +132,7 @@ export function CardMaker({ title, greetings = GREETINGS, blessing, groups, defa
               <img
                 src={preview}
                 alt={t('cardTitle')}
-                className={`block aspect-[9/16] ${typing ? 'h-[150px]' : 'h-[28vh] max-h-[260px] min-h-[180px]'} w-auto rounded-[10px] shadow-[0_10px_26px_rgba(20,10,40,0.35)] transition-shadow duration-300 ${flash ? 'ring-4 ring-[#ffb43a]' : ''}`}
+                className={`block ${typing ? 'h-[150px]' : 'h-[28vh] max-h-[260px] min-h-[180px]'} w-auto object-contain rounded-[10px] shadow-[0_10px_26px_rgba(20,10,40,0.35)] transition-shadow duration-300 ${flash ? 'ring-4 ring-[#ffb43a]' : ''}`}
               />
             </button>
           ) : (
@@ -281,13 +265,11 @@ export function CardMaker({ title, greetings = GREETINGS, blessing, groups, defa
       </div>
 
       {/* Send bar, always on screen just above the tab bar */}
-      <div className="fixed inset-x-0 z-20 px-3" style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 100px)' }}>
-        <div className="mx-auto grid max-w-xl grid-cols-[1fr_56px] gap-2">
-          <button onClick={share} disabled={busy || !preview} className="flex min-h-[54px] items-center justify-center gap-2 rounded-2xl border-[1.5px] border-[#1f8f4e] bg-white text-[1.15rem] font-bold text-[#1f8f4e] shadow-[0_4px_14px_rgba(80,40,10,0.12)] disabled:opacity-60">
-            <WhatsAppLogo size={24} /> {t('share')}
-          </button>
-          <button onClick={download} disabled={!preview} aria-label={t('download')} className="grid place-items-center rounded-2xl border-[1.5px] border-[#ead9c4] bg-white text-flame shadow-[0_4px_14px_rgba(80,40,10,0.12)]">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <div className="fixed inset-x-0 z-20 px-3" style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 82px)' }}>
+        <div className="mx-auto max-w-xl rounded-2xl border border-[#ead9c4] bg-[#fbf4e8] p-2 shadow-lg">
+          <ShareControls file={file} title={cardTitle} />
+          <button onClick={download} disabled={!preview} aria-label={t('download')} className="mt-2 flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border-[1.5px] border-[#ead9c4] bg-white text-flame shadow-[0_4px_14px_rgba(80,40,10,0.12)]">
+            {t('download')} <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14" />
             </svg>
           </button>

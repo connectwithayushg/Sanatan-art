@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { DEITIES, deityOfDay } from '../../content/deities'
@@ -12,15 +12,22 @@ type Pick = { deity: string; sound: Sound; minutes?: number }
 const DIYA_HALO: [string, string, string] = ['rgba(255,170,70,.55)', 'rgba(200,90,20,.22)', 'rgba(200,110,20,.18)']
 
 /**
- * The home page's way into meditation: a quiet dark bar. The first time it asks which deity and which sound;
+ * The home page's way into meditation: a quiet dark bar (`bare` leaves only the sheet and player, for pages that open it from their own button). The first time it asks which deity and which sound;
  * after that one tap starts with the last choice, and "बदलें" asks again.
  */
-export function DhyanBar() {
+export function DhyanBar({ trigger = 0, bare = false }: { trigger?: number; bare?: boolean }) {
   const { t, i18n } = useTranslation()
   const hi = i18n.language === 'hi'
   const [pick, setPick] = useStored<Pick | null>('dhyanPick', null)
   const [sheet, setSheet] = useState(false)
   const [on, setOn] = useState<Pick | null>(null)
+  const previousTrigger = useRef(0)
+  useEffect(() => {
+    if (trigger <= previousTrigger.current) return
+    previousTrigger.current = trigger
+    if (pick) setOn(pick)
+    else setSheet(true)
+  }, [trigger, pick])
 
   const name = (id: string) => {
     if (id === 'diya') return t('dhyanDiya')
@@ -30,8 +37,8 @@ export function DhyanBar() {
   const deity = on && DEITIES.find((d) => d.id === on.deity)
 
   return (
-    <section className="px-4 pt-6">
-      <div className="flex items-stretch overflow-hidden rounded-2xl bg-[linear-gradient(100deg,#1b0e07,#2e170a)] text-[#f6e9d6] shadow-[0_6px_18px_rgba(43,26,16,0.18)]">
+    <section className={bare ? undefined : 'px-4 pt-6'}>
+      {!bare && <div className="flex items-stretch overflow-hidden rounded-2xl bg-[linear-gradient(100deg,#1b0e07,#2e170a)] text-[#f6e9d6] shadow-[0_6px_18px_rgba(43,26,16,0.18)]">
         <button onClick={() => (pick ? setOn(pick) : setSheet(true))} className="flex min-w-0 flex-1 items-center gap-3.5 px-4 py-3.5 text-left active:opacity-80">
           <DhyanIcon size={38} glow />
           <span className="min-w-0">
@@ -49,7 +56,7 @@ export function DhyanBar() {
             {t('dhyanChange')}
           </button>
         )}
-      </div>
+      </div>}
 
       {sheet && (
         <DhyanSheet

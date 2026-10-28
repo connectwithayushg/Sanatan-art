@@ -2,7 +2,7 @@ import { WhatsAppLogo } from '../../ui/WhatsAppLogo'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { diwaliMuhurat, type DiwaliMuhurat } from '../../lib/panchang/diwali'
-import { CityPicker, useCity } from '../../ui/CityPicker'
+import { useCity } from '../../ui/CityPicker'
 import { useStored } from '../../lib/useStored'
 import { buzz, ringBell } from '../../lib/audio/bell'
 import { formatClock, formatDateTime } from '../../lib/format'
@@ -45,7 +45,7 @@ export function HomeView({ goTo }: { goTo: (tab: 'puja' | 'aarti' | 'card') => v
           )}
           <label className="mt-4 inline-flex flex-wrap items-baseline justify-center gap-x-2 text-[1.1rem] text-warm">
             <span>{t('cityLine')}</span>
-            <CityPicker />
+            <span>{lang === 'hi' ? city.name_hi : city.name_en}</span>
           </label>
         </div>
 

@@ -1,30 +1,14 @@
 import { WhatsAppLogo } from '../../ui/WhatsAppLogo'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { SHELVES, TEXTS, loadVerses, textById, type Cover, type LibText, type Shelf, type Verse } from '../../content/library'
+import { SHELVES, TEXTS, loadVerses, textById, type Cover, type LibText, type Verse } from '../../content/library'
 import { CHAPTERS, MEANINGS } from '../../content/gita/meanings'
 import { useStored } from '../../lib/useStored'
 import { Credits } from '../../ui/Credits'
-
-type Sanskrit = Record<string, string[]>
-/** The Sanskrit of all 18 chapters is large, so it loads only when Path opens. */
-let sanskritCache: Sanskrit | null = null
-function useSanskrit() {
-  const [data, setData] = useState(sanskritCache)
-  useEffect(() => {
-    if (data) return
-    void import('../../content/gita/sanskrit.json').then((m) => {
-      sanskritCache = m.default as Sanskrit
-      setData(sanskritCache)
-    })
-  }, [data])
-  return data
-}
-
-/** Verses for the verse of the day: well-loved ones from the chapters that have meanings. */
-const DAILY: [number, number][] = [
-  [2, 47], [2, 14], [2, 20], [2, 22], [2, 48], [12, 8], [2, 50], [2, 62], [2, 63], [12, 13], [2, 23], [12, 15], [2, 70], [12, 12], [2, 56], [12, 20], [2, 38], [2, 71],
-]
+import { PageHeading, SectionHeading } from '../../ui/PageHeading'
+import { ShareCardDialog } from '../greet/ShareCardDialog'
+import { CARD_MARK } from '../../lib/share/card'
+import { useDailyShloka, useSanskrit } from '../../lib/dailyShloka'
 
 const DEV = '०१२३४५६७८९'
 const num = (n: number | string, hi: boolean) => (hi ? String(n).replace(/\d/g, (d) => DEV[+d]) : String(n))
@@ -32,6 +16,7 @@ const num = (n: number | string, hi: boolean) => (hi ? String(n).replace(/\d/g, 
 /** backLabel is set when the Path opens inside another tab (the Mandir), so its back buttons name that place. */
 export function PathView({ sub, open, go, backLabel }: { sub: string[]; open: (path: string) => void; go: (to: string) => void; backLabel?: string }) {
   const [book, part] = sub
+  if (book === 'topics') return <TopicView id={part} go={go} />
   if (book === 'gita' && part) return <GitaChapter ch={Math.min(18, Math.max(1, Number(part) || 1))} open={open} />
   if (book === 'gita') return <GitaChapters open={open} backLabel={backLabel} />
   const text = book ? textById(book) : undefined
@@ -42,109 +27,64 @@ export function PathView({ sub, open, go, backLabel }: { sub: string[]; open: (p
 function PathHome({ open, go }: { open: (path: string) => void; go: (to: string) => void }) {
   const { t, i18n } = useTranslation()
   const hi = i18n.language === 'hi'
-  const sanskrit = useSanskrit()
+  const l = hi ? 'hi' : 'en'
   const [last] = useStored('gitaLast', 0)
   const [q, setQ] = useState('')
-  const day = Math.floor((Date.now() + 330 * 60000) / 86400e3)
-  const [ch, v] = DAILY[day % DAILY.length]
-  const meaning = MEANINGS[ch][v - 1]
-
-  const share = () => {
-    const text = `${sanskrit?.[ch][v - 1] ?? ''}\n\n${hi ? meaning.hi : meaning.en}\n\n${t('gitaRef', { ch: num(ch, hi), v: num(v, hi) })}\n${location.origin}`
-    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank', 'noopener')
-  }
-
+  const shloka = useDailyShloka()
+  const [sharing, setSharing] = useState(false)
+  const topics = ['chalisa', 'katha', 'stotra', 'mantra'].map((id) => SHELVES.find((s) => s.id === id)!)
+  const loved = SHELVES[0]
+  const featured = [loved.covers.find((c) => c.to === 'path/chalisa')!, loved.covers.find((c) => c.to === 'path/gita')!]
   return (
-    <main className="mx-auto max-w-xl pb-6">
-      <header className="px-4 pt-3">
-        <h1 className="font-display text-[1.7rem] leading-tight text-warm">{t('nav_path')}</h1>
-        <p className="text-[0.92rem] text-dim">{t('pathIntro')}</p>
-        <label className="mt-3 flex h-12 items-center gap-2 rounded-2xl bg-white px-3 ring-1 ring-black/15 focus-within:ring-2 focus-within:ring-flame">
-          <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-dim" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
-            <circle cx="11" cy="11" r="7" />
-            <path d="m20 20-4-4" />
-          </svg>
-          <input
-            type="text"
-            inputMode="search"
-            enterKeyHint="search"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder={t('pathSearch')}
-            aria-label={t('pathSearch')}
-            className="search-input h-full min-w-0 flex-1 bg-transparent text-[1rem] text-warm outline-none placeholder:text-dim/80"
-          />
-          {q && (
-            <button onClick={() => setQ('')} aria-label={t('close')} className="-mr-1 h-10 w-10 shrink-0 text-xl text-dim">
-              ×
-            </button>
-          )}
+    <main className="tab-page">
+      <PageHeading title={t('nav_path')} subtitle={t('r_pathIntro')} image="/art/redesign/path-banner.webp" />
+      <div className="page-content">
+        <label className="library-search">
+          <span aria-hidden="true">⌕</span>
+          <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('pathSearch')} aria-label={t('pathSearch')} />
+          {q && <button onClick={() => setQ('')} aria-label={t('close')}>×</button>}
         </label>
-      </header>
-
-      {q.trim() ? (
-        <PathResults q={q} go={go} />
-      ) : (
-        <>
-          <ShelfRow shelf={SHELVES[0]} go={go} />
-
-      <section className="mx-4 mt-4 rounded-3xl bg-white p-4 ring-1 ring-black/10">
-        <p className="text-[0.85rem] font-bold text-flame">{t('verseOfDay')} · {t('gitaRef', { ch: num(ch, hi), v: num(v, hi) })}</p>
-        <p className="mt-2 min-h-[3.5rem] whitespace-pre-line font-scripture text-[1.2rem] [overflow-wrap:anywhere] leading-snug text-warm">{sanskrit?.[ch][v - 1] ?? ''}</p>
-        <p className="mt-2 text-[0.95rem] leading-relaxed text-warm/80">{hi ? meaning.hi : meaning.en}</p>
-        <div className="mt-3 grid grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] gap-2">
-          <button className="h-11 rounded-xl bg-flame text-[0.95rem] font-bold text-ember active:scale-[0.98]" onClick={() => open(`gita/${ch}`)}>{t('readChapter')}</button>
-          <button className="flex min-h-11 items-center justify-center gap-1.5 rounded-xl border-[1.5px] border-[#1f8f4e] bg-white px-2 text-[0.9rem] font-bold text-[#1f8f4e] active:scale-[0.98]" onClick={share}><WhatsAppLogo size={20} /> {t('share')}</button>
-        </div>
-      </section>
-
-      {last > 0 && (
-        <button className="mx-4 mt-3 flex w-[calc(100%-2rem)] items-center gap-3 rounded-2xl bg-flame/10 px-4 py-3 text-left ring-1 ring-flame/40 active:scale-[0.99]" onClick={() => open(`gita/${last}`)}>
-          <span className="min-w-0 flex-1 text-[0.95rem] font-semibold text-warm">{t('continueReading', { ch: num(last, hi), name: hi ? CHAPTERS[last - 1].hi : CHAPTERS[last - 1].en })}</span>
-          <span aria-hidden="true" className="text-xl text-flame">›</span>
-        </button>
-      )}
-
-      {SHELVES.slice(1).map((shelf) => (
-        <ShelfRow key={shelf.id} shelf={shelf} go={go} />
-      ))}
-        </>
-      )}
-      <div className="px-4">
+        {q.trim() ? <PathResults q={q} go={go} /> : <>
+          {last > 0 && last <= CHAPTERS.length && <button className="reading-row continue-reading" onClick={() => open(`gita/${last}`)}>
+            <img src="/art/path/krishna.webp" alt="" />
+            <span><small>{t('r_continueReading')}</small><strong>{t('continueReading', { ch: num(last, hi), name: CHAPTERS[last - 1][l] })}</strong></span><span className="row-arrow" aria-hidden="true">›</span>
+          </button>}
+          <SectionHeading title={loved.title[l]} onAll={() => open('topics/top')} />
+          <ul className="photo-grid book-grid">{featured.map((c) => <li key={c.to}><CoverButton c={c} go={go} /></li>)}</ul>
+          <SectionHeading title={t('r_chooseTopic')} onAll={() => open('topics/all')} />
+          <ul className="topic-grid">{topics.map((s) => <li key={s.id}><button onClick={() => open(`topics/${s.id}`)}><img src={s.covers[0]?.img ?? '/art/path/diya.webp'} alt="" /><span>{s.title[l]}</span><span aria-hidden="true">›</span></button></li>)}</ul>
+          <section className="daily-shloka-card">
+            <h2>{t('verseOfDay')}</h2><p className="shloka-reference">{t('gitaRef', { ch: num(shloka.chapter, hi), v: num(shloka.verse, hi) })}</p>
+            <p className="daily-verse">{shloka.text}</p><p>{shloka.meaning[l]}</p>
+            <div className="detail-actions"><button className="primary-action" onClick={() => open(`gita/${shloka.chapter}`)}>{t('readChapter')}</button><button className="share-action" onClick={() => setSharing(true)} disabled={!shloka.text}><WhatsAppLogo size={20} /> {t('share')}</button></div>
+          </section>
+          {SHELVES.filter((s) => s.id === 'granth' || s.id === 'tyohar').map((s) => <section key={s.id}><SectionHeading title={s.title[l]} onAll={() => open(`topics/${s.id}`)} /><ul className="photo-grid book-grid">{s.covers.slice(0, 2).map((c) => <li key={c.to}><CoverButton c={c} go={go} /></li>)}</ul></section>)}
+          <button className="calendar-entry" onClick={() => open('topics/all')}>{t('r_fullLibrary')} <span aria-hidden="true">→</span></button>
+        </>}
+        {sharing && <ShareCardDialog input={{ title: t('verseOfDay'), message: `${shloka.text}\n\n${shloka.meaning[l]}`, source: t('gitaRef', { ch: shloka.chapter, v: shloka.verse }), name: '', footer: CARD_MARK, lang: l, compact: true, picture: '/art/redesign/path-banner.webp' }} filename="sanatan-shloka.png" onClose={() => setSharing(false)} />}
         <Credits />
       </div>
     </main>
   )
 }
 
-/** One shelf: a heading, a line under it, and covers that scroll sideways. */
-function ShelfRow({ shelf, go }: { shelf: Shelf; go: (to: string) => void }) {
+function TopicView({ id, go }: { id: string; go: (to: string) => void }) {
+  const { t, i18n } = useTranslation()
+  const l = i18n.language === 'hi' ? 'hi' : 'en'
+  const shelf = SHELVES.find((s) => s.id === id)
+  const covers = shelf?.covers ?? ALL
+  return <main className="tab-page"><PageHeading title={shelf?.title[l] ?? t('r_fullLibrary')} subtitle={shelf?.line[l] ?? t('pathIntro')} image="/art/redesign/path-banner.webp" /><div className="page-content"><button className="back-link" onClick={() => history.back()}>‹ {t('nav_path')}</button><ul className="photo-grid book-grid">{covers.map((c) => <li key={c.to}><CoverButton c={c} go={go} /></li>)}</ul></div></main>
+}
+
+function CoverButton({ c, go }: { c: Cover; go: (to: string) => void }) {
   const { i18n } = useTranslation()
   const l = i18n.language === 'hi' ? 'hi' : 'en'
-  return (
-    <section className="pt-6">
-      <div className="px-4">
-        <h2 className="text-[1.1rem] font-bold leading-tight text-warm">{shelf.title[l]}</h2>
-        <p className="text-[0.85rem] text-dim">{shelf.line[l]}</p>
-      </div>
-      <ul className="mt-3 flex gap-3 overflow-x-auto px-4 pb-1 [scrollbar-width:none]">
-        {shelf.covers.map((c) => (
-          <li key={c.to} className="w-[8.25rem] shrink-0">
-            <button onClick={() => go(c.to)} className="block w-full text-left active:scale-[0.98]">
-              <CoverArt c={c} />
-              <span className="mt-1.5 line-clamp-2 block text-[0.9rem] font-semibold leading-tight text-warm">{c.title[l]}</span>
-              <span className="mt-0.5 block text-[0.78rem] leading-tight text-dim">{c.inside[l]}</span>
-            </button>
-          </li>
-        ))}
-      </ul>
-    </section>
-  )
+  return <button className="photo-tile book-tile" onClick={() => go(c.to)}><CoverArt c={c} /><span>{c.title[l]} <span aria-hidden="true">›</span></span><small>{c.inside[l]}</small></button>
 }
 
 /** A deity sits in a temple arch with a thin gold edge; a painting of a scene keeps its plain rounded frame. */
 function CoverArt({ c }: { c: Cover }) {
-  if (!c.arch) return <img src={c.img} alt="" loading="lazy" className="aspect-[4/5] w-full rounded-2xl bg-[#f3e6d3] object-cover object-top" />
+  if (!c.arch) return <img src={c.to === 'path/gita' ? '/art/path/krishna.webp' : c.img} alt="" loading="lazy" className="aspect-[4/5] w-full rounded-2xl bg-[#f3e6d3] object-cover object-top" />
   return (
     <span className="block aspect-[4/5] w-full rounded-t-[999px] rounded-b-2xl bg-gradient-to-b from-[#ecc06a] via-[#c98f35] to-[#9c6524] p-[3px]">
       <img src={c.img} alt="" loading="lazy" className="h-full w-full rounded-t-[999px] rounded-b-[13px] bg-[#1a120c] object-cover object-top" />

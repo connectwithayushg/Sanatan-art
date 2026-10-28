@@ -91,3 +91,14 @@ export function monthMasas(city: City, y: number, m: number) {
   const b = masaAt(last, tithiAt(last).paksha)
   return a.i === b.i ? [a] : [a, b]
 }
+
+/** The next Ekadashi on or after `today`, this month or else the next one. */
+export function nextEkadashi(city: City, y: number, m: number, today: number) {
+  const here = monthPanchang(city, y, m).find((x) => x.d >= today && x.marks.includes('ekadashi'))
+  if (here) return { y, m, d: here.d }
+  const n = new Date(Date.UTC(y, m, 1))
+  const ny = n.getUTCFullYear()
+  const nm = n.getUTCMonth() + 1
+  const there = monthPanchang(city, ny, nm).find((x) => x.marks.includes('ekadashi'))
+  return there ? { y: ny, m: nm, d: there.d } : null
+}

@@ -1,4 +1,3 @@
-import { drawDiya, drawRangoli } from './diya'
 
 export interface CardInput {
   title: string
@@ -11,6 +10,9 @@ export interface CardInput {
   picture: string | null
   /** Closing blessing in gold near the bottom */
   blessing?: string
+  source?: string
+  compact?: boolean
+  pictureFit?: 'cover' | 'contain'
 }
 
 export const PICTURE_GROUPS = [
@@ -76,23 +78,29 @@ export const CARD_PICTURES = [
   photo('mandir', 'KqHVYJS_Rh0'),
 ]
 
+export const CARD_MARK = 'ॐ सनातन ऐप'
 const W = 1080
-const H = 1920
 const HEAD = '"Rozha One", serif'
 const BODY = '"Mukta", sans-serif'
 
-function wrap(c: CanvasRenderingContext2D, text: string, maxWidth: number) {
-  const words = text.split(/\s+/)
+/** Keep line breaks and Devanagari grapheme clusters intact, even in long unspaced words. */
+function wrap(c: CanvasRenderingContext2D, text: string, width: number) {
   const lines: string[] = []
-  let line = ''
-  for (const w of words) {
-    const test = line ? line + ' ' + w : w
-    if (c.measureText(test).width > maxWidth && line) {
-      lines.push(line)
-      line = w
-    } else line = test
+  const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' })
+  for (const paragraph of text.split('\n')) {
+    if (!paragraph.trim()) { lines.push(''); continue }
+    let line = ''
+    for (const word of paragraph.trim().split(/\s+/)) {
+      const test = line ? `${line} ${word}` : word
+      if (c.measureText(test).width <= width) { line = test; continue }
+      if (line) { lines.push(line); line = '' }
+      for (const { segment } of segmenter.segment(word)) {
+        if (line && c.measureText(line + segment).width > width) { lines.push(line); line = '' }
+        line += segment
+      }
+    }
+    if (line) lines.push(line)
   }
-  if (line) lines.push(line)
   return lines
 }
 
@@ -105,109 +113,88 @@ function loadImage(src: string): Promise<HTMLImageElement | null> {
   })
 }
 
-/** The painting inside a temple arch, its foot dissolving into the night. */
-function drawArchPainting(c: CanvasRenderingContext2D, img: HTMLImageElement) {
-  const x = 190, y = 150, w = 700, h = 980, r = w / 2
-  c.save()
-  c.beginPath()
-  c.moveTo(x, y + h)
-  c.lineTo(x, y + r)
-  c.arc(x + r, y + r, r, Math.PI, 0)
-  c.lineTo(x + w, y + h)
-  c.closePath()
-  c.clip()
-  const s = Math.max(w / img.width, h / img.height)
-  c.drawImage(img, x + (w - img.width * s) / 2, y, img.width * s, img.height * s)
-  const fade = c.createLinearGradient(0, y + h - 320, 0, y + h)
-  fade.addColorStop(0, 'rgba(13,18,48,0)')
-  fade.addColorStop(1, 'rgba(13,18,48,1)')
-  c.fillStyle = fade
-  c.fillRect(x, y + h - 320, w, 320)
-  c.restore()
-
-  c.strokeStyle = '#ffb43a'
-  c.lineWidth = 5
-  c.beginPath()
-  c.moveTo(x - 18, y + h - 260)
-  c.lineTo(x - 18, y + r)
-  c.arc(x + r, y + r, r + 18, Math.PI, 0)
-  c.lineTo(x + w + 18, y + h - 260)
-  c.stroke()
-}
-
+/** One ivory/saffron photo-card system. Height grows to preserve every line of the source text. */
 export async function renderCard(input: CardInput): Promise<HTMLCanvasElement> {
-  const [img] = await Promise.all([
-    input.picture ? loadImage(input.picture) : Promise.resolve(null),
-    document.fonts.load(`110px ${HEAD}`, 'शुभ दीपावली Shubh'),
-    document.fonts.load(`600 54px ${BODY}`, 'माँ लक्ष्मी May'),
-  ]).catch(() => [null])
-
+  const [photo] = await Promise.all([
+    loadImage(input.picture ?? '/art/redesign/aarti-banner.webp'),
+    document.fonts.load(`88px ${HEAD}`, 'शुभ सुप्रभात'),
+    document.fonts.load(`500 52px ${BODY}`, 'अर्थ Meaning'),
+  ])
+  const img = photo ?? await loadImage('/art/redesign/aarti-banner.webp')
   const canvas = document.createElement('canvas')
   canvas.width = W
-  canvas.height = H
   const c = canvas.getContext('2d')!
-
-  // the moonless night, warmed by lamplight from below
-  c.fillStyle = '#0d1230'
+  const titleSize = input.lang === 'hi' ? 88 : 80
+  c.font = `${titleSize}px ${HEAD}`
+  const titleLines = wrap(c, input.title, W - 144)
+  c.font = `500 52px ${BODY}`
+  const messageLines = wrap(c, input.message, W - 156)
+  c.font = `600 48px ${BODY}`
+  const nameLines = input.name.trim() ? wrap(c, input.name.trim(), W - 156) : []
+  c.font = `500 36px ${BODY}`
+  const sourceLines = input.source ? wrap(c, input.source, W - 156) : []
+  c.font = `500 44px ${BODY}`
+  const blessingLines = input.blessing ? wrap(c, input.blessing, W - 156) : []
+  const photoH = input.compact ? 300 : 620
+  const textTop = 128 + photoH + 90
+  const end = textTop + titleLines.length * 104 + 32 + messageLines.length * 76 + (sourceLines.length ? 36 + sourceLines.length * 54 : 0) + (nameLines.length ? 40 + nameLines.length * 68 : 0) + (blessingLines.length ? 36 + blessingLines.length * 64 : 0)
+  canvas.height = Math.max(1350, end + 140)
+  const H = canvas.height
+  c.fillStyle = '#fbf4e8'
   c.fillRect(0, 0, W, H)
-  const warm = c.createRadialGradient(W / 2, H + 200, 100, W / 2, H, 1500)
-  warm.addColorStop(0, 'rgba(120,52,18,0.95)')
-  warm.addColorStop(0.45, 'rgba(42,26,51,0.6)')
-  warm.addColorStop(1, 'rgba(13,18,48,0)')
-  c.fillStyle = warm
-  c.fillRect(0, 0, W, H)
+  const band = c.createLinearGradient(0, 0, W, 0)
+  band.addColorStop(0, '#d9600b')
+  band.addColorStop(1, '#c24e06')
+  c.fillStyle = band
+  c.fillRect(0, 0, W, 24)
+  c.strokeStyle = '#e4cba5'
+  c.lineWidth = 2
+  c.strokeRect(34, 48, W - 68, H - 82)
 
-  // stars
-  for (let i = 0; i < 60; i++) {
-    const x = (Math.sin(i * 12.9898) * 43758.5453) % 1
-    const y = (Math.sin(i * 78.233) * 12345.678) % 1
-    c.fillStyle = `rgba(255,255,255,${0.2 + (i % 5) * 0.1})`
-    c.beginPath()
-    c.arc(Math.abs(x) * W, Math.abs(y) * H * 0.6, 1.5 + (i % 3) * 0.8, 0, Math.PI * 2)
-    c.fill()
-  }
-
-  let top: number
+  c.save()
+  c.beginPath()
+  c.roundRect(60, 128, W - 120, photoH, 32)
+  c.clip()
+  c.fillStyle = '#f0e0c5'
+  c.fillRect(60, 128, W - 120, photoH)
   if (img) {
-    drawArchPainting(c, img)
-    top = 1230
-  } else {
-    drawRangoli(c, W / 2, 520, 380)
-    drawDiya(c, W / 2, 700, 1.5)
-    top = 1100
+    const scale = (input.pictureFit === 'cover' ? Math.max : Math.min)((W - 120) / img.width, photoH / img.height)
+    c.drawImage(img, (W - img.width * scale) / 2, 128 + (photoH - img.height * scale) / 2, img.width * scale, img.height * scale)
   }
+  c.restore()
 
   c.textAlign = 'center'
-  c.fillStyle = '#ffe7b8'
-  c.shadowColor = 'rgba(255,180,58,0.45)'
-  c.shadowBlur = 40
-  let size = input.lang === 'hi' ? 124 : 108
-  c.font = `${size}px ${HEAD}`
-  while (c.measureText(input.title).width > W - 120 && size > 60) c.font = `${(size -= 4)}px ${HEAD}`
-  c.fillText(input.title, W / 2, top)
-  c.shadowBlur = 0
-
-  c.fillStyle = '#ffe7b8'
-  c.font = `600 ${input.lang === 'hi' ? 58 : 52}px ${BODY}`
-  const lines = wrap(c, input.message, W - 240)
-  lines.forEach((l, i) => c.fillText(l, W / 2, top + 130 + i * 84))
-
-  if (input.name.trim()) {
-    c.fillStyle = '#ffb43a'
-    c.font = `600 58px ${BODY}`
-    c.fillText(input.name.trim(), W / 2, top + 130 + lines.length * 84 + 80)
+  c.textBaseline = 'alphabetic'
+  let y = textTop
+  c.fillStyle = '#a43f05'
+  c.font = `${titleSize}px ${HEAD}`
+  for (const line of titleLines) { c.fillText(line, W / 2, y); y += 104 }
+  y += 32
+  c.fillStyle = '#42291b'
+  c.font = `500 52px ${BODY}`
+  for (const line of messageLines) { c.fillText(line, W / 2, y); y += 76 }
+  if (sourceLines.length) {
+    y += 36
+    c.fillStyle = '#795a41'
+    c.font = `500 36px ${BODY}`
+    for (const line of sourceLines) { c.fillText(line, W / 2, y); y += 54 }
   }
-
-  c.fillStyle = '#ffb43a'
-  c.font = `72px ${HEAD}`
-  c.fillText(input.blessing ?? '॥ शुभ लाभ ॥', W / 2, H - 200)
-
-  // a small maker's mark in the corner, no link
+  if (nameLines.length) {
+    y += 40
+    c.fillStyle = '#a43f05'
+    c.font = `600 48px ${BODY}`
+    for (const line of nameLines) { c.fillText(line, W / 2, y); y += 68 }
+  }
+  if (blessingLines.length) {
+    y += 36
+    c.fillStyle = '#a43f05'
+    c.font = `500 44px ${BODY}`
+    for (const line of blessingLines) { c.fillText(line, W / 2, y); y += 64 }
+  }
   c.textAlign = 'right'
-  c.fillStyle = 'rgba(255,231,184,0.6)'
-  c.font = `500 34px ${BODY}`
-  c.fillText(input.footer, W - 56, H - 56)
-
+  c.fillStyle = '#9b4c1e'
+  c.font = `600 34px ${BODY}`
+  c.fillText(CARD_MARK, W - 64, H - 56)
   return canvas
 }
 

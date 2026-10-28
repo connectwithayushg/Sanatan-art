@@ -6,7 +6,7 @@ import type { Bi } from '../../content/diwaliVidhi'
 import type { FestivalPage } from '../../content/festivalPages'
 import { formatClock } from '../../lib/format'
 import { festivalTimes } from '../../lib/panchang/festivalTimes'
-import { CityPicker, useCity } from '../../ui/CityPicker'
+import { useCity } from '../../ui/CityPicker'
 import { BigDiya } from '../../ui/Diya'
 import { Lotus } from '../../ui/Ornaments'
 import { CardMaker } from '../diwali/CardMaker'
@@ -127,7 +127,7 @@ function Overview({ page, open }: { page: FestivalPage; open: (p: DayPart) => vo
             </>
           )}
           <p className="mt-3 text-[1.1rem] text-warm">
-            {t('kc_in')} <CityPicker />
+            {t('kc_in')} {lang === 'hi' ? city.name_hi : city.name_en}
           </p>
         </div>
       </section>

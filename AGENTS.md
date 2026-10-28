@@ -6,7 +6,7 @@ Read this first. The full story, every decision and every open item is in `HANDO
 
 **Sanatan App** (सनातन ऐप): a Hindi-first (Hindi + English) devotional web app (PWA) for Hindu (Sanatan Dharma) families in India, especially people aged 40–70 who want big text and a calm, traditional feel. Owner: **Ayush** (non-technical founder). Live: https://sanatan-dharma-app.vercel.app. Launch deadline: **27 Oct 2026**.
 
-Five bottom tabs, keep exactly five: **आज** (home + panchang), **त्योहार** (festivals), **मंदिर** (home shrine), **आरती** (aartis + bhajans), **पाठ** (scriptures). Profile and search open from the top bar.
+Five bottom tabs, keep exactly five: **होम** (the doorway: shrine hero, four shortcuts, coming festivals, everything else), **आज** (the daily reading page: panchang, verse, shrine, greeting card), **मंदिर** (home shrine), **आरती** (aartis + bhajans), **पाठ** (scriptures). Festivals (त्योहार) are a page inside Home, not a tab: `#tyohar` and `#tyohar/<id>/...` still work and keep Home lit. The app opens straight on the Mandir (no other opener). Profile and search open from the top bar.
 
 ## Stack and commands
 
@@ -18,7 +18,7 @@ Five bottom tabs, keep exactly five: **आज** (home + panchang), **त्य�
 
 ## Map
 
-- `src/features/<tab>/` screens: `aaj/` (QuickHome = home), `tyohar/`, `mandir/` (MandirView, Offerings, Dvar doors, Dhyan meditation), `aarti/` (AartiLibrary; the reader is `diwali/AartiView.tsx`, shared with the Diwali page), `path/`, `bharat/` (भारत के मंदिर, 94 temples), `profile/`, `search/`, `greet/`, `diwali/` (card maker, YouTube card).
+- `src/features/<tab>/` screens: `home/` (HomeView), `aaj/` (AajToday = the daily page), `tyohar/`, `mandir/` (MandirView, Offerings, Dvar doors, Dhyan meditation), `aarti/` (AartiLibrary; the reader is `diwali/AartiView.tsx`, shared with the Diwali page), `path/`, `bharat/` (भारत के मंदिर, 94 temples), `profile/`, `search/`, `greet/`, `diwali/` (card maker, YouTube card).
 - `src/content/` all devotional text and data: `deities.ts` (single source for every deity picture), `aartis*.ts`, `bhajans*.ts`, `festivals.ts` + `*FestivalPages.ts`, `temples*.ts`, `library/` (Path texts; long ones lazy-load from `library/more/*.json`), `learn.ts` (सनातन क्या है).
 - `src/lib/panchang/` tithi/nakshatra/masa maths, with tests. `src/lib/share/` canvas cards for WhatsApp.
 - `public/art/` pictures (`deity/<id>-cut.webp`, `<id>-face.webp`, weekday sets), `public/audio/` (bell, Om, CC0 nature loops).
@@ -34,7 +34,7 @@ Five bottom tabs, keep exactly five: **आज** (home + panchang), **त्य�
 7. **Aarti reader:** calm reading page, ONE "अर्थ" on/off switch for the whole aarti, no play button for lyrics. Audio only through official YouTube embeds (tap to play, never autoplay).
 8. **Festivals:** if a festival has one aarti, its आरती tab opens it directly; no "आज की आरती" heading inside a festival.
 9. **No money features** (UPI, donations, ads, paywall) while the app is on Vercel's free plan; it bans commercial use.
-10. **Keep exactly 5 tabs.** Ideas like Rashifal become cards on आज, not new tabs.
+10. **Keep exactly 5 tabs** (होम · आज · मंदिर · आरती · पाठ). Ideas like Rashifal become cards on आज, not new tabs.
 11. **Code style:** match the file you are in (single quotes, no semicolons, 2 spaces). There is no Prettier config: **never run Prettier** on this repo. Hindi strings stay in Devanagari; add the English twin in `strings.ts` too.
 12. **No secrets in the repo.** There are none today. API keys live only in the Claude environment settings, never in code.
 13. **Held back on purpose:** the home wallpapers feature exists in a separate bundle and must stay out until Ayush confirms the photo sources.

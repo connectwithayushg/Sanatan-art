@@ -4,13 +4,13 @@ import { ringGhanti } from '../../lib/audio/bell'
 import { load, save } from '../../lib/storage'
 
 /** The doors open on the first visit of each day, and only from 4 am: a look at the phone at 1 am does not use them up. */
-let due: boolean | null = null
+const doorDay = (now: Date) => {
+  const india = new Date(now.getTime() + 330 * 60000)
+  return `${india.getUTCFullYear()}-${india.getUTCMonth() + 1}-${india.getUTCDate()}`
+}
 export function doorsDue(now = new Date()) {
-  if (due !== null) return due
-  const day = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`
-  due = now.getHours() >= 4 && load('dvarDay', '') !== day
-  if (due) save('dvarDay', day)
-  return due
+  const hour = new Date(now.getTime() + 330 * 60000).getUTCHours()
+  return hour >= 4 && load('dvarDay', '') !== doorDay(now)
 }
 
 /**
@@ -37,6 +37,7 @@ export function Dvar({ onDone }: { onDone: () => void }) {
     return () => clearTimeout(gone)
   }, [open, onDone])
   useEffect(() => {
+    save('dvarDay', doorDay(new Date()))
     document.body.style.overflow = 'hidden'
     return () => {
       document.body.style.overflow = ''

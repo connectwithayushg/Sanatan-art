@@ -26,9 +26,8 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,png,svg,jpg}', '**/*-{devanagari,latin}-*.woff2'],
-        // Full-size card photos load only when picked, so the offline download stays small.
-        globIgnores: ['art/photo/**'],
+        // Daily temples, deity photos, card art and self-hosted type remain available offline.
+        globPatterns: ['**/*.{js,css,html,png,svg,jpg,webp}', '**/*-{devanagari,latin}-*.woff2'],
       },
     }),
   ],

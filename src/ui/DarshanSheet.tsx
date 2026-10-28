@@ -3,6 +3,9 @@ import { useTranslation } from 'react-i18next'
 import { ymd } from '../content/festivals'
 import { nextMilestone, useDarshan } from '../lib/darshan'
 import { Diya } from './Diya'
+import { CARD_MARK } from '../lib/share/card'
+import { ShareCardDialog } from '../features/greet/ShareCardDialog'
+import { ShareIcon } from './ShareIcon'
 
 const WEEK_HI = ['रवि', 'सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि']
 const WEEK_EN = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -12,6 +15,8 @@ export function DarshanSheet({ onClose }: { onClose: () => void }) {
   const { t, i18n } = useTranslation()
   const hi = i18n.language === 'hi'
   const { days, total, today } = useDarshan()
+  const [sharing, setSharing] = useState(false)
+  const achieved = [11, 21, 51, 108].filter((n) => total >= n).at(-1)
   const now = ymd(new Date())
   const [month, setMonth] = useState(now.slice(0, 7))
   const [y, m] = month.split('-').map(Number)
@@ -24,10 +29,10 @@ export function DarshanSheet({ onClose }: { onClose: () => void }) {
   const earliest = (days[0] ?? now).slice(0, 7)
 
   useEffect(() => {
-    const esc = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    const esc = (e: KeyboardEvent) => { if (e.key === 'Escape' && !sharing) onClose() }
     addEventListener('keydown', esc)
     return () => removeEventListener('keydown', esc)
-  }, [onClose])
+  }, [onClose, sharing])
 
   const arrow = 'grid h-10 w-10 place-items-center rounded-full text-[1.4rem] leading-none text-warm disabled:opacity-25'
   return (
@@ -82,6 +87,8 @@ export function DarshanSheet({ onClose }: { onClose: () => void }) {
             )
           })}
         </div>
+        {achieved && <button className="share-action mt-3 w-full" onClick={() => setSharing(true)}><ShareIcon /> {t('r_milestoneShare', { count: achieved })}</button>}
+        {sharing && achieved && <ShareCardDialog input={{ title: t('darshanDays', { count: achieved }), message: t('r_milestoneMessage'), name: '', footer: CARD_MARK, lang: hi ? 'hi' : 'en', picture: '/art/redesign/aarti-banner.webp', pictureFit: 'cover' }} filename={`sanatan-darshan-${achieved}.png`} onClose={() => setSharing(false)} />}
         <p className="mt-3 text-center text-[0.85rem] text-dim">{t('nextMilestone', { count: nextMilestone(total) })}</p>
       </div>
     </div>

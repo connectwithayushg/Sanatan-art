@@ -4,7 +4,7 @@ import { FESTIVALS } from '../../content/festivals'
 import { KC_GREETINGS, KC_KATHA, KC_SAMAGRI, KC_VIDHI } from '../../content/karwaChauth'
 import { karwaChauthTimes } from '../../lib/panchang/festivalTimes'
 import { formatClock } from '../../lib/format'
-import { CityPicker, useCity } from '../../ui/CityPicker'
+import { useCity } from '../../ui/CityPicker'
 import { Lotus } from '../../ui/Ornaments'
 import { CardMaker } from '../diwali/CardMaker'
 import { KATHA_PICS } from '../../content/kathaPics'
@@ -72,7 +72,7 @@ function Overview({ open }: { open: (p: KcPart) => void }) {
             {formatClock(times?.moonrise ?? null, lang)}
           </h1>
           <p className="mt-3 text-[1.1rem] text-warm">
-            {t('kc_in')} <CityPicker />
+            {t('kc_in')} {lang === 'hi' ? city.name_hi : city.name_en}
           </p>
           <p className="mx-auto mt-2 max-w-sm text-[1rem] text-dim">{t('kc_moonNote')}</p>
         </div>
