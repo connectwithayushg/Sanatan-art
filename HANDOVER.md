@@ -152,3 +152,5 @@ Use **Layout 1 now**: labelled पुष्प · दीया · घंटी c
 Keep **Layout 2** saved for a possible switch once the app has been live for six months and people know the controls. It uses the large flower thali near the deity as the flower control, with no lower labels or separate flower-thali button. This is an option for Ayush to review later, not an automatic or scheduled change. No exact launch/review date has been assumed.
 
 Both approved PNG references, the isolated interactive source for both versions and the decision record are saved in `docs/redesign/mandir-layouts/`. This choice supersedes older Mandir offering descriptions where they differ. Changes remain on local review branches; nothing has been deployed.
+
+Layout 1 also supports direct taps on the large flower thali near the deity and on either side diya. The large thali shares the labelled flower action; either side diya lights the central and both side lamps using the same saved state. Both top bells remain clickable. Keep the three labelled controls too; repeated taps must not count a second day’s darshan.

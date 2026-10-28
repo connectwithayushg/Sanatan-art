@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "checks": [
+    "large thali and both side lamps accept native touch at 320/390 px",
+    "tap targets are not covered and have 44px minimum area",
+    "either side lamp lights all lamps and the central diya together",
+    "large thali and labelled flower control share saved state",
+    "both hanging bells swing and invoke real audio",
+    "13 flowers disappear without added floor layer",
+    "repeat lighting does not replay ignition",
+    "darshan counts once per day across objects and deities",
+    "reload retains shared offering state",
+    "Hindi and English",
+    "keyboard flower activation and focus outline",
+    "five tabs and no horizontal overflow",
+    "both isolated comparison layouts updated",
+    "no app exceptions"
+  ]
+}
