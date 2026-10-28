@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "checks": [
+    "production service worker installed",
+    "approved flame and bell source precached with Workbox revision keys",
+    "Layout 1 reloads offline",
+    "saved diya state retained",
+    "scene and approved photo layers decode offline"
+  ]
+}

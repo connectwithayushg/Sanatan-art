@@ -27,3 +27,7 @@ This decision supersedes the earlier natural-offerings notes where those mention
 ## Direct object taps — approved by Ayush, 28 October 2026
 
 Layout 1 also accepts taps on the large flower thali near the deity and either side diya. The large thali uses the same flower action as the labelled पुष्प button. Either side diya uses the same saved lighting state as the central diya, lighting all three together. Both top bells retain the existing sound and swing. The labelled controls remain available. There are no separate counters for the added tap areas, and darshan still counts only once per day. Invisible native button targets have Hindi/English accessible names, keyboard focus indicators and generous tap areas. Both interactive previews include these shared actions; the originally approved image/source snapshot remains preserved unchanged.
+
+## Verification
+
+TypeScript, Vitest and production builds pass for the updated Today/Mandir, daily opener and share-card review stages (11 / 15 / 20 tests respectively). `validation.json` records the production-browser check: offerings/audio, gradual light, original photo flame, 13 flowers disappearing, saved state, cumulative darshan, reader/back, jap, deity and Shivling switching, Hindi/English at 320/390 px with enlarged text, minimum tap areas and reduced motion. `app-before-selection.png` and `app-layout-1-{unlit,lit}.png` are the before/after phone screenshots.
