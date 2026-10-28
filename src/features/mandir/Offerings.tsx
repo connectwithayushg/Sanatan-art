@@ -2,7 +2,7 @@ import { useState, type CSSProperties } from 'react'
 
 const ART = '/art/redesign/mandir-offerings-v2'
 
-/** Matching photographic flowers share their landing spots and scale in both states. */
+/** Photographic flowers match the thali and disappear after one brief offering. */
 const FLOWERS = [
   { x: 20, y: 73, size: 5.6, turn: -18 },
   { x: 33, y: 75, size: 6.4, turn: 12 },
@@ -14,6 +14,9 @@ const FLOWERS = [
   { x: 38, y: 78, size: 5.4, turn: -12 },
   { x: 62, y: 78, size: 5.6, turn: 15 },
   { x: 74, y: 77, size: 5.2, turn: -8 },
+  { x: 29, y: 74, size: 5.5, turn: 7 },
+  { x: 50, y: 76, size: 5.8, turn: -16 },
+  { x: 66, y: 75, size: 5.4, turn: 11 },
 ]
 
 const flowerStyle = (flower: typeof FLOWERS[number], i: number): CSSProperties => ({
@@ -24,13 +27,6 @@ const flowerStyle = (flower: typeof FLOWERS[number], i: number): CSSProperties =
   '--delay': `${i * 85}ms`,
 } as CSSProperties)
 
-export function GroundFlowers({ on, fresh }: { on: boolean; fresh: boolean }) {
-  return <div className={`shrine-ground-flowers ${on ? 'has-flowers' : ''} ${fresh ? 'fresh-flowers' : ''}`} aria-hidden="true">
-    {FLOWERS.map((flower, i) => <span key={i} className="photo-ground-flower" style={flowerStyle(flower, i)}><img src={`${ART}/flower-${i % 6 + 1}.webp`} alt="" /></span>)}
-  </div>
-}
-
-/** One brief offering; no perpetual particle effect. The identical flowers settle at the end. */
 export function FallFlowers({ wave }: { wave: number }) {
   if (!wave) return null
   return <div key={wave} className="shrine-falling-flowers" aria-hidden="true">
@@ -43,7 +39,6 @@ export function HangingBell({ side, onRing, label }: { side: 'left' | 'right'; o
   const [swing, setSwing] = useState(0)
   return <button className={`shrine-bell shrine-bell-${side}`} onClick={() => { setSwing((n) => n + 1); onRing() }} aria-label={label}>
     <img key={swing} className={swing ? 'photo-bell-swing' : ''} src={`${ART}/hanging-bell.webp`} alt="" />
-    <span>{label}</span>
   </button>
 }
 
@@ -55,7 +50,7 @@ export function ShrineLamps({ lit, igniting }: { lit: boolean; igniting: boolean
   </div>
 }
 
-export function OfferingLedge({ lit, igniting, flowers, light, offerFlowers, flowerLabel, diyaLabel, lightLabel }: {
+export function OfferingLedge({ lit, igniting, flowers, light, offerFlowers, flowerLabel, diyaLabel, lightLabel, ring, bellLabel }: {
   lit: boolean
   igniting: boolean
   flowers: boolean
@@ -64,15 +59,23 @@ export function OfferingLedge({ lit, igniting, flowers, light, offerFlowers, flo
   flowerLabel: string
   diyaLabel: string
   lightLabel: string
+  ring: () => void
+  bellLabel: string
 }) {
   return <div className="photo-offering-ledge">
+    <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true"><defs><filter id="approved-jyoti-alpha" colorInterpolationFilters="sRGB"><feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 8 0 0 -6.2" /></filter></defs></svg>
     <button className="photo-offering photo-offering-flowers" onClick={offerFlowers} aria-label={flowerLabel} aria-pressed={flowers}>
       <img className="photo-thali" src={`${ART}/flower-thali.webp`} alt="" />
       <strong>{flowerLabel}</strong>
     </button>
     <button className={`photo-offering photo-offering-diya ${lit ? 'diya-is-lit' : ''} ${igniting ? 'diya-igniting' : ''}`} onClick={light} aria-label={lightLabel} aria-pressed={lit}>
-      <span className="photo-diya-object"><img className="photo-diya-bowl" src={`${ART}/diya.webp`} alt="" /><span className="photo-wick-glow" /><span className="photo-flame-rise"><img src={`${ART}/flame.webp`} className="photo-oil-flame" alt="" /></span></span>
+      <span className="photo-diya-object"><img className="photo-diya-bowl" src={`${ART}/diya.webp`} alt="" /><span className="approved-jyoti-crop"><img src={`${ART}/diya-flame-context.png`} alt="" /></span></span>
       <strong>{diyaLabel}</strong>
     </button>
+    <button className="photo-offering photo-offering-bell" onClick={ring} aria-label={bellLabel}><strong>{bellLabel}</strong></button>
   </div>
+}
+
+export function ApprovedTableBell() {
+  return <span className="approved-table-bell-crop" aria-hidden="true"><img src={`${ART}/approved-scene.png`} alt="" /></span>
 }

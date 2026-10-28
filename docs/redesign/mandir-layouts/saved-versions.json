@@ -1,0 +1,12 @@
+{
+  "decisionDate": "2026-10-28",
+  "currentLayout": 1,
+  "futureCandidate": 2,
+  "reviewAfter": "six months after actual app launch, subject to Ayush choosing to proceed",
+  "automaticSwitch": false,
+  "artifacts": {
+    "layout-1.png": "71468ccf6759ccdee6cfc39eaea6746f89ef5a1c4aeb2c3d708bba8f750fefd4",
+    "layout-2.png": "244f6df870c1ca3de08d7c4c0b666bc110212b25376d21e5367c529dc4a725b4",
+    "interactive-prototype.tar.gz": "99288509daa3119a82c294f930e4dcafb7d22176d4af433deaa3773ef043c4e1"
+  }
+}

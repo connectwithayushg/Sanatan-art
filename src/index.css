@@ -422,14 +422,13 @@ button, a, input, select { touch-action: manipulation; }
 .shrine-bell-left { left: 4%; }
 .shrine-bell-right { right: 4%; }
 .shrine-bell img { display: block; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center top; transform-origin: 50% 0; }
-.shrine-bell span { position: absolute; bottom: -21px; left: 50%; transform: translateX(-50%); padding: 0 7px; background: #fff5e6e8; color: #563620; border-radius: 8px; font-size: .88rem; line-height: 1.5; white-space: nowrap; }
 .shrine-bell:focus-visible { outline: 3px solid #af4100; outline-offset: -3px; border-radius: 12px; }
 .photo-bell-swing { animation: photoBellSwing 1.35s ease-out; }
 @keyframes photoBellSwing { 0% { transform: rotate(0); } 14% { transform: rotate(8deg); } 32% { transform: rotate(-6deg); } 50% { transform: rotate(4deg); } 68% { transform: rotate(-2deg); } 84% { transform: rotate(1deg); } 100% { transform: rotate(0); } }
 .photo-offering-ledge { position: absolute; inset: 80% 0 -36px; z-index: 6; }
 .photo-offering-ledge::before { content: ''; position: absolute; inset: auto 0 0; height: 36px; background: linear-gradient(#f5ead9, #f4e7d2); }
 .photo-offering { position: absolute; top: 0; bottom: 0; min-height: 100px; min-width: 44px; }
-.photo-offering-flowers { left: 2%; width: 36%; }
+.photo-offering-flowers { left: 0; width: 33%; }
 .photo-offering-diya { left: 36%; width: 28%; }
 .photo-offering strong { position: absolute; bottom: 2px; left: 0; right: 0; font-size: 1.05rem; line-height: 1.5; color: #422b19; }
 .photo-offering:focus-visible { outline: 3px solid #af4100; outline-offset: -3px; border-radius: 12px; }
@@ -437,25 +436,10 @@ button, a, input, select { touch-action: manipulation; }
 .photo-thali { position: absolute; bottom: 38px; width: 100%; height: auto; max-height: calc(100% - 36px); object-fit: contain; object-position: center bottom; }
 .photo-diya-object { position: absolute; bottom: 40px; left: 0; width: 100%; aspect-ratio: 1; }
 .photo-diya-bowl { position: absolute; inset: auto 0 0; width: 100%; height: auto; }
-.photo-wick-glow { position: absolute; left: 45%; bottom: 44%; width: 10%; height: 8%; opacity: 0; border-radius: 50%; background: radial-gradient(ellipse, #ffe4a1, #f99a0066 40%, transparent 70%); }
-.photo-flame-rise { position: absolute; left: 40%; bottom: 44%; width: 23%; height: 48%; transform-origin: 50% 100%; opacity: 0; transform: scale(.04); }
-.photo-oil-flame { width: 100%; height: 100%; object-fit: fill; transform-origin: 50% 100%; }
-.diya-is-lit .photo-flame-rise { opacity: 1; transform: none; }
-.diya-is-lit .photo-oil-flame { animation: oilFlameBreathe 3.2s ease-in-out infinite; }
-.diya-igniting .photo-flame-rise { animation: oilIgnition 1.35s ease-out both; }
-.diya-igniting .photo-wick-glow { animation: wickIgnition 1.4s ease-out both; }
-@keyframes oilIgnition { 0% { opacity: 0; transform: scale(.02, .04); } 16% { opacity: .35; transform: scale(.24, .15); } 43% { opacity: .85; transform: scale(.65, .5) rotate(-2deg); } 74% { opacity: 1; transform: scale(.96, 1.04) rotate(1deg); } 100% { opacity: 1; transform: none; } }
-@keyframes wickIgnition { 0%, 100% { opacity: 0; } 12% { opacity: .8; } 50% { opacity: .3; } }
-@keyframes oilFlameBreathe { 0%, 100% { transform: scale(.99, 1) rotate(-.4deg); } 43% { transform: scale(1.01, .97) rotate(.5deg); } 70% { transform: scale(.98, 1.02); } }
-.shrine-ground-flowers, .shrine-falling-flowers { position: absolute; inset: 0; z-index: 4; pointer-events: none; overflow: hidden; }
-.photo-ground-flower, .photo-fall-flower { position: absolute; aspect-ratio: 1; pointer-events: none; }
-.photo-ground-flower { opacity: 0; transform: translate(-50%, -50%) rotate(var(--turn)) scaleY(.58); }
-.photo-ground-flower img, .photo-fall-flower img { display: block; width: 100%; height: 100%; object-fit: contain; }
-.has-flowers .photo-ground-flower { opacity: 1; }
-.photo-ground-flower::after { content: ''; position: absolute; z-index: -1; left: 12%; right: 12%; bottom: 12%; height: 24%; border-radius: 50%; background: #58331548; filter: blur(2px); }
-.fresh-flowers .photo-ground-flower { animation: flowerSettle .22s ease-out calc(1.85s + var(--delay)) backwards; }
+.shrine-falling-flowers { position: absolute; inset: 0; z-index: 4; pointer-events: none; overflow: hidden; }
+.photo-fall-flower { position: absolute; aspect-ratio: 1; pointer-events: none; }
+.photo-fall-flower img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .photo-fall-flower { animation: photoFlowerFall 2s cubic-bezier(.3, .12, .55, 1) var(--delay) both; }
-@keyframes flowerSettle { from { opacity: 0; transform: translate(-50%, -65%) rotate(var(--turn)) scaleY(.7); } to { opacity: 1; transform: translate(-50%, -50%) rotate(var(--turn)) scaleY(.58); } }
 @keyframes photoFlowerFall {
   0% { opacity: 0; transform: translate(calc(-50% + var(--drift)), calc(-1 * var(--flower-rise))) rotate(calc(var(--turn) - 35deg)) scale(.75); }
   12% { opacity: 1; }
@@ -463,11 +447,22 @@ button, a, input, select { touch-action: manipulation; }
   94% { opacity: 1; transform: translate(-50%, -65%) rotate(var(--turn)) scale(1, .75); }
   100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--turn)) scale(1, .58); }
 }
+/* Layout 1 is the launch choice. The exact approved photograph supplies the flame and lower bell. */
+.approved-jyoti-crop { position: absolute; left: 41.4%; bottom: 44%; width: 18%; aspect-ratio: 24 / 54; overflow: hidden; pointer-events: none; filter: url(#approved-jyoti-alpha); mask-image: linear-gradient(to bottom, transparent, #000 8%, #000 86%, transparent), linear-gradient(to right, transparent, #000 22%, #000 78%, transparent); mask-composite: intersect; opacity: 0; transition: opacity 1.1s ease-out; }
+.approved-jyoti-crop img { display: block; position: absolute; max-width: none; width: 291.6666667%; height: auto; left: -83.3333333%; top: -31.4814815%; }
+.diya-is-lit .approved-jyoti-crop { opacity: 1; }
+.approved-table-bell-crop { position: absolute; z-index: 5; left: 75.3968254%; top: 73.7179487%; width: 24.6031746%; height: 26.2820513%; overflow: hidden; pointer-events: none; mask-image: linear-gradient(to right, transparent, #000 3%, #000 97%, transparent), linear-gradient(to bottom, transparent, #000 2%, #000 98%, transparent); mask-composite: intersect; }
+.approved-table-bell-crop img { position: absolute; max-width: none; width: 406.4516129%; height: auto; left: -306.4516129%; top: -280.4878049%; }
+.photo-offering-bell { left: 70%; width: 28%; top: -36px; }
+.photo-offering-bell strong { left: 16px; }
+.mandir-shrine::after { content: ''; position: absolute; inset: 0; z-index: 8; background: rgba(26,17,10,.18); opacity: 1; pointer-events: none; transition: opacity 1.35s ease-out; }
+.mandir-shrine.is-lit::after { opacity: 0; }
 @media (prefers-reduced-motion: reduce) {
-  .photo-bell-swing, .photo-oil-flame, .diya-igniting .photo-flame-rise, .diya-igniting .photo-wick-glow, .lamps-igniting .corner-lamp, .fresh-flowers .photo-ground-flower { animation: none !important; }
-  .shrine-falling-flowers, .photo-wick-glow { display: none; }
+  .photo-bell-swing, .lamps-igniting .corner-lamp { animation: none !important; }
+  .shrine-falling-flowers { display: none; }
+  .approved-jyoti-crop, .mandir-shrine::after { transition: none; }
 }
-.mandir-extras { padding-top: 36px; }
+.mandir-extras { padding-top: 80px; }
 .mandir-mantra { text-align: center; font-family: var(--font-scripture); padding: 12px 0; font-size: 1.1rem; }
 .mandir-actions { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr); gap: 8px; padding: 8px 14px; background: #fff8ec; border-top: 1px solid #e8d7bd; }
 .mandir-actions > button { display: flex; align-items: center; gap: 7px; min-height: 64px; min-width: 0; padding: 6px 9px 6px 0; border: 1px solid #e9d8bc; border-radius: 12px; text-align: left; overflow: hidden; font-size: 1rem; line-height: 1.35; font-weight: 600; }

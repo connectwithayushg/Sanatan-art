@@ -9,7 +9,7 @@ import { Dhyan } from './Dhyan'
 import { DhyanIcon } from '../../ui/DhyanIcon'
 import { useStored } from '../../lib/useStored'
 import { offer, type Offering } from '../../lib/darshan'
-import { FallFlowers, GroundFlowers, HangingBell, OfferingLedge, ShrineLamps } from './Offerings'
+import { ApprovedTableBell, FallFlowers, HangingBell, OfferingLedge, ShrineLamps } from './Offerings'
 import { useCutBox } from './useCutBox'
 import { TabBook } from '../../ui/TabIcons'
 import { BharatHomeCard } from '../bharat/BharatHomeCard'
@@ -64,7 +64,7 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
   const [ling, setLing] = useStored('shivLing', false)
   const form = (d: (typeof DEITIES)[number]) => (d.id === 'krishna' && gopal ? { ...d, ...BAL_GOPAL } : d.id === 'shiv' && ling ? { ...d, ...SHIVLING, shrineScene: undefined, shrineScenes: undefined } : d)
   const deity = form(DEITIES.find((d) => d.id === chosen) ?? DEITIES[0])
-  // What has been offered to each deity today (diya lit, flowers on the ground); it resets at midnight.
+  // What has been offered to each deity today; it resets at midnight.
   const [offered_, setOffered] = useStored<{ day: string; d: Record<string, { lit?: boolean; flowers?: boolean }> }>('offerings', { day: '', d: {} })
   const [seen, setSeen] = useStored<{ diya?: boolean; bell?: boolean; bowl?: boolean }>('offerHints', {})
   const [petals, setPetals] = useState(0)
@@ -212,11 +212,11 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
           <ShrineLamps lit={lit} igniting={igniting} />
           {!scene && <><div className="mandir-statue-shadow" /><img key={picture} src={picture} alt={hi ? deity.name_hi : deity.name_en} className="mandir-statue" style={{ height, bottom: sz.h * .255 - (1 - (box?.b ?? 1)) * height, transform: `translateX(-${(box?.cx ?? .5) * 100}%)`, opacity: box ? 1 : 0 }} /></>}
         </div>
-        <GroundFlowers key={`${deity.id}-${petals}`} on={!!here.flowers} fresh={petals > 0} />
         <FallFlowers wave={petals} />
         <HangingBell side="left" onRing={bell} label={t('bell')} />
         <HangingBell side="right" onRing={bell} label={t('bell')} />
-        <OfferingLedge lit={lit} igniting={igniting} flowers={!!here.flowers} light={light} offerFlowers={flowers} flowerLabel={t('r_offeringFlowers')} diyaLabel={t('r_offeringDiya')} lightLabel={lit ? t('diyaLit') : t('lightDiya')} />
+        <OfferingLedge lit={lit} igniting={igniting} flowers={!!here.flowers} light={light} offerFlowers={flowers} flowerLabel={t('r_offeringFlowers')} diyaLabel={t('r_offeringDiya')} lightLabel={lit ? t('diyaLit') : t('lightDiya')} ring={bell} bellLabel={t('bell')} />
+        <ApprovedTableBell />
       </div>
       <div className="mandir-actions">
         {aarti && <button className="mandir-aarti-action" onClick={() => openAarti?.(aarti.id, deity.id)}><img src="/art/redesign/approved-mandir/aarti-book.png" alt="" /><span>{t('r_mandirReadAarti', { name: aartiName })}</span><span aria-hidden="true">→</span></button>}

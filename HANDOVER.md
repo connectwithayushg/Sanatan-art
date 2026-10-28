@@ -143,3 +143,12 @@ These live in Ayush's Claude project, not in GitHub. Ask Ayush for any file you 
 - `tools/marketingskills/` — Corey Haines marketing skills (MIT).
 - `ayush-learn/` — Ayush's design skills and notes.
 - `uploads/` — files Ayush sent in chat.
+
+
+## 11. Mandir choice — Ayush, 28 October 2026
+
+Use **Layout 1 now**: labelled पुष्प · दीया · घंटी controls, centred diya, and two unlabelled hanging bells. Use the exact approved photo jyoti and lower bell, gently dim the unlit shrine and brighten it on lighting, and let 13 matching photographic flowers fall without an extra permanent floor layer.
+
+Keep **Layout 2** saved for a possible switch once the app has been live for six months and people know the controls. It uses the large flower thali near the deity as the flower control, with no lower labels or separate flower-thali button. This is an option for Ayush to review later, not an automatic or scheduled change. No exact launch/review date has been assumed.
+
+Both approved PNG references, the isolated interactive source for both versions and the decision record are saved in `docs/redesign/mandir-layouts/`. This choice supersedes older Mandir offering descriptions where they differ. Changes remain on local review branches; nothing has been deployed.

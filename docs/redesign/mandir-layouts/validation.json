@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "checks": [
+    "Layout 1 default",
+    "three labelled offerings with centred diya",
+    "two unlabelled hanging bells",
+    "all three bell actions invoke real audio",
+    "13 falling flowers vanish with no settled layer",
+    "approved photo flame fades without shape animation",
+    "shrine brightness and corner lamps",
+    "saved offerings reload without ignition",
+    "cumulative darshan counts once",
+    "Aarti and Jap",
+    "deity and Shivling switching",
+    "320/390px Hindi/English with enlarged text",
+    "44px minimum hit areas",
+    "reduced motion",
+    "five tabs",
+    "no browser exceptions"
+  ]
+}
