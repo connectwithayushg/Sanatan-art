@@ -12,8 +12,8 @@ type Pick = { deity: string; sound: Sound; minutes?: number }
 const DIYA_HALO: [string, string, string] = ['rgba(255,170,70,.55)', 'rgba(200,90,20,.22)', 'rgba(200,110,20,.18)']
 
 /**
- * The home page's way into meditation: a quiet dark bar (`bare` leaves only the sheet and player, for pages that open it from their own button). The first time it asks which deity and which sound;
- * after that one tap starts with the last choice, and "बदलें" asks again.
+ * The home page's way into meditation: a quiet dark bar (`bare` leaves only the sheet and player, for pages that open it from their own button).
+ * Every time it opens the sheet (deity, sound, timer) with the last choice already picked, so changing it never needs a hidden button.
  */
 export function DhyanBar({ trigger = 0, bare = false }: { trigger?: number; bare?: boolean }) {
   const { t, i18n } = useTranslation()
@@ -27,9 +27,8 @@ export function DhyanBar({ trigger = 0, bare = false }: { trigger?: number; bare
   useEffect(() => {
     if (trigger <= previousTrigger.current) return
     previousTrigger.current = trigger
-    if (pick) setOn(pick)
-    else setSheet(true)
-  }, [trigger, pick])
+    setSheet(true)
+  }, [trigger])
 
   const name = (id: string) => {
     if (id === 'diya') return t('dhyanDiya')
@@ -41,23 +40,16 @@ export function DhyanBar({ trigger = 0, bare = false }: { trigger?: number; bare
   return (
     <section className={bare ? undefined : 'px-4 pt-6'}>
       {!bare && <div className="flex items-stretch overflow-hidden rounded-2xl bg-[linear-gradient(100deg,#1b0e07,#2e170a)] text-[#f6e9d6] shadow-[0_6px_18px_rgba(43,26,16,0.18)]">
-        <button onClick={() => (pick ? setOn(pick) : setSheet(true))} className="flex min-w-0 flex-1 items-center gap-3.5 px-4 py-3.5 text-left active:opacity-80">
+        <button onClick={() => setSheet(true)} className="flex min-w-0 flex-1 items-center gap-3.5 px-4 py-3.5 text-left active:opacity-80">
           <DhyanIcon size={38} glow />
           <span className="min-w-0">
             <span className="block font-display text-[1.25rem] leading-tight">{t('dhyanStart')}</span>
             <span className="block truncate text-[0.82rem] text-[#c9b08f]">{pick ? `${name(pick.deity)} · ${t('sound_' + pick.sound)}${pick.minutes ? ' · ' + t('dhyanMin', { count: pick.minutes }) : ''}` : t('dhyanLine')}</span>
           </span>
-          {!pick && (
-            <span aria-hidden="true" className="ml-auto text-[1.4rem] text-[#f2b544]">
-              ›
-            </span>
-          )}
+          <span aria-hidden="true" className="ml-auto text-[1.4rem] text-[#f2b544]">
+            ›
+          </span>
         </button>
-        {pick && (
-          <button onClick={() => setSheet(true)} className="shrink-0 border-l border-white/10 px-4 text-[0.85rem] font-semibold text-[#f2b544] active:opacity-80">
-            {t('dhyanChange')}
-          </button>
-        )}
       </div>}
 
       {sheet && (
@@ -95,6 +87,13 @@ function DhyanSheet({ initial, onClose, onStart }: { initial: Pick; onClose: () 
   const [deity, setDeity] = useState(initial.deity)
   const [sound, setSound] = useState<Sound>(initial.sound)
   const [minutes, setMinutes] = useState(initial.minutes ?? 0)
+  // The last chosen deity may sit far along the row: bring it into view when the sheet opens.
+  const row = useRef<HTMLUListElement>(null)
+  useEffect(() => {
+    const ul = row.current
+    const on = ul?.querySelector<HTMLElement>('[aria-pressed="true"]')
+    if (ul && on) ul.scrollLeft = on.offsetLeft - (ul.clientWidth - on.offsetWidth) / 2
+  }, [])
 
   useEffect(() => {
     const esc = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
@@ -116,7 +115,7 @@ function DhyanSheet({ initial, onClose, onStart }: { initial: Pick; onClose: () 
         </div>
 
         <h3 className="mt-4 text-[0.95rem] font-bold text-warm">{t('dhyanWhom')}</h3>
-        <ul className="-mx-4 mt-2 flex gap-3 overflow-x-auto px-4 pb-1 [scrollbar-width:none]">
+        <ul ref={row} className="-mx-4 mt-2 flex gap-3 overflow-x-auto px-4 pb-1 [scrollbar-width:none]">
           <li className="shrink-0">
             <button onClick={() => setDeity('diya')} aria-pressed={deity === 'diya'} className="flex w-[4.2rem] flex-col items-center gap-1">
               <span className={`${ring(deity === 'diya')} grid place-items-center bg-[#2a1608] [&>svg]:w-[2.6rem]`}>
