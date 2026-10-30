@@ -162,3 +162,6 @@ Layout 1 also supports direct taps on the large flower thali near the deity and 
 - The daily opener (DailyOpener, `dailyOpener.ts`) was REMOVED on Ayush's word ("mandir only, no other opener"). Cold launch still opens the Mandir (doors once a day). The `dailyOpenerDay` storage key is no longer written. Wallpaper save stays off.
 - Hero pictures: `public/art/home/hero.webp` is the original Option 4 Shiva; `hero-<id>.webp` for the other forms are crops of the approved Mandir shrine scenes (same ivory frame). Missing: no Shiv weekday variants, no new art was generated.
 - Removed: QuickHome, MonthCard (home calendar tile). New: `useSuprabhat` hook shared by the card page and Aaj; `nextEkadashi` in `lib/panchang/month.ts`.
+
+## Mandir artwork v2 (31 Oct 2026, NOT live)
+- New scenes for all 12 forms; Shiv ji and Hanuman ji change by weekday (Sunday to Saturday). Other ten are static until their weekday sets exist. See `docs/redesign/mandir-artwork-v2/README.md`.
