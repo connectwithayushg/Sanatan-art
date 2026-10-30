@@ -27,7 +27,7 @@ export function Dvar({ onDone }: { onDone: () => void }) {
     setOpen(true)
   }
   useEffect(() => {
-    const auto = setTimeout(() => opening(false), 9000)
+    const auto = setTimeout(() => opening(false), 5000)
     return () => clearTimeout(auto)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open])

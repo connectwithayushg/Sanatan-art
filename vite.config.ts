@@ -15,7 +15,7 @@ export default defineConfig({
         short_name: 'सनातन',
         description: 'दीपावली लक्ष्मी पूजन मुहूर्त, विधि, आरती और शुभकामना कार्ड',
         lang: 'hi',
-        theme_color: '#fbf4e8',
+        theme_color: '#c24e06',
         background_color: '#fbf4e8',
         display: 'standalone',
         start_url: '/',

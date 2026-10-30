@@ -492,7 +492,8 @@ button, a, input, select { touch-action: manipulation; }
 .mala-targets { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .mala-targets button { min-width: 50px; min-height: 46px; padding: 7px; border: 1px solid #dec6a6; border-radius: 12px; }
 .mala-targets button[aria-pressed=true] { background: #b34700; color: #fff; }
-.mala-counter { position: relative; display: block; aspect-ratio: 1; width: min(100%, 300px); margin: 10px auto; }
+.mala-counter { position: relative; display: block; aspect-ratio: 1; width: min(100%, 300px); margin: 10px auto; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; transition: transform 120ms ease-out; }
+.mala-counter:active { transform: scale(0.98); }
 .mala-counter > span { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
 .mala-counter strong { font-family: var(--font-display); font-size: 3rem; }
 .mala-counter small { font-size: 1rem; }
@@ -597,7 +598,7 @@ button, a, input, select { touch-action: manipulation; }
 .h4-feature > span { display: flex; flex-direction: column; justify-content: center; min-width: 0; padding: 9px 11px; }
 .h4-feature small { font-size: .85rem; font-weight: 500; line-height: 1.5; color: #965216; }
 .h4-feature strong { font-size: 1.4rem; line-height: 1.5; color: #592b18; }
-.h4-feature span > span { font-size: .85rem; line-height: 1.6; color: #966032; }
+.h4-feature span > span { font-size: .85rem; line-height: 1.6; color: #7f4f27; }
 .h4-feature b { margin-top: 5px; font-size: .9rem; font-weight: 600; color: #b54808; }
 .h4-strip { scroll-padding-inline: 12px; display: flex; gap: 9px; margin: 10px -12px 0; padding: 0 12px 4px; overflow-x: auto; list-style: none; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .h4-strip li { flex: 0 0 112px; align-self: stretch; scroll-snap-align: start; }

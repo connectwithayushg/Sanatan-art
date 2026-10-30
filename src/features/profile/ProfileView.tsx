@@ -28,6 +28,12 @@ export function ProfileView({ sub, open, scale, setScale }: { sub: string[]; ope
 
 const useHi = () => useTranslation().i18n.language === 'hi'
 
+/** The first whole letter of a name, so क्षमा shows क्ष (not क) and श्रीमती shows श्र; vowel signs are dropped. */
+const initial = (name: string) => {
+  const first = [...new Intl.Segmenter('hi', { granularity: 'grapheme' }).segment(name.trim())][0]?.segment
+  return first ? first.replace(/[\u0900-\u0903\u093E-\u094D\u0962\u0963]+$/u, '').toUpperCase() || first : 'ॐ'
+}
+
 function Back({ to, open, title }: { to: string; open: Open; title: string }) {
   const { t } = useTranslation()
   return (
@@ -83,7 +89,7 @@ function Main({ open, scale, setScale }: { open: Open; scale: number; setScale: 
       <h1 className="flex h-14 items-center text-[1.15rem] font-bold text-warm">{t('profile')}</h1>
 
       <div className="flex items-center gap-3 rounded-2xl bg-white p-3.5 ring-1 ring-black/[0.07]">
-        <span className="grid h-[3.4rem] w-[3.4rem] shrink-0 place-items-center rounded-full bg-[#fff1d6] font-display text-[1.6rem] text-flame">{(name.trim()[0] ?? 'ॐ').toUpperCase()}</span>
+        <span className="grid h-[3.4rem] w-[3.4rem] shrink-0 place-items-center rounded-full bg-[#fff1d6] font-display text-[1.6rem] text-flame">{initial(name)}</span>
         <div className="min-w-0 flex-1">
           <input
             id="profile-name"
@@ -149,10 +155,6 @@ function Main({ open, scale, setScale }: { open: Open; scale: number; setScale: 
                 </button>
               ))}
             </span>
-          </div>
-          <div className={`${row} text-dim`}>
-            <span className="font-semibold">{t('reminders')}</span>
-            <span className="ml-auto rounded-full bg-[#fff1d6] px-2.5 py-0.5 text-[0.75rem]">{t('soonTag')}</span>
           </div>
         </div>
       </Section>

@@ -77,7 +77,6 @@ export function HomeView({ go }: { go: Go }) {
         <ul className="h4-list">
           <li><button onClick={() => go('aaj', 'calendar')}><span>{t('cal_title')}</span><span aria-hidden="true">›</span></button></li>
           <li><button onClick={() => go('profile', 'sanatan')}><span>{t('homeSanatanTitle')}</span><span aria-hidden="true">›</span></button></li>
-          <li><button disabled><span>{t('h4_wallpaper')}<small>{t('h4_soon')}</small></span></button></li>
         </ul>
       </div>
       <DhyanBar trigger={dhyanTrigger} bare />

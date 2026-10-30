@@ -71,7 +71,7 @@ function Row({ img, title, line, tag, onClick }: { img: string; title: string; l
       {inner}
     </button>
   ) : (
-    <div className="flex w-full items-center gap-4 rounded-3xl bg-white/60 px-4 py-3 opacity-70 ring-1 ring-black/5">{inner}</div>
+    <div className="flex w-full items-center gap-4 rounded-3xl bg-white/60 px-4 py-3 opacity-90 ring-1 ring-black/5">{inner}</div>
   )
 }
 

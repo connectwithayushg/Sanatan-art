@@ -75,7 +75,6 @@ export function HomeView({ goTo }: { goTo: (tab: 'puja' | 'aarti' | 'card') => v
 
         <footer className="mt-14 space-y-2 pb-6 text-center text-dim">
           <Lotus className="mx-auto" />
-          <p>{t('footer')}</p>
           <p className="text-sm">{t('credits')}</p>
           <p className="text-sm">{t('artCredit')}</p>
         </footer>
