@@ -219,7 +219,7 @@ export const CHOTI_DIWALI: FestivalPage = {
     { hi: 'छोटी दीवाली की रौनक आपके जीवन में सदा बनी रहे।', en: 'May the sparkle of Choti Diwali stay in your life forever.' },
     { hi: 'सपरिवार आपको छोटी दीवाली और रूप चौदस की शुभकामनाएँ।', en: 'Choti Diwali and Roop Chaudas wishes to you and your family.' },
   ],
-  card: { title: { hi: 'छोटी दीवाली', en: 'Choti Diwali' }, blessing: '॥ शुभ दीपावली ॥', groups: ['diya', 'krishna', 'lakshmi'], picture: 'H4ilfu3vftk' },
+  card: { title: { hi: 'छोटी दीवाली', en: 'Choti Diwali' }, blessing: '॥ शुभ दीपावली ॥', groups: ['diya', 'krishna', 'lakshmi'], picture: 'diya-1' },
   aartis: ['hanuman', 'kunjbihari'],
 }
 
@@ -323,7 +323,7 @@ export const GOVARDHAN: FestivalPage = {
     { hi: 'इस गोवर्धन पूजा आपके घर छप्पन भोग जैसी मिठास हो।', en: 'This Govardhan Puja, may your home have the sweetness of chhappan bhog.' },
     { hi: 'सपरिवार आपको अन्नकूट और गोवर्धन पूजा की बधाई।', en: 'Annakoot and Govardhan Puja greetings to you and your family.' },
   ],
-  card: { title: { hi: 'गोवर्धन पूजा', en: 'Govardhan Puja' }, blessing: '॥ जय गिरधारी ॥', groups: ['krishna', 'diya'], picture: 'bxYwhPIFOcA' },
+  card: { title: { hi: 'गोवर्धन पूजा', en: 'Govardhan Puja' }, blessing: '॥ जय गिरधारी ॥', groups: ['krishna', 'diya'], picture: 'krishna-1' },
   aartis: ['govardhan', 'kunjbihari'],
 }
 
@@ -420,7 +420,7 @@ export const BHAI_DOOJ: FestivalPage = {
     { hi: 'यम द्वितीया का यह पर्व आपके रिश्ते को और मज़बूत करे।', en: 'May this festival of Yam Dwitiya make your bond even stronger.' },
     { hi: 'सपरिवार आपको भाई दूज की बहुत-बहुत शुभकामनाएँ।', en: 'Many Bhai Dooj wishes to you and your family.' },
   ],
-  card: { title: { hi: 'भाई दूज', en: 'Bhai Dooj' }, blessing: '॥ भाई की लंबी आयु ॥', groups: ['diya', 'ganesh'], picture: 'H4ilfu3vftk' },
+  card: { title: { hi: 'भाई दूज', en: 'Bhai Dooj' }, blessing: '॥ भाई की लंबी आयु ॥', groups: ['diya', 'ganesh'], picture: 'diya-1' },
   aartis: ['ganesh', 'jagdish'],
 }
 

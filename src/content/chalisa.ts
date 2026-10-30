@@ -89,7 +89,7 @@ export const HANUMAN_CHALISA: LibText = {
   title: { hi: 'श्री हनुमान चालीसा', en: 'Shri Hanuman Chalisa' },
   by: { hi: 'गोस्वामी तुलसीदास कृत', en: 'By Goswami Tulsidas' },
   inside: { hi: '40 चौपाई · अर्थ सहित', en: '40 verses · with meanings' },
-  img: '/art/thumb/1qvWMJv_NUU.jpg',
+  img: '/art/path/hanuman.webp',
   lang: 'hi',
   keys: 'hanuman chalisa bajrangbali tulsidas mangalvar tuesday shanivar',
   closing: '॥ जय श्री राम ॥',

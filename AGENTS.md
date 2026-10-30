@@ -12,7 +12,7 @@ Five bottom tabs, keep exactly five: **होम** (the doorway: shrine hero, fo
 
 - Vite 8 + React 19 + TypeScript 7 + Tailwind CSS v4, `vite-plugin-pwa`, `i18next` (strings in `src/lib/i18n/strings.ts`), `astronomy-engine` for the panchang. Node 22.
 - `npm ci` · `npm run dev` · `npm test` (vitest, 11 tests) · `npx tsc -b` · `npm run build`
-- `npm run build` also runs `scripts/fetch-gita.mjs`, `scripts/fetch-art.mjs` (downloads Wikimedia/Unsplash pictures) and `scripts/build-assets.mjs` (icons). It needs internet.
+- `npm run build` also runs `scripts/fetch-gita.mjs` and `scripts/build-assets.mjs` (icons). It needs internet.
 - Routing is hash-based in `src/App.tsx` (`#tyohar/diwali`, `#mandir/shiv/aarti/shiv`, `#path/...`, `#aaj/calendar`, `#profile`).
 - No backend, no accounts, no analytics. Everything a user does is saved in `localStorage` through `useStored()` (`src/lib/useStored.ts`). Never rename an existing storage key; users would lose their data.
 
@@ -29,7 +29,7 @@ Five bottom tabs, keep exactly five: **होम** (the doorway: shrine hero, fo
 2. **Show before building big things.** For any visible change, describe it or add screenshots in the PR. Ayush decides the look.
 3. **Religious text must be right.** Every aarti, chalisa, katha, ritual, date or temple fact must match at least **two trusted sources** (Drik Panchang, Gita Press, Bhakti Bharat, Shubh Panchang, temple boards). Where customs differ by region, say so; do not pick one silently. Never invent shlokas, lyrics, predictions or history. Meanings are our own wording.
 4. **Design:** bright Blinkit/Zepto/Swiggy-style clarity with a traditional soul. Deep bhagwa top band (#d9600b → #c24e06) with white text, cream pages (#fbf4e8), white cards, saffron accents. Big readable text for elders. **No generic "AI-made" look, no cartoon or kiddish animation, photos over emojis, the deity is always the focus.**
-5. **Deity pictures:** only colours that traditionally belong to that deity (Krishna/Bal Gopal: yellow, white, red only). **Khatu Shyam ji is always the SHISH (head) darshan, never a full-body Barbarik.** Canva paintings are never used in cards people send.
+5. **Deity pictures:** only colours that traditionally belong to that deity (Krishna/Bal Gopal: yellow, white, red only). **Khatu Shyam ji is always the SHISH (head) darshan, never a full-body Barbarik.** No Unsplash photos and no Raja Ravi Varma or other Wikimedia public-domain paintings anywhere in the app (Ayush, 30 Oct 2026); greeting cards use the app's own art in `public/art/card/`.
 6. **Home page:** no WhatsApp/send buttons on home cards, no "पूरा अर्थ पढ़ें" links.
 7. **Aarti reader:** calm reading page, ONE "अर्थ" on/off switch for the whole aarti, no play button for lyrics. Audio only through official YouTube embeds (tap to play, never autoplay).
 8. **Festivals:** if a festival has one aarti, its आरती tab opens it directly; no "आज की आरती" heading inside a festival.

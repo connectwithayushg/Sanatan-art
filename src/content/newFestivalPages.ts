@@ -97,7 +97,7 @@ export const SHARAD_PURNIMA: FestivalPage = {
     { hi: 'माँ लक्ष्मी आपके घर सुख और समृद्धि लेकर आएँ।', en: 'May Maa Lakshmi bring joy and plenty to your home.' },
     { hi: 'आपको शरद पूर्णिमा की हार्दिक शुभकामनाएँ।', en: 'Warm Sharad Purnima wishes to you.' },
   ],
-  card: { title: { hi: 'शरद पूर्णिमा', en: 'Sharad Purnima' }, blessing: '॥ अमृत की चाँदनी ॥', groups: ['moon', 'lakshmi', 'diya'], picture: 'LryOyGjm1bo' },
+  card: { title: { hi: 'शरद पूर्णिमा', en: 'Sharad Purnima' }, blessing: '॥ अमृत की चाँदनी ॥', groups: ['moon', 'lakshmi', 'diya'], picture: 'moon-2' },
   aartis: ['lakshmi', 'jagdish'],
 }
 
@@ -197,7 +197,7 @@ export const AHOI_ASHTAMI: FestivalPage = {
     { hi: 'माँ का आशीर्वाद सदा आपके परिवार पर बना रहे।', en: 'May a mother’s blessing always rest on your family.' },
     { hi: 'आपको अहोई अष्टमी की हार्दिक शुभकामनाएँ।', en: 'Warm Ahoi Ashtami wishes to you.' },
   ],
-  card: { title: { hi: 'अहोई अष्टमी', en: 'Ahoi Ashtami' }, blessing: '॥ संतान की रक्षा ॥', groups: ['diya', 'lakshmi', 'moon'], picture: 'cM8X2DDvnGE' },
+  card: { title: { hi: 'अहोई अष्टमी', en: 'Ahoi Ashtami' }, blessing: '॥ संतान की रक्षा ॥', groups: ['diya', 'lakshmi', 'moon'], picture: 'diya-2' },
   aartis: ['ahoi', 'ambe', 'ganesh'],
 }
 
@@ -285,7 +285,7 @@ export const CHHATH: FestivalPage = {
     { hi: 'सूर्य देव आपके जीवन को प्रकाश और आरोग्य से भर दें।', en: 'May Surya Dev fill your life with light and health.' },
     { hi: 'आपको छठ पूजा की हार्दिक शुभकामनाएँ।', en: 'Warm Chhath Puja wishes to you.' },
   ],
-  card: { title: { hi: 'छठ पूजा', en: 'Chhath Puja' }, blessing: '॥ जय छठी मैया ॥', groups: ['diya', 'devta'], picture: 'xisPXJqwQkA' },
+  card: { title: { hi: 'छठ पूजा', en: 'Chhath Puja' }, blessing: '॥ जय छठी मैया ॥', groups: ['diya', 'devta'], picture: 'diya-3' },
   aartis: ['surya', 'jagdish'],
 }
 
@@ -415,7 +415,7 @@ export const DEV_UTHANI: FestivalPage = {
     { hi: 'तुलसी माता आपके आँगन को सदा हरा-भरा रखें।', en: 'May Tulsi Mata keep your courtyard green and blessed.' },
     { hi: 'आपको देवउठनी एकादशी की हार्दिक शुभकामनाएँ।', en: 'Warm Dev Uthani Ekadashi wishes to you.' },
   ],
-  card: { title: { hi: 'देवउठनी एकादशी', en: 'Dev Uthani Ekadashi' }, blessing: '॥ उठो देव, बैठो देव ॥', groups: ['diya', 'lakshmi', 'krishna'], picture: 'H4ilfu3vftk' },
+  card: { title: { hi: 'देवउठनी एकादशी', en: 'Dev Uthani Ekadashi' }, blessing: '॥ उठो देव, बैठो देव ॥', groups: ['diya', 'lakshmi', 'krishna'], picture: 'diya-1' },
   aartis: ['tulsi', 'jagdish', 'lakshmi'],
 }
 
@@ -506,6 +506,6 @@ export const KARTIK_PURNIMA: FestivalPage = {
     { hi: 'भगवान शिव और विष्णु की कृपा आप पर सदा बनी रहे।', en: 'May the grace of Lord Shiva and Vishnu stay with you always.' },
     { hi: 'आपको कार्तिक पूर्णिमा की हार्दिक शुभकामनाएँ।', en: 'Warm Kartik Purnima wishes to you.' },
   ],
-  card: { title: { hi: 'कार्तिक पूर्णिमा', en: 'Kartik Purnima' }, blessing: '॥ हर हर महादेव ॥', groups: ['diya', 'moon', 'devta'], picture: '-32lKp1bi9k' },
+  card: { title: { hi: 'कार्तिक पूर्णिमा', en: 'Kartik Purnima' }, blessing: '॥ हर हर महादेव ॥', groups: ['diya', 'moon', 'devta'], picture: 'diya-4' },
   aartis: ['ganga', 'shiv', 'jagdish'],
 }

@@ -51,7 +51,7 @@ export const DURGA_CHALISA: LibText = {
   title: { hi: 'श्री दुर्गा चालीसा', en: 'Shri Durga Chalisa' },
   by: { hi: 'देवीदास कृत', en: 'By Devidas' },
   inside: { hi: '40 चौपाई · अर्थ सहित', en: '40 verses · with meanings' },
-  img: '/art/thumb/vruHKfa-Fi0.jpg',
+  img: '/art/path/durga.webp',
   lang: 'hi',
   keys: 'durga chalisa maa amba ambe navratri devi sherawali',
   closing: '॥ जय माता दी ॥',

@@ -90,7 +90,7 @@ export const SHIV_TANDAV: LibText = {
   title: { hi: 'शिव तांडव स्तोत्र', en: 'Shiv Tandav Stotram' },
   by: { hi: 'रावण कृत', en: 'Attributed to Ravana' },
   inside: { hi: '16 श्लोक · अर्थ सहित', en: '16 shlokas · with meanings' },
-  img: '/art/thumb/z_oc2zi8hkA.jpg',
+  img: '/art/path/shiv.webp',
   lang: 'sa',
   keys: 'shiv tandav stotram tandava ravan shiva sanskrit',
   closing: '॥ इति रावणकृतं शिवताण्डवस्तोत्रं सम्पूर्णम् ॥',

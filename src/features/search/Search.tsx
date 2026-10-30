@@ -62,7 +62,7 @@ export function Search({ onClose, go }: { onClose: () => void; go: (to: string) 
         k: `${x.title.hi} ${x.title.en} ${x.keys} ${x.verses.map((v) => `${v.label?.hi ?? ''} ${v.label?.en ?? ''} ${v.text.split('\n')[0]}`).join(' ')}`,
       })),
       ...katha.map((c) => ({ title: c.title[l], kind: t('katha'), to: c.to, img: c.img, k: `${c.title.hi} ${c.title.en} ${c.inside.hi} ${c.inside.en} katha कथा` })),
-      { title: t('gita'), kind: t('q_path'), to: 'path/gita', img: '/art/thumb/bxYwhPIFOcA.jpg', k: 'gita bhagavad geeta गीता भगवद्गीता' },
+      { title: t('gita'), kind: t('q_path'), to: 'path/gita', img: '/art/path/krishna.webp', k: 'gita bhagavad geeta गीता भगवद्गीता' },
       ...CHAPTERS.map((c, i) => ({ title: `${t('chapterN', { n: i + 1 })}: ${hi ? c.hi : c.en}`, kind: t('gita'), to: `path/gita/${i + 1}`, k: `gita geeta गीता adhyay chapter अध्याय ${i + 1} ${c.en} ${c.hi}` })),
       { title: t('cal_title'), kind: t('nav_aaj'), to: 'aaj/calendar', k: 'calendar calender panchang month कैलेंडर कैलेंडर पंचांग महीना तिथि ekadashi एकादशी purnima पूर्णिमा amavasya अमावस्या' },
       { title: t('q_panchang'), kind: t('nav_aaj'), to: 'aaj/panchang', k: 'panchang aaj today tithi rahu kaal पंचांग आज तिथि राहु काल नक्षत्र nakshatra sunrise सूर्योदय' },

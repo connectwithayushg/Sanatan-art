@@ -53,7 +53,7 @@ export const SHIV_CHALISA: LibText = {
   title: { hi: 'श्री शिव चालीसा', en: 'Shri Shiv Chalisa' },
   by: { hi: 'अयोध्यादास कृत', en: 'By Ayodhyadas' },
   inside: { hi: '40 चौपाई · अर्थ सहित', en: '40 verses · with meanings' },
-  img: '/art/thumb/JxJ15qeVisk.jpg',
+  img: '/art/path/shiv.webp',
   lang: 'hi',
   keys: 'shiv chalisa shiva shankar bholenath somvar monday',
   closing: '॥ हर हर महादेव ॥',
