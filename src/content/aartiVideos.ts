@@ -73,4 +73,41 @@ export const AARTI_VIDEOS: Record<string, AartiVideo> = {
   yakundendu: { yt: 'DySzqHwNCxU', title: 'या कुन्देन्दु · Rajshri Soul' },
   gayatrimantra: { yt: 'nwRoHC83wx0', title: 'गायत्री मंत्र · Anuradha Paudwal' },
   vaishnavjan: { yt: 'xipue67yfPQ', title: 'वैष्णव जन तो तेने कहिए · Rajshri Soul' },
+  payoji: { yt: 'zq8BQEDIa0o', title: 'पायो जी मैंने राम रतन धन पायो · Lata Mangeshkar' },
+  mangalbhavan: { yt: 'sPeKCaCeNWk', title: 'मंगल भवन अमंगल हारी · T-Series Bhakti Sagar' },
+  'shiv-chalisa': { yt: 'Og_SivYZiQw', title: 'श्री शिव चालीसा · Anuradha Paudwal' },
+  'lakshmi-chalisa': { yt: 'qpMjVlSDVIU', title: 'श्री लक्ष्मी चालीसा · Anuradha Paudwal' },
+  'shani-chalisa': { yt: 'stSZnoIqKgU', title: 'श्री शनि चालीसा · Anuradha Paudwal' },
+  'saraswati-chalisa': { yt: 'dR39jtACMTg', title: 'श्री सरस्वती चालीसा · Anuradha Paudwal' },
+  'vishnu-chalisa': { yt: 'yPiSJP34-QM', title: 'श्री विष्णु चालीसा · Anuradha Paudwal' },
+  'kali-chalisa': { yt: 'zkyY1XnkS3U', title: 'श्री महाकाली चालीसा · Anuradha Paudwal' },
+  'ram-chalisa': { yt: 'h4IkygZkq6s', title: 'श्री राम चालीसा · Rajshri Soul' },
+  'santoshi-chalisa': { yt: '-eMrps0Y5ck', title: 'संतोषी माता चालीसा · Swastika Mishra' },
+  'sundar-kand': { yt: 'd4yKGNg6PzE', title: 'सम्पूर्ण सुंदरकांड · Hari Om Sharan' },
+  'vishnu-sahasranama': { yt: '4cSntJ2l6Nw', title: 'श्री विष्णु सहस्रनाम · Shemaroo Bhakti' },
+  'ram-raksha': { yt: 'UWfpIXL7mao', title: 'श्री राम रक्षा स्तोत्र · Anuradha Paudwal' },
+  'durga-kavach': { yt: '2gBFC1KoN38', title: 'श्री दुर्गा कवच · Anuradha Paudwal' },
+  'aditya-hridayam': { yt: 'HCnloqMOWVw', title: 'आदित्य हृदयम् · T-Series Bhakti Sagar' },
+  'ganesh-atharvashirsha': { yt: 'Xvlzl10mOKk', title: 'गणपति अथर्वशीर्ष · Shemaroo Bhakti' },
+  'shri-suktam': { yt: 'ThznwYxJ8po', title: 'श्री सूक्तम् · Rajshri Soul' },
+  'siddha-kunjika': { yt: 'uIyiHQ-gAjE', title: 'सिद्ध कुंजिका स्तोत्र · Saregama' },
+  'kanakdhara-stotra': { yt: 'ENVsUGP7LV0', title: 'कनकधारा स्तोत्र · T-Series Bhakti Sagar' },
+  'shiv-mahimna': { yt: '0l74xRkvmgw', title: 'शिव महिम्न स्तोत्र · Anuradha Paudwal' },
+  'sankatnashan-ganesh': { yt: '9J5GXvB-TUA', title: 'संकटनाशन गणेश स्तोत्र · Shemaroo Bhakti' },
+  'bhaja-govindam': { yt: '9q5kQ7NmLlM', title: 'भज गोविन्दम् · M. S. Subbulakshmi' },
 }
+
+/** Path texts whose official video is already listed above under the aarti or bhajan id. */
+const SAME_AS: Record<string, string> = {
+  'durga-chalisa': 'durgachalisa',
+  'ganesh-chalisa': 'ganeshchalisa',
+  'bajrang-baan': 'bajrangbaan',
+  'hanuman-ashtak': 'hanumanashtak',
+  'shiv-tandav': 'shivtandav',
+  'shiv-panchakshar': 'panchakshar',
+  'mahishasura-mardini': 'mahishasura',
+  'mahalakshmi-ashtakam': 'mahalakshmi',
+  achyutashtakam: 'achyutam',
+}
+/** The video key for a Path text: its own entry, or the aarti/bhajan it shares one with. */
+export const videoKeyForText = (id: string) => (AARTI_VIDEOS[id] ? id : (SAME_AS[id] ?? id))

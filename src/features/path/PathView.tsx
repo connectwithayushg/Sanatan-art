@@ -1,6 +1,8 @@
 import { WhatsAppLogo } from '../../ui/WhatsAppLogo'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { videoKeyForText } from '../../content/aartiVideos'
+import { YoutubeCard } from '../diwali/YoutubeCard'
 import { SHELVES, TEXTS, loadVerses, textById, type Cover, type LibText, type Verse } from '../../content/library'
 import { CHAPTERS, MEANINGS } from '../../content/gita/meanings'
 import { useStored } from '../../lib/useStored'
@@ -32,9 +34,7 @@ function PathHome({ open, go }: { open: (path: string) => void; go: (to: string)
   const [q, setQ] = useState('')
   const shloka = useDailyShloka()
   const [sharing, setSharing] = useState(false)
-  const topics = ['chalisa', 'katha', 'stotra', 'mantra'].map((id) => SHELVES.find((s) => s.id === id)!)
-  const loved = SHELVES[0]
-  const featured = [loved.covers.find((c) => c.to === 'path/chalisa')!, loved.covers.find((c) => c.to === 'path/gita')!]
+  const shelves = SHELVES
   return (
     <main className="tab-page">
       <PageHeading title={t('nav_path')} subtitle={t('r_pathIntro')} image="/art/redesign/path-banner.webp" />
@@ -49,17 +49,12 @@ function PathHome({ open, go }: { open: (path: string) => void; go: (to: string)
             <img src="/art/path/krishna.webp" alt="" />
             <span><small>{t('r_continueReading')}</small><strong>{t('continueReading', { ch: num(last, hi), name: CHAPTERS[last - 1][l] })}</strong></span><span className="row-arrow" aria-hidden="true">›</span>
           </button>}
-          <SectionHeading title={loved.title[l]} onAll={() => open('topics/top')} />
-          <ul className="photo-grid book-grid">{featured.map((c) => <li key={c.to}><CoverButton c={c} go={go} /></li>)}</ul>
-          <SectionHeading title={t('r_chooseTopic')} onAll={() => open('topics/all')} />
-          <ul className="topic-grid">{topics.map((s) => <li key={s.id}><button onClick={() => open(`topics/${s.id}`)}><img src={s.covers[0]?.img ?? '/art/path/diya.webp'} alt="" /><span>{s.title[l]}</span><span aria-hidden="true">›</span></button></li>)}</ul>
           <section className="daily-shloka-card">
             <h2>{t('verseOfDay')}</h2><p className="shloka-reference">{t('gitaRef', { ch: num(shloka.chapter, hi), v: num(shloka.verse, hi) })}</p>
             <p className="daily-verse">{shloka.text}</p><p>{shloka.meaning[l]}</p>
             <div className="detail-actions"><button className="primary-action" onClick={() => open(`gita/${shloka.chapter}`)}>{t('readChapter')}</button><button className="share-action" onClick={() => setSharing(true)} disabled={!shloka.text}><WhatsAppLogo size={20} /> {t('share')}</button></div>
           </section>
-          {SHELVES.filter((s) => s.id === 'granth' || s.id === 'tyohar').map((s) => <section key={s.id}><SectionHeading title={s.title[l]} onAll={() => open(`topics/${s.id}`)} /><ul className="photo-grid book-grid">{s.covers.slice(0, 2).map((c) => <li key={c.to}><CoverButton c={c} go={go} /></li>)}</ul></section>)}
-          <button className="calendar-entry" onClick={() => open('topics/all')}>{t('r_fullLibrary')} <span aria-hidden="true">→</span></button>
+          {shelves.map((s) => <section key={s.id}><SectionHeading title={`${s.title[l]} · ${num(s.covers.length, hi)}`} /><ul className="mt-2 grid gap-2">{s.covers.map((c) => <li key={c.to}><CoverRow c={c} go={go} /></li>)}</ul></section>)}
         </>}
         {sharing && <ShareCardDialog input={{ title: t('verseOfDay'), message: `${shloka.text}\n\n${shloka.meaning[l]}`, source: t('gitaRef', { ch: shloka.chapter, v: shloka.verse }), name: '', footer: CARD_MARK, lang: l, compact: true, picture: '/art/redesign/path-banner.webp' }} filename="sanatan-shloka.png" onClose={() => setSharing(false)} />}
         <Credits />
@@ -98,6 +93,22 @@ const keysOf = (c: Cover) => {
   const text = TEXTS.find((x) => `path/${x.id}` === c.to)
   const k = `${c.title.hi} ${c.title.en} ${c.inside.hi} ${c.inside.en} ${text?.keys ?? ''} ${text?.by.hi ?? ''} ${text?.by.en ?? ''}`
   return `${k.toLowerCase()} ${squash(k)}`
+}
+
+/** One text as a compact row, so a whole shelf can stay open without a long scroll. */
+function CoverRow({ c, go }: { c: Cover; go: (to: string) => void }) {
+  const { i18n } = useTranslation()
+  const l = i18n.language === 'hi' ? 'hi' : 'en'
+  return (
+    <button onClick={() => go(c.to)} className="flex w-full items-center gap-3 rounded-2xl bg-white p-2 pr-3 text-left ring-1 ring-black/10 active:scale-[0.99]">
+      <span className="w-12 shrink-0"><CoverArt c={c} /></span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-[1rem] font-semibold leading-tight text-warm">{c.title[l]}</span>
+        <span className="block text-[0.82rem] leading-tight text-dim">{c.inside[l]}</span>
+      </span>
+      <span aria-hidden="true" className="text-xl text-flame">›</span>
+    </button>
+  )
 }
 
 /** Everything in Path whose name, deity or day matches what was typed, names first. */
@@ -284,6 +295,8 @@ function TextReader({ text, backLabel }: { text: LibText; backLabel?: string }) 
           <p className="text-[0.9rem] text-dim">{text.by[l]}</p>
         </div>
       </header>
+
+      <YoutubeCard aartiId={videoKeyForText(text.id)} />
 
       <article className="mt-4 rounded-3xl bg-white px-4 py-5 ring-1 ring-black/10">
         {!verses && <p className="py-10 text-center text-dim">{t('loading')}</p>}

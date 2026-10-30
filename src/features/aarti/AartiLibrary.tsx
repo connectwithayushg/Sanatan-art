@@ -52,8 +52,6 @@ export function AartiLibrary({ id, open }: { id: string | null; open: (id: strin
   const hi = i18n.language === 'hi'
   const [term, setTerm] = useState('')
   const [deity, setDeity] = useState('')
-  const [showDeities, setShowDeities] = useState(false)
-  const [showAll, setShowAll] = useState(false)
   const [mode, setMode] = useStored<'aarti' | 'bhajan'>('aartiMode', 'aarti')
   const chosen = AARTIS.find((a) => a.id === id) ?? BHAJANS.find((a) => a.id === id)
   if (chosen) return <AartiView key={chosen.id} aartis={[chosen]} onBack={() => history.back()} />
@@ -67,7 +65,6 @@ export function AartiLibrary({ id, open }: { id: string | null; open: (id: strin
   const primary = ['shiv', 'ganesh', 'hanuman', 'lakshmi']
   const deities = [...primary.map((id) => DEITIES.find((d) => d.id === id)!), ...DEITIES.filter((d) => !primary.includes(d.id))]
   const filtered = !!q || !!deity
-  const visible = filtered || showAll ? found : found.slice(0, 6)
   const row = (a: Aarti) => (
     <li key={a.id}>
       <button className="reading-row" onClick={() => open(a.id)}>
@@ -88,17 +85,17 @@ export function AartiLibrary({ id, open }: { id: string | null; open: (id: strin
           {term && <button onClick={() => setTerm('')} aria-label={t('close')}>×</button>}
         </label>
         <div className="library-switch" role="group" aria-label={t('aartiOrBhajan')}>
-          {(['aarti', 'bhajan'] as const).map((m) => <button key={m} aria-pressed={mode === m} onClick={() => { setMode(m); setTerm(''); setDeity(''); setShowAll(false) }}>{t(m === 'aarti' ? 'nav_aarti' : 'bhajanTab')}</button>)}
+          {(['aarti', 'bhajan'] as const).map((m) => <button key={m} aria-pressed={mode === m} onClick={() => { setMode(m); setTerm(''); setDeity('') }}>{t(m === 'aarti' ? 'nav_aarti' : 'bhajanTab')}</button>)}
         </div>
         {!filtered && !bhajans && todays.length > 0 && (
           <section className="today-aarti"><h2>{t('aartiToday')}</h2><ul>{todays.map(row)}</ul></section>
         )}
         {!q && !deity && (
           <section>
-            <SectionHeading title={t('r_aartiCollection')} onAll={() => setShowDeities(!showDeities)} expanded={showDeities} />
+            <SectionHeading title={t('r_aartiCollection')} />
             <ul className="photo-grid deity-grid">
-              {(showDeities ? deities : deities.slice(0, 4)).map((d) => (
-                <li key={d.id}><button className="photo-tile deity-tile" aria-pressed={deity === d.id} onClick={() => { setDeity(deity === d.id ? '' : d.id); setShowAll(true) }}>
+              {deities.map((d) => (
+                <li key={d.id}><button className="photo-tile deity-tile" aria-pressed={deity === d.id} onClick={() => setDeity(deity === d.id ? '' : d.id)}>
                   <DeityPhoto id={d.id} />
                   <span>{hi ? d.name_hi : d.name_en}<span aria-hidden="true">›</span></span>
                 </button></li>
@@ -107,9 +104,9 @@ export function AartiLibrary({ id, open }: { id: string | null; open: (id: strin
           </section>
         )}
         <section id="aarti-results" aria-live="polite">
-          <SectionHeading title={deity ? (hi ? DEITIES.find((d) => d.id === deity)!.name_hi : DEITIES.find((d) => d.id === deity)!.name_en) : t(bhajans ? 'allBhajans' : 'allAartis')} onAll={!filtered ? () => setShowAll(!showAll) : undefined} expanded={showAll} />
+          <SectionHeading title={deity ? (hi ? DEITIES.find((d) => d.id === deity)!.name_hi : DEITIES.find((d) => d.id === deity)!.name_en) : t(bhajans ? 'allBhajans' : 'allAartis')} />
           {deity && <button className="clear-filter" onClick={() => setDeity('')}>{t('r_clearFilter')} ×</button>}
-          {visible.length ? <ol className="reading-list">{visible.map(row)}</ol> : <p className="empty-state">{t(bhajans ? 'bhajanNone' : 'aartiNone')}</p>}
+          {found.length ? <ol className="reading-list">{found.map(row)}</ol> : <p className="empty-state">{t(bhajans ? 'bhajanNone' : 'aartiNone')}</p>}
         </section>
       </div>
     </main>
