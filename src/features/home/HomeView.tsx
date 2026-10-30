@@ -13,7 +13,7 @@ import { DhyanBar } from '../aaj/DhyanBar'
 import { CityLine, HeroShrine, PhotoTile } from './parts'
 
 type Tab = 'home' | 'aaj' | 'tyohar' | 'mandir' | 'aarti' | 'path' | 'profile'
-type Go = (tab: Tab, sub?: string) => void
+type Go = (tab: Tab, sub?: string, push?: boolean) => void
 
 /** Home is the doorway: today's darshan, the four daily shortcuts, coming festivals and everything else in the app. Option 4. */
 export function HomeView({ go }: { go: Go }) {
@@ -62,7 +62,7 @@ export function HomeView({ go }: { go: Go }) {
         <ul className="h4-grid h4-shortcuts">{shortcuts.map((s) => <li key={s.label}><PhotoTile label={s.label} img={s.img} onClick={s.action} /></li>)}</ul>
         {aarti && <button className="h4-row" onClick={() => go('aarti', aarti.id)}><img src="/art/home/lamp.webp" alt="" /><span><strong>{hi ? aarti.title_hi : aarti.title_en}</strong><small>{t('h4_todayAarti')}</small></span><span className="h4-arrow" aria-hidden="true">›</span></button>}
 
-        <div className="section-heading"><h2>{t('q_upcoming')}</h2><button type="button" onClick={() => go('tyohar')}>{t('h4_allFestivals')} <span aria-hidden="true">→</span></button></div>
+        <div className="section-heading"><h2>{t('q_upcoming')}</h2><button type="button" onClick={() => go('tyohar', '', true)}>{t('h4_allFestivals')} <span aria-hidden="true">→</span></button></div>
         {next && <button className="h4-feature" onClick={() => go('tyohar', next.id)}><img src={photo(next.id, next.art)} alt="" /><span><small>{daysUntil(next) === 0 ? t('festivalToday') : t('festivalIn', { count: daysUntil(next) })}</small><strong>{name(next)}</strong><span>{fmt(next.date, { day: 'numeric', month: 'long', weekday: 'long' })}</span><b>{t('h4_prepare')} →</b></span></button>}
         {after.length > 0 && <ul className="h4-strip">{after.slice(0, 4).map((f) => <li key={f.id}><button onClick={() => go('tyohar', f.id)}><img src={photo(f.id, f.art)} alt="" loading="lazy" /><strong>{name(f)}</strong><small>{fmt(f.date, { day: 'numeric', month: 'long' })}</small></button></li>)}</ul>}
 

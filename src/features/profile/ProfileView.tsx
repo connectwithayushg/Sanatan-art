@@ -108,7 +108,7 @@ function Main({ open, scale, setScale }: { open: Open; scale: number; setScale: 
               <Diya lit={today} size={22} />
               {total}
             </span>
-            <span className="mt-1 block text-[0.8rem] text-dim">{t('darshanDaysLabel')} ›</span>
+            <span className="mt-1 block text-[0.8rem] text-dim">{t('darshanDaysLabel', { count: total })} ›</span>
           </button>
           <div className="rounded-2xl bg-white p-3.5 ring-1 ring-black/[0.07]">
             <span className="block text-[1.5rem] leading-none font-bold tabular-nums text-warm">{japToday}</span>

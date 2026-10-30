@@ -94,9 +94,9 @@ export function AartiView({ aartis = [GANESH_AARTI, LAKSHMI_AARTI], onBack, back
 
   return (
     <main className="mx-auto max-w-xl px-4 pb-4">
-      <div className="sticky top-0 z-20 -mx-4 flex items-center gap-1.5 border-b border-black/10 bg-night px-4 py-2">
+      <div className="sticky top-0 z-20 -mx-4 flex flex-wrap items-center justify-end gap-1.5 border-b border-black/10 bg-night px-4 py-2">
         {onBack && (
-          <button onClick={onBack} className={`h-11 shrink-0 rounded-full border-[1.5px] border-black/15 bg-white px-3 text-[0.95rem] font-semibold text-warm ${ring}`}>
+          <button onClick={onBack} className={`mr-auto h-11 shrink-0 rounded-full border-[1.5px] border-black/15 bg-white px-3 text-[0.95rem] font-semibold text-warm ${ring}`}>
             ‹ {backLabel ?? (aarti.kind === 'bhajan' ? t('bhajanTab') : t('nav_aarti'))}
           </button>
         )}
@@ -104,11 +104,11 @@ export function AartiView({ aartis = [GANESH_AARTI, LAKSHMI_AARTI], onBack, back
           role="switch"
           aria-checked={meaning}
           onClick={() => setMeaning(!meaning)}
-          className={`ml-auto flex h-11 shrink-0 items-center gap-2 rounded-full border-[1.5px] border-black/15 bg-white pl-3 pr-2 text-[0.95rem] font-semibold text-warm ${ring}`}
+          className={`flex h-11 shrink-0 items-center gap-2 rounded-full border-[1.5px] border-black/15 bg-white pl-3 pr-2 text-[0.95rem] font-semibold text-warm ${ring}`}
         >
           {t('meaning')}
           <span aria-hidden="true" className={`relative h-6 w-10 rounded-full transition-colors ${meaning ? 'bg-flame' : 'bg-[#d9cfc2]'}`}>
-            <span className={`absolute top-[3px] size-[18px] rounded-full bg-white transition-all ${meaning ? 'left-[19px]' : 'left-[3px]'}`} />
+            <span className={`absolute top-[3px] size-[18px] rounded-full bg-white transition-[left] duration-200 ease-out ${meaning ? 'left-[19px]' : 'left-[3px]'}`} />
           </span>
         </button>
         <div className="flex shrink-0 overflow-hidden rounded-full border-[1.5px] border-black/15 bg-white">

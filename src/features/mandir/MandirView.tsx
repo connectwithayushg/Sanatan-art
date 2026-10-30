@@ -230,7 +230,7 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
         <ul className="mandir-deity-list" aria-label={t('chooseDeity')}>{order.map(form).map((d) => <li key={d.id}><button onClick={() => pick(d.id)} aria-pressed={d.id === deity.id}><img src={d.face ?? d.thumb} alt="" /><span>{hi ? d.name_hi : d.name_en}</span></button></li>)}</ul>
         <section id="mandir-mala" className="mala-card">
           <h2>{t('malaTitle')}</h2><div className="mala-targets">{TARGETS.map((n) => <button key={n} onClick={() => chooseTarget(n)} aria-pressed={n === target}>{n}</button>)}</div>
-          <button onClick={count} aria-label={t('japCount', { count: japToday.count })} className="mala-counter"><Mala count={japToday.count} beads={target} /><span><strong>{japToday.count}</strong><small>/ {target}</small></span></button>
+          <button onClick={count} aria-label={t('japCount', { count: japToday.count })} className="mala-counter"><Mala count={japToday.count} beads={target} malas={japToday.malas} /><span><strong>{japToday.count}</strong><small>/ {target}</small></span></button>
           <p aria-live="polite">{t('sankalp', { count: target })}</p>
         </section>
         <section className="mandir-paths"><h2><TabBook /> {t('nav_path')}</h2><ul>{[...(PATHS[deity.id] ?? []), MANTRA_PATH].map((x) => <li key={x.to}><button className="calendar-entry" onClick={() => openPath?.(x.to, deity.id)}><span>{hi ? x.hi : x.en}</span><span aria-hidden="true">›</span></button></li>)}</ul></section>
@@ -243,16 +243,18 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
 }
 
 /** The mala has as many beads as the chosen count, so a mala of 11 is smaller and its beads larger. The strand turns clockwise one bead per jap; beads already counted are darker. */
-function Mala({ count, beads }: { count: number; beads: number }) {
+function Mala({ count, beads, malas }: { count: number; beads: number; malas: number }) {
   const R = 118
   const C = 140
   const Y = C + 10
   const r = Math.min(20, ((Math.PI * 2 * R) / beads) * 0.52)
-  const k = count % beads
+  const k = Math.min(count, beads)
+  // The angle keeps growing across malas, so the 108th bead turns forward instead of spinning back to 0.
+  const turned = (Math.max(0, malas - (count >= beads ? 1 : 0)) * beads + k) * (360 / beads)
   return (
     <svg viewBox="0 0 280 290" className="h-full w-full" aria-hidden="true">
       <circle cx={C} cy={Y} r={R} fill="none" stroke="#c9a24a" strokeWidth={1.6} />
-      <g style={{ transform: `rotate(${(k * 360) / beads}deg)`, transformOrigin: `${C}px ${Y}px`, transition: 'transform .25s' }}>
+      <g style={{ transform: `rotate(${turned}deg)`, transformOrigin: `${C}px ${Y}px`, transition: 'transform .25s' }}>
         {Array.from({ length: beads }, (_, i) => {
           const a = (i / beads) * Math.PI * 2 - Math.PI / 2
           const done = k > 0 && i >= beads - k

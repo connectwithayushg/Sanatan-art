@@ -63,10 +63,10 @@ export default function App() {
     return () => removeEventListener('hashchange', onHash)
   }, [])
 
-  const go = (tab: Tab, sub = '') => {
+  const go = (tab: Tab, sub = '', push = !!sub) => {
     const hash = `#${tab}${sub ? '/' + sub : ''}`
     // Going deeper adds a history entry so the phone's back button returns; switching tabs replaces it.
-    if (sub) history.pushState(null, '', hash || location.pathname + location.search)
+    if (push) history.pushState(null, '', hash || location.pathname + location.search)
     else history.replaceState(null, '', hash || location.pathname + location.search)
     setRoute({ tab, sub: sub ? sub.split('/') : [] })
     scrollTo({ top: 0 })
