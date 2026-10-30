@@ -26,8 +26,8 @@ export const TEXTS: LibText[] = [
   withDeity(SHIV_TANDAV, 'shiv'),
   MANTRAS,
   ...FROM_BHAJANS,
-  // Sundar Kand is a granth, so like the Gita it keeps a painting.
-  ...Object.values(MORE).map((t) => (t.id === 'sundar-kand' ? { ...t, img: '/art/thumb/1qvWMJv_NUU.jpg', deity: undefined } : t)),
+  // Sundar Kand is a granth, so like the Gita it is not drawn in the deity arch.
+  ...Object.values(MORE).map((t) => (t.id === 'sundar-kand' ? { ...t, img: '/art/path/hanuman.webp', deity: undefined } : t)),
 ]
 export const textById = (id: string) => TEXTS.find((t) => t.id === id)
 
@@ -54,7 +54,7 @@ export interface Shelf {
 }
 
 const fromText = (t: LibText): Cover => ({ title: t.title, inside: t.inside, img: t.img, to: `path/${t.id}`, arch: !!t.deity })
-const GITA: Cover = { title: { hi: 'श्रीमद्भगवद्गीता', en: 'Bhagavad Gita' }, inside: { hi: '18 अध्याय · 700 श्लोक', en: '18 chapters · 700 verses' }, img: '/art/thumb/bxYwhPIFOcA.jpg', to: 'path/gita' }
+const GITA: Cover = { title: { hi: 'श्रीमद्भगवद्गीता', en: 'Bhagavad Gita' }, inside: { hi: '18 अध्याय · 700 श्लोक', en: '18 chapters · 700 verses' }, img: '/art/path/krishna.webp', to: 'path/gita' }
 /** Covers in the order given: most read and most searched first. */
 const pick = (...ids: string[]): Cover[] => ids.map((id) => (id === 'gita' ? GITA : fromText(textById(id)!)))
 
@@ -64,11 +64,11 @@ const festName = (id: string): Bi => {
 }
 
 const KATHAS: Cover[] = [
-  { title: KC_KATHA.title, inside: { hi: 'करवा चौथ', en: 'Karwa Chauth' }, img: '/art/thumb/jJ_CskRaG3g.jpg', to: 'tyohar/karwa-chauth/katha' },
+  { title: KC_KATHA.title, inside: { hi: 'करवा चौथ', en: 'Karwa Chauth' }, img: '/art/festival/karwa-chauth.webp', to: 'tyohar/karwa-chauth/katha' },
   ...(['dhanteras', 'choti-diwali', 'govardhan', 'bhai-dooj'] as const).map((id, i) => ({
     title: FESTIVAL_PAGES[id].katha.title,
     inside: festName(id),
-    img: ['/art/thumb/LEwZuOq84Ww.jpg', '/art/thumb/-32lKp1bi9k.jpg', '/art/thumb/-jeARsrDO1c.jpg', '/art/thumb/xisPXJqwQkA.jpg'][i],
+    img: ['/art/festival/dhanteras.webp', '/art/festival/choti-diwali.webp', '/art/festival/govardhan.webp', '/art/festival/bhai-dooj.webp'][i],
     to: `tyohar/${id}/katha`,
   })),
 ]

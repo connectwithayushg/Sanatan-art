@@ -54,7 +54,6 @@ export const hi = {
 
   amavasyaNight: 'अमावस्या की रात, रविवार 8 नवंबर',
   startPuja: 'पूजा शुरू करें',
-  paintingCaption: 'राजा रवि वर्मा, “लक्ष्मी”, 1896',
   cityLine: 'लक्ष्मी पूजन का मुहूर्त,',
   openAarti: 'आरती खोलें',
   meaning: 'अर्थ',
@@ -69,7 +68,7 @@ export const hi = {
   cardPicture: 'चित्र चुनें',
   picLakshmi: 'माँ लक्ष्मी',
   picDiya: 'दीया',
-  artCredit: 'चित्र: राजा रवि वर्मा, “लक्ष्मी” (1896) और रवि वर्मा प्रेस की लक्ष्मी (1930 का दशक), विकिमीडिया कॉमन्स। दोनों सार्वजनिक डोमेन। फ़ोटो: Unsplash पर Sanjeev Nagaraj, Vivek Sharma, Kalpesh Bagde, Mohnish Landge, Rajan Patil, Mohit Deorukhkar, Sonika Agarwal, Umesh Soni, Ashwini Chaudhary, Udayaditya Barua, Suchandra Roy Chowdhury, Rishu Bhosale, Aditya Sethia, Aron Visuals, Swapnil Potdar, Remuel, artawkrn, Tanuj Singhal, Prajna Amey, Hush Naidoo Jade Photography, Amish Thakkar, Happysurd Photography, Vishal Nirmalkar, Vinit Patel, Vishal, krivi, Paragg Girish Gaikwad, Roshan Prajapati, Akkash Shah, Deepavali Gaind।',
+  artCredit: 'चित्र: सनातन ऐप के अपने बनाए चित्र। भारत के मंदिर की फ़ोटो: विकिमीडिया कॉमन्स (श्रेय हर मंदिर के पेज पर)।',
   app: 'सनातन ऐप',
   brand: 'सनातन',
   nav_aaj: 'आज',
@@ -525,7 +524,6 @@ export const en: Strings = {
 
   amavasyaNight: 'Amavasya night, Sunday 8 November',
   startPuja: 'Begin the puja',
-  paintingCaption: 'Raja Ravi Varma, “Lakshmi”, 1896',
   cityLine: 'Lakshmi Puja muhurat,',
   openAarti: 'Open the aarti',
   meaning: 'Meaning',
@@ -540,7 +538,7 @@ export const en: Strings = {
   cardPicture: 'Choose a picture',
   picLakshmi: 'Maa Lakshmi',
   picDiya: 'Diya',
-  artCredit: 'Paintings: Raja Ravi Varma, “Lakshmi” (1896), and Lakshmi from the Ravi Varma Press (1930s), Wikimedia Commons. Both public domain. Photos on Unsplash by Sanjeev Nagaraj, Vivek Sharma, Kalpesh Bagde, Mohnish Landge, Rajan Patil, Mohit Deorukhkar, Sonika Agarwal, Umesh Soni, Ashwini Chaudhary, Udayaditya Barua, Suchandra Roy Chowdhury, Rishu Bhosale, Aditya Sethia, Aron Visuals, Swapnil Potdar, Remuel, artawkrn, Tanuj Singhal, Prajna Amey, Hush Naidoo Jade Photography, Amish Thakkar, Happysurd Photography, Vishal Nirmalkar, Vinit Patel, Vishal, krivi, Paragg Girish Gaikwad, Roshan Prajapati, Akkash Shah and Deepavali Gaind.',
+  artCredit: 'Pictures: made for Sanatan App. Temple photos in Bharat ke Mandir: Wikimedia Commons (credited on each temple page).',
   app: 'Sanatan App',
   brand: 'Sanatan',
   nav_aaj: 'Today',

@@ -7,7 +7,7 @@ export const MANTRAS: LibText = {
   title: { hi: 'रोज़ के मंत्र', en: 'Everyday mantras' },
   by: { hi: 'पूजा में बोले जाने वाले मुख्य मंत्र और श्लोक', en: 'The mantras and shlokas said in daily puja' },
   inside: { hi: '9 मंत्र · अर्थ सहित', en: '9 mantras · with meanings' },
-  img: '/art/thumb/0ixU5CM6Xig.jpg',
+  img: '/art/path/diya.webp',
   lang: 'sa',
   keys: 'mantra gayatri mahamrityunjay mrityunjaya vakratunda ganesh saraswati guru shanti karpur gauram hanuman manojavam vasudevaya',
   closing: '॥ ॐ शान्तिः शान्तिः शान्तिः ॥',

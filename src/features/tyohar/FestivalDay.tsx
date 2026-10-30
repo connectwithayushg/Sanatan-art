@@ -181,7 +181,7 @@ function AartiPart({ page, openAarti }: { page: FestivalPage; openAarti: (id: st
         {aartis.map((a) => (
           <li key={a.id}>
             <button onClick={() => openAarti(a.id)} className="flex w-full items-center gap-4 rounded-2xl bg-night2/70 px-4 py-3 text-left ring-1 ring-black/10 active:scale-[0.99]">
-              <img src={PORTRAIT[a.id] ?? '/art/thumb/H4ilfu3vftk.jpg'} alt="" width={44} height={60} className="h-[3.75rem] w-11 shrink-0 rounded-t-full object-cover object-top ring-2 ring-flame/60" />
+              <img src={PORTRAIT[a.id] ?? '/art/deity/diya-face.webp'} alt="" width={44} height={60} className="h-[3.75rem] w-11 shrink-0 rounded-t-full object-cover object-top ring-2 ring-flame/60" />
               <span className="flex-1 font-display text-[1.35rem] leading-tight text-warm">{l === 'hi' ? a.title_hi : a.title_en}</span>
               <span aria-hidden="true" className="text-2xl text-flame">›</span>
             </button>

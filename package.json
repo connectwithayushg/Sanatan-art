@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/fetch-gita.mjs && node scripts/fetch-art.mjs && node scripts/build-assets.mjs && tsc -b && vite build",
+    "build": "node scripts/fetch-gita.mjs && node scripts/build-assets.mjs && tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run"

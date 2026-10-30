@@ -8,10 +8,10 @@ export function PujaView({ goTo }: { goTo: (tab: 'aarti') => void }) {
     <main className="mx-auto max-w-xl px-5">
       <figure className="rise mx-auto mt-4 max-w-[22rem]">
         <img
-          src="/art/lakshmi-1896.jpg"
-          width={800}
-          height={1132}
-          alt={i18n.language === 'hi' ? 'कमल पर खड़ी माँ लक्ष्मी, राजा रवि वर्मा का चित्र' : 'Maa Lakshmi standing on a lotus, painting by Raja Ravi Varma'}
+          src="/art/card/lakshmi-1.jpg"
+          width={700}
+          height={980}
+          alt={i18n.language === 'hi' ? 'कमल पर विराजमान माँ लक्ष्मी' : 'Maa Lakshmi seated on a lotus'}
           className="fade-down block max-h-[52dvh] w-full object-cover object-top"
         />
       </figure>

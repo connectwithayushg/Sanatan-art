@@ -52,7 +52,7 @@ export const HANUMAN_ASHTAK: LibText = {
   title: { hi: 'संकटमोचन हनुमान अष्टक', en: 'Sankat Mochan Hanuman Ashtak' },
   by: { hi: 'गोस्वामी तुलसीदास कृत', en: 'By Goswami Tulsidas' },
   inside: { hi: '8 छंद · अर्थ सहित', en: '8 stanzas · with meanings' },
-  img: '/art/thumb/a5zmuEwHzyc.jpg',
+  img: '/art/path/hanuman.webp',
   lang: 'hi',
   keys: 'hanuman ashtak ashtakam sankat mochan bajrangbali mangalvar tuesday',
   closing: '॥ जय श्री राम ॥',
