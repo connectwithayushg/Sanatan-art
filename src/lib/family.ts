@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { todayIST } from '../content/festivals'
-import { masaAt, tithiAt } from './panchang/daily'
+import { AMAVASYA, MASA, PURNIMA, TITHI, masaAt, tithiAt } from './panchang/daily'
 import { useStored } from './useStored'
 
 /** A tithi as printed calendars name it: 1–30 and the Purnimanta month index (see masaAt). */
@@ -16,8 +16,6 @@ export interface Member {
   rel: string
   bd?: string
   an?: string
-  /** Remind by Hindu tithi instead of the calendar date */
-  byTithi?: boolean
   tb?: FamilyTithi
   ta?: FamilyTithi
 }
@@ -54,6 +52,12 @@ export function tithiOfDate(dateIso: string): FamilyTithi | undefined {
   return { n: t.n, masa: masaAt(at, t.paksha).i }
 }
 
+/** The tithi saved for a member's date, worked out again for lists saved before tithis were kept. */
+export function memberTithi(m: Member, kind: 'bd' | 'an') {
+  const d = m[kind]
+  return d ? ((kind === 'bd' ? m.tb : m.ta) ?? tithiOfDate(d)) : undefined
+}
+
 /** Next date for a calendar birthday or anniversary: this year or next. 29 Feb falls on 28 Feb in other years. */
 function nextCalendar(dateIso: string, from: number, y: number): number | undefined {
   const [, m, d] = dateIso.split('-').map(Number)
@@ -65,20 +69,17 @@ function nextCalendar(dateIso: string, from: number, y: number): number | undefi
   }
 }
 
-/** Every upcoming birthday and anniversary within a year, soonest first. Tithi dates are found by walking day by day, once. */
+/** Every upcoming birthday and anniversary within a year, soonest first. Each date is kept twice, by calendar date and by Hindu tithi (found by walking day by day, once). If both fall on one day only the calendar one is kept. */
 export function nextOccasions(members: Member[], now = new Date()): Occasion[] {
   const t = todayIST(now)
   const from = Date.UTC(t.y, t.m - 1, t.d)
   const out: Occasion[] = []
   const wanted = new Map<string, { n: number; masa: number; hit?: number }>()
-  const want = (x?: FamilyTithi) => {
-    if (x) wanted.set(`${x.n}/${x.masa}`, { ...x })
-  }
-  for (const m of members) {
-    if (!m.byTithi) continue
-    if (m.bd) want(m.tb)
-    if (m.an) want(m.ta)
-  }
+  for (const m of members)
+    for (const kind of ['bd', 'an'] as const) {
+      const x = memberTithi(m, kind)
+      if (x) wanted.set(`${x.n}/${x.masa}`, { ...x })
+    }
   if (wanted.size) {
     const numbers = new Set([...wanted.values()].map((w) => w.n))
     let open = wanted.size
@@ -101,12 +102,22 @@ export function nextOccasions(members: Member[], now = new Date()): Occasion[] {
     for (const kind of ['bd', 'an'] as const) {
       const d = m[kind]
       if (!d) continue
-      const tithi = kind === 'bd' ? m.tb : m.ta
-      if (m.byTithi && tithi) push(m, kind, wanted.get(`${tithi.n}/${tithi.masa}`)?.hit, true)
-      else push(m, kind, nextCalendar(d, from, t.y), false)
+      const cal = nextCalendar(d, from, t.y)
+      push(m, kind, cal, false)
+      const x = memberTithi(m, kind)
+      const hit = x ? wanted.get(`${x.n}/${x.masa}`)?.hit : undefined
+      if (hit !== undefined && hit !== cal) push(m, kind, hit, true)
     }
   }
   return out.sort((a, b) => a.days - b.days)
+}
+
+/** "कार्तिक कृष्ण पंचमी": month, paksha and tithi. Purnima and Amavasya name no paksha. */
+export function tithiLabel(x: FamilyTithi, L: 0 | 1, paksha: [string, string]) {
+  const inPaksha = ((x.n - 1) % 15) + 1
+  const name = x.n === 15 ? PURNIMA : x.n === 30 ? AMAVASYA : TITHI[inPaksha - 1]
+  const side = x.n === 15 || x.n === 30 ? '' : ` ${x.n <= 15 ? paksha[0] : paksha[1]}`
+  return `${MASA[x.masa][L]}${side} ${name[L]}`
 }
 
 /** Occasions for the family list and the home card, worked out once per change of list. */

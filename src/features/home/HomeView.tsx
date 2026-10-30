@@ -54,7 +54,7 @@ export function HomeView({ go }: { go: Go }) {
               <strong className="block font-display text-[1.15rem] leading-snug text-flame">
                 {occasions.map((o) => t(o.days === 0 ? 'fam_homeToday' : 'fam_homeTomorrow', { what: t(o.kind === 'bd' ? 'fam_bdayOf' : 'fam_annivOf', { name: o.member.name }) })).join(' · ')}
               </strong>
-              <small className="text-[0.85rem] text-dim">{t('fam_homeLine')}</small>
+              <small className="text-[0.85rem] text-dim">{occasions.some((o) => o.byTithi) ? `${t('fam_byTithiTag')} · ` : ''}{t('fam_homeLine')}</small>
             </span>
             <span aria-hidden="true" className="text-[1.3rem] text-flame">›</span>
           </button>

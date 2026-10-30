@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { MAX_MEMBERS, RELATIONS, tithiOfDate, useFamily, useOccasions, type Member, type Occasion } from '../../lib/family'
+import { MAX_MEMBERS, RELATIONS, memberTithi, tithiLabel, tithiOfDate, useFamily, useOccasions, type FamilyTithi, type Member, type Occasion } from '../../lib/family'
 
 type Open = (sub: string) => void
 
@@ -19,7 +19,8 @@ export function FamilyView({ open }: { open: Open }) {
   const occasions = useOccasions(members)
   const [editing, setEditing] = useState<Member | 'new' | null>(null)
   const nextFor = (id: string) => occasions.find((o) => o.member.id === id)
-  const fmt = (iso: string) => new Date(iso + 'T12:00:00Z').toLocaleDateString(hi ? 'hi-IN' : 'en-IN', { day: 'numeric', month: 'long', timeZone: 'UTC' })
+  const fmtDay = (iso: string) => new Date(iso.slice(0, 10) + 'T12:00:00Z').toLocaleDateString(hi ? 'hi-IN' : 'en-IN', { day: 'numeric', month: 'long', timeZone: 'UTC' })
+  const pk: [string, string] = [t('shukla'), t('krishna')]
   const when = (days: number) => (days === 0 ? t('fam_today') : days === 1 ? t('fam_tomorrow') : t('fam_inDays', { count: days }))
   const soon = occasions[0]
   const upsert = (m: Member) => {
@@ -51,7 +52,7 @@ export function FamilyView({ open }: { open: Open }) {
           <div className="min-w-0 flex-1">
             <small className="block text-[0.72rem] font-bold tracking-wide text-dim">{t('fam_next')}</small>
             <span className="block leading-snug font-semibold text-warm">{occasionText(soon, t)}</span>
-            <span className="text-[0.82rem] text-dim">{when(soon.days)}</span>
+            <span className="text-[0.82rem] text-dim">{when(soon.days)}{soon.byTithi ? ` · ${t('fam_byTithiTag')}` : ''}</span>
           </div>
         </section>
       )}
@@ -62,6 +63,8 @@ export function FamilyView({ open }: { open: Open }) {
         <ul className="mt-3 overflow-hidden rounded-2xl bg-white ring-1 ring-black/[0.07]">
           {members.map((m) => {
             const o = nextFor(m.id)
+            const kind = o?.kind ?? (m.bd ? 'bd' : m.an ? 'an' : undefined)
+            const tithi = kind ? memberTithi(m, kind) : undefined
             return (
               <li key={m.id} className="border-t border-black/[0.07] first:border-t-0">
                 <button onClick={() => setEditing(m)} className="flex w-full items-center gap-3 px-3.5 py-3 text-left active:bg-black/[0.03]">
@@ -71,11 +74,17 @@ export function FamilyView({ open }: { open: Open }) {
                     <span className="block text-[0.8rem] text-dim">{t(`fam_rel_${m.rel}`)}</span>
                   </span>
                   <span className="shrink-0 text-right text-[0.78rem] leading-tight text-dim">
-                    {o ? (
+                    {kind ? (
                       <>
-                        {t(o.kind === 'bd' ? 'fam_birthday' : 'fam_anniversary')}
+                        {t(kind === 'bd' ? 'fam_birthday' : 'fam_anniversary')}
                         <br />
-                        <span className="text-flame">{fmt(o.date)}</span>
+                        <span className="text-flame">{fmtDay(m[kind]!)}</span>
+                        {tithi && (
+                          <>
+                            <br />
+                            {tithiLabel(tithi, hi ? 0 : 1, pk)}
+                          </>
+                        )}
                       </>
                     ) : (
                       t('fam_noDates')
@@ -107,7 +116,6 @@ function MemberSheet({ member, onSave, onRemove, onClose }: { member: Member | n
   const [rel, setRel] = useState(member?.rel ?? 'mother')
   const [bd, setBd] = useState(member?.bd ?? '')
   const [an, setAn] = useState(member?.an ?? '')
-  const [byTithi, setByTithi] = useState(member?.byTithi ?? false)
   const [sure, setSure] = useState(false)
 
   useEffect(() => {
@@ -119,16 +127,14 @@ function MemberSheet({ member, onSave, onRemove, onClose }: { member: Member | n
   const save = () => {
     const clean = name.trim()
     if (!clean) return
-    const useTithi = byTithi && !!(bd || an)
     onSave({
       id: member?.id ?? `m${Date.now().toString(36)}`,
       name: clean,
       rel,
       bd: bd || undefined,
       an: an || undefined,
-      byTithi: useTithi || undefined,
-      tb: useTithi && bd ? tithiOfDate(bd) : undefined,
-      ta: useTithi && an ? tithiOfDate(an) : undefined,
+      tb: bd ? tithiOfDate(bd) : undefined,
+      ta: an ? tithiOfDate(an) : undefined,
     })
   }
   const label = 'mb-1 block text-[0.8rem] font-bold text-dim'
@@ -164,22 +170,16 @@ function MemberSheet({ member, onSave, onRemove, onClose }: { member: Member | n
           <div>
             <label htmlFor="fam-bd" className={label}>{t('fam_birthday')}</label>
             <input id="fam-bd" type="date" value={bd} onChange={(e) => setBd(e.target.value)} max="2100-12-31" className={field} />
+            <TithiLine date={bd} />
           </div>
           <div>
             <label htmlFor="fam-an" className={label}>{t('fam_anniversary')}</label>
             <input id="fam-an" type="date" value={an} onChange={(e) => setAn(e.target.value)} max="2100-12-31" className={field} />
+            <TithiLine date={an} />
           </div>
         </div>
 
-        {(bd || an) && (
-          <label className="mt-4 flex cursor-pointer items-center gap-3">
-            <span className="min-w-0 flex-1">
-              <b className="block text-[0.95rem] text-warm">{t('fam_byTithi')}</b>
-              <span className="text-[0.8rem] text-dim">{t('fam_byTithiNote')}</span>
-            </span>
-            <input type="checkbox" checked={byTithi} onChange={(e) => setByTithi(e.target.checked)} className="h-6 w-6 shrink-0 accent-flame" />
-          </label>
-        )}
+        {(bd || an) && <p className="mt-3 text-[0.8rem] leading-snug text-dim">{t('fam_dateNote')}</p>}
 
         <button onClick={save} disabled={!name.trim()} className="mt-5 w-full rounded-2xl bg-flame py-3.5 text-[1.05rem] font-bold text-white disabled:opacity-40 active:scale-[0.98]">
           {t('fam_save')}
@@ -196,4 +196,12 @@ function MemberSheet({ member, onSave, onRemove, onClose }: { member: Member | n
       </div>
     </div>
   )
+}
+
+/** The Hindu tithi of the chosen date, shown under the date picker so the person can see what will be remembered. */
+function TithiLine({ date }: { date: string }) {
+  const { t, i18n } = useTranslation()
+  const tithi: FamilyTithi | undefined = useMemo(() => (date ? tithiOfDate(date) : undefined), [date])
+  if (!tithi) return null
+  return <span className="mt-1 block text-[0.78rem] leading-snug text-flame">{tithiLabel(tithi, i18n.language === 'hi' ? 0 : 1, [t('shukla'), t('krishna')])}</span>
 }
