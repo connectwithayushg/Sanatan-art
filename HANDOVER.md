@@ -162,3 +162,7 @@ Layout 1 also supports direct taps on the large flower thali near the deity and 
 - The daily opener (DailyOpener, `dailyOpener.ts`) was REMOVED on Ayush's word ("mandir only, no other opener"). Cold launch still opens the Mandir (doors once a day). The `dailyOpenerDay` storage key is no longer written. Wallpaper save stays off.
 - Hero pictures: `public/art/home/hero.webp` is the original Option 4 Shiva; `hero-<id>.webp` for the other forms are crops of the approved Mandir shrine scenes (same ivory frame). Missing: no Shiv weekday variants, no new art was generated.
 - Removed: QuickHome, MonthCard (home calendar tile). New: `useSuprabhat` hook shared by the card page and Aaj; `nextEkadashi` in `lib/panchang/month.ts`.
+
+## Legal pages (30 Oct 2026, draft)
+
+Profile › नियम और गोपनीयता (`#profile/legal`) holds Privacy policy, Terms of use, Content/sources/disclaimer, Complaints and contact (grievance officer) and "मेरा डेटा मिटाएँ" (erases every `sanatan:*` key on the phone). Text is in `src/content/legal.ts`; blanks (owner, email, grievance officer, address, court city) are in `LEGAL_INFO` and show as "[to be added]" until filled. Pages show a "draft, not checked by a lawyer" band while `LEGAL_INFO.draft` is true. Lawyer's checklist: `docs/legal/LAWYER-REVIEW.md`. Any new feature that collects data (login, family circle, push, payments, ads, analytics) must update these pages first.

@@ -3,6 +3,7 @@ import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ABOUT, CHAPTERS, FAQS, type Chapter } from '../../content/learn'
 import { ymd } from '../../content/festivals'
+import { LEGAL_INFO, LEGAL_PAGES } from '../../content/legal'
 import { useDarshan } from '../../lib/darshan'
 import { save } from '../../lib/storage'
 import { useStored } from '../../lib/useStored'
@@ -15,11 +16,12 @@ export const SIZES = [1, 1.25, 1.4]
 
 type Open = (sub: string) => void
 
-/** The profile and the pages behind it: सनातन क्या है (chapters), ऐप के बारे में and the FAQ. Nothing leaves the phone. */
+/** The profile and the pages behind it: सनातन क्या है (chapters), ऐप के बारे में, the FAQ and नियम और गोपनीयता (legal pages, delete my data). Nothing leaves the phone. */
 export function ProfileView({ sub, open, scale, setScale }: { sub: string[]; open: Open; scale: number; setScale: (s: number) => void }) {
   if (sub[0] === 'sanatan') return sub[1] ? <ChapterPage index={Number(sub[1]) - 1} open={open} /> : <ChapterList open={open} />
   if (sub[0] === 'about') return <AboutPage open={open} />
   if (sub[0] === 'faq') return <FaqPage open={open} />
+  if (sub[0] === 'legal') return sub[1] === 'delete' ? <DeletePage open={open} /> : sub[1] ? <LegalPageView id={sub[1]} open={open} /> : <LegalList open={open} />
   return <Main open={open} scale={scale} setScale={setScale} />
 }
 
@@ -150,6 +152,7 @@ function Main({ open, scale, setScale }: { open: Open; scale: number; setScale: 
               ['sanatan', t('whatIsSanatan')],
               ['about', t('aboutApp')],
               ['faq', t('faq')],
+              ['legal', t('legal')],
             ] as const
           ).map(([to, label]) => (
             <button key={to} onClick={() => open(to)} className={`${row} w-full text-left`}>
@@ -335,6 +338,112 @@ function FaqPage({ open }: { open: Open }) {
           </li>
         ))}
       </ul>
+    </main>
+  )
+}
+
+/** Fills {owner}, {email}… from LEGAL_INFO; an empty value shows the "to be added" mark. */
+function fill(text: string, hi: boolean, missing: string) {
+  const v = (x: string) => x.trim() || missing
+  return text
+    .replaceAll('{owner}', v(LEGAL_INFO.owner))
+    .replaceAll('{email}', v(LEGAL_INFO.email))
+    .replaceAll('{grievance}', v(LEGAL_INFO.grievance))
+    .replaceAll('{address}', v(LEGAL_INFO.address))
+    .replaceAll('{city}', v(LEGAL_INFO.city))
+    .replaceAll('{updated}', hi ? LEGAL_INFO.updated.hi : LEGAL_INFO.updated.en)
+}
+
+function DraftBand() {
+  const { t } = useTranslation()
+  if (!LEGAL_INFO.draft) return null
+  return <p className="mb-3 rounded-xl bg-[#fff1d6] px-3 py-2 text-center text-[0.8rem] font-semibold text-flame">{t('legalDraft')}</p>
+}
+
+function LegalList({ open }: { open: Open }) {
+  const { t } = useTranslation()
+  const hi = useHi()
+  const rows = [...LEGAL_PAGES.map((p) => ({ to: `legal/${p.id}`, title: hi ? p.title.hi : p.title.en, line: hi ? p.line.hi : p.line.en })), { to: 'legal/delete', title: t('deleteData'), line: t('deleteLine') }]
+  return (
+    <main className="mx-auto max-w-xl px-4 pb-6">
+      <Back to="" open={open} title={t('legal')} />
+      <DraftBand />
+      <p className="mb-3 px-1 text-[0.95rem] text-dim">{t('legalLine')}</p>
+      <div className="overflow-hidden rounded-2xl bg-white ring-1 ring-black/[0.07]">
+        {rows.map((r) => (
+          <button key={r.to} onClick={() => open(r.to)} className={`${row} w-full text-left`}>
+            <span className="min-w-0 flex-1">
+              <b className="block leading-snug text-warm">{r.title}</b>
+              <span className="block text-[0.82rem] leading-snug text-dim">{r.line}</span>
+            </span>
+            <span className="text-[1.3rem] text-flame">›</span>
+          </button>
+        ))}
+      </div>
+    </main>
+  )
+}
+
+function LegalPageView({ id, open }: { id: string; open: Open }) {
+  const { t } = useTranslation()
+  const hi = useHi()
+  const page = LEGAL_PAGES.find((p) => p.id === id)
+  if (!page) return <LegalList open={open} />
+  return (
+    <main className="mx-auto max-w-xl px-4 pb-6">
+      <Back to="legal" open={open} title={hi ? page.title.hi : page.title.en} />
+      <DraftBand />
+      <article className="grid gap-3">
+        {(hi ? page.body.hi : page.body.en).map((raw, i) => {
+          const p = raw === '@artCredit' ? t('artCredit') : fill(raw, hi, t('legalMissing'))
+          if (p.startsWith('## ')) return <h2 key={i} className="mt-3 text-[1.1rem] font-bold text-flame">{p.slice(3)}</h2>
+          if (p.startsWith('~ ')) return <p key={i} className="mt-2 text-[0.8rem] text-dim">{p.slice(2)}</p>
+          if (p.startsWith('• '))
+            return (
+              <p key={i} className="flex gap-2.5 text-[1rem] leading-[1.7] text-warm">
+                <span className="mt-[0.7em] h-1.5 w-1.5 shrink-0 rounded-full bg-flame" />
+                <span>
+                  <Rich text={p.slice(2)} />
+                </span>
+              </p>
+            )
+          return (
+            <p key={i} className="text-[1rem] leading-[1.7] text-warm">
+              <Rich text={p} />
+            </p>
+          )
+        })}
+      </article>
+    </main>
+  )
+}
+
+/** Erases every sanatan:* key on this phone, then reloads the app fresh. The offline picture cache is left alone: it holds no personal data. */
+function DeletePage({ open }: { open: Open }) {
+  const { t } = useTranslation()
+  const [sure, setSure] = useState(false)
+  const erase = () => {
+    try {
+      Object.keys(localStorage)
+        .filter((k) => k.startsWith('sanatan:'))
+        .forEach((k) => localStorage.removeItem(k))
+    } catch {
+      /* storage unavailable: nothing to erase */
+    }
+    location.hash = ''
+    location.reload()
+  }
+  return (
+    <main className="mx-auto max-w-xl px-4 pb-6">
+      <Back to="legal" open={open} title={t('deleteData')} />
+      <p className="rounded-2xl bg-white p-4 text-[1rem] leading-[1.7] text-warm ring-1 ring-black/[0.07]">{t('deleteBody')}</p>
+      {sure && <p className="mt-4 text-center font-bold text-[#b42318]">{t('deleteSure')}</p>}
+      <button onClick={sure ? erase : () => setSure(true)} className="mt-4 w-full rounded-2xl bg-[#b42318] py-3 text-[1rem] font-bold text-white active:scale-[0.98]">
+        {sure ? t('deleteConfirm') : t('deleteData')}
+      </button>
+      <button onClick={() => open('legal')} className="mt-2 w-full rounded-2xl py-3 text-[1rem] font-semibold text-warm">
+        {t('deleteCancel')}
+      </button>
     </main>
   )
 }
