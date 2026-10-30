@@ -68,6 +68,7 @@ const ICON_SAVE = 'M12 4v11m0 0-4-4m4 4 4-4M5 19h14'
 export function GreetingMaker({ heading, title, messages, groups, defaultPicture, pool, fileName, storeKey }: GreetingMakerProps) {
   const { t, i18n } = useTranslation()
   const [name, setName] = useStored('cardName', '')
+  const [family, setFamily] = useStored('cardWithFamily', false)
   const [stored, setStored] = useStored<unknown>('greetingRotation:v1', null)
   const [lang, setLang] = useState<'hi' | 'en'>(i18n.language === 'hi' ? 'hi' : 'en')
   const strings = lang === 'hi' ? hiStrings : enStrings
@@ -85,7 +86,7 @@ export function GreetingMaker({ heading, title, messages, groups, defaultPicture
   const picture = CARD_PICTURES.find((p) => p.id === pictureId) ?? CARD_PICTURES[0]
   const message = messages[msgIndex] ?? messages[0]
   const cardTitle = title[lang]
-  const sender = name.trim() ? strings.gm_from.replace('{{name}}', name.trim()) : ''
+  const sender = name.trim() ? (family ? strings.gm_fromFamily : strings.gm_from).replace('{{name}}', name.trim()) : ''
 
   const [preview, setPreview] = useState('')
   const [file, setFile] = useState<File | null>(null)
@@ -167,7 +168,7 @@ export function GreetingMaker({ heading, title, messages, groups, defaultPicture
       {sheet === 'message' && (
         <MessageSheet messages={messages} order={msgOrder} current={msgIndex} lang={lang} setLang={setLang} onClose={() => setSheet(null)} onApply={(i) => { setMsgIndex(i); setSheet(null) }} />
       )}
-      {sheet === 'name' && <NameSheet name={name} strings={strings} onClose={() => setSheet(null)} onApply={(value) => { setName(value); setSheet(null) }} />}
+      {sheet === 'name' && <NameSheet name={name} family={family} strings={strings} onClose={() => setSheet(null)} onApply={(value, withFamily) => { setName(value); setFamily(withFamily); setSheet(null) }} />}
     </main>
   )
 }
@@ -230,19 +231,24 @@ function MessageSheet({ messages, order, current, lang, setLang, onClose, onAppl
   )
 }
 
-function NameSheet({ name, strings, onClose, onApply }: { name: string; strings: typeof hiStrings; onClose: () => void; onApply: (name: string) => void }) {
+function NameSheet({ name, family, strings, onClose, onApply }: { name: string; family: boolean; strings: typeof hiStrings; onClose: () => void; onApply: (name: string, family: boolean) => void }) {
   const { t } = useTranslation()
   const [draft, setDraft] = useState(name)
-  const shown = draft.trim() ? strings.gm_from.replace('{{name}}', draft.trim()) : t('gm_noName')
+  const [withFamily, setWithFamily] = useState(family)
+  const shown = draft.trim() ? (withFamily ? strings.gm_fromFamily : strings.gm_from).replace('{{name}}', draft.trim()) : t('gm_noName')
   return (
     <Sheet label={t('gm_yourName')} onClose={onClose}>
       <SheetHead title={t('gm_yourName')} onClose={onClose} />
+      <div className="gm-lang" role="group" aria-label={t('gm_yourName')}>
+        <button type="button" aria-pressed={!withFamily} onClick={() => setWithFamily(false)}>{t('gm_nameOnly')}</button>
+        <button type="button" aria-pressed={withFamily} onClick={() => setWithFamily(true)}>{t('gm_nameFamily')}</button>
+      </div>
       <label className="gm-field">
         <span>{t('yourName')}</span>
         <input value={draft} autoComplete="off" onChange={(e) => setDraft(clip(e.target.value))} onFocus={(e) => e.currentTarget.scrollIntoView({ block: 'center' })} placeholder={t('namePlaceholder')} />
       </label>
       <p className="gm-hint">{t('gm_onCard', { text: shown })}</p>
-      <button type="button" className="gm-apply" onClick={() => onApply(draft.trim())}>{t('gm_useName')}</button>
+      <button type="button" className="gm-apply" onClick={() => onApply(draft.trim(), withFamily)}>{t('gm_useName')}</button>
     </Sheet>
   )
 }

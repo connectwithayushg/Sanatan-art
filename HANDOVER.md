@@ -169,4 +169,5 @@ Layout 1 also supports direct taps on the large flower thali near the deity and 
 - Picture rotation (`src/lib/share/rotation.ts`, from the Codex handoff) stores in the new key `greetingRotation:v1`; a picture is committed only after a successful render. All earlier keys (`cardName`, `cardSeed`, `*CardPicture`) are kept.
 - Only existing approved card pictures are used. No Mandir art, no wallpapers, no new photographs.
 - Pending: Ayush must review the 6 new Suprabhat wishes (`src/content/greetingMessages.ts`); real-phone share test; wallpaper library and rights catalogue are not built.
+- Name sheet has a switch, Name only / Name and family (new key `cardWithFamily`, boolean). Card text: "स्नेह सहित, आयुष और परिवार". Card never shows an address.
 - Known, pre-existing: the festival tab strip overflows horizontally by 3 px at 320 px wide.
