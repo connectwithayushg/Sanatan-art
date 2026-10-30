@@ -9,6 +9,8 @@ import { useStored } from '../../lib/useStored'
 import { CityPicker } from '../../ui/CityPicker'
 import { DarshanSheet } from '../../ui/DarshanSheet'
 import { Diya } from '../../ui/Diya'
+import { useFamily } from '../../lib/family'
+import { FamilyView } from './FamilyView'
 
 /** Text sizes: normal, large (the old A+) and extra large. */
 export const SIZES = [1, 1.25, 1.4]
@@ -18,6 +20,7 @@ type Open = (sub: string) => void
 /** The profile and the pages behind it: सनातन क्या है (chapters), ऐप के बारे में and the FAQ. Nothing leaves the phone. */
 export function ProfileView({ sub, open, scale, setScale }: { sub: string[]; open: Open; scale: number; setScale: (s: number) => void }) {
   if (sub[0] === 'sanatan') return sub[1] ? <ChapterPage index={Number(sub[1]) - 1} open={open} /> : <ChapterList open={open} />
+  if (sub[0] === 'family') return <FamilyView open={open} />
   if (sub[0] === 'about') return <AboutPage open={open} />
   if (sub[0] === 'faq') return <FaqPage open={open} />
   return <Main open={open} scale={scale} setScale={setScale} />
@@ -61,6 +64,7 @@ function Main({ open, scale, setScale }: { open: Open; scale: number; setScale: 
   const [name, setName] = useStored('cardName', '')
   const { total, today } = useDarshan()
   const [calendar, setCalendar] = useState(false)
+  const [family] = useFamily()
   const [jap] = useStored('jap', { date: '', count: 0, malas: 0 })
   const japToday = jap.date === ymd(new Date()) ? jap.count : 0
   const setLang = (l: 'hi' | 'en') => {
@@ -111,6 +115,16 @@ function Main({ open, scale, setScale }: { open: Open; scale: number; setScale: 
             <span className="mt-1 block text-[0.8rem] text-dim">{t('japToday')}</span>
           </div>
         </div>
+      </Section>
+
+      <Section title={t('fam_title')}>
+        <button onClick={() => open('family')} className="flex w-full items-center gap-3 rounded-2xl bg-white p-3.5 text-left ring-1 ring-black/[0.07] active:scale-[0.99]">
+          <span className="min-w-0 flex-1">
+            <b className="block text-warm">{t('fam_title')}</b>
+            <span className="text-[0.8rem] text-dim">{family.length ? t('fam_members', { count: family.length }) : t('fam_empty')}</span>
+          </span>
+          <span className="text-[1.3rem] text-flame">›</span>
+        </button>
       </Section>
 
       <Section title={t('settings')}>

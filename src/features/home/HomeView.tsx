@@ -6,6 +6,8 @@ import { TEMPLES } from '../../content/bharatTemples'
 import { AARTIS } from '../../content/aartis'
 import { dayPanchang } from '../../lib/panchang/daily'
 import { useStored } from '../../lib/useStored'
+import { useFamily, useOccasions } from '../../lib/family'
+import { Diya } from '../../ui/Diya'
 import { useCity } from '../../ui/CityPicker'
 import { DhyanBar } from '../aaj/DhyanBar'
 import { CityLine, HeroShrine, PhotoTile } from './parts'
@@ -22,6 +24,8 @@ export function HomeView({ go }: { go: Go }) {
   const [dhyanTrigger, setDhyanTrigger] = useState(0)
   const [city] = useCity()
   const today = todayIST()
+  const [family] = useFamily()
+  const occasions = useOccasions(family).filter((o) => o.days <= 1)
   const date = new Date(Date.UTC(today.y, today.m - 1, today.d, 6))
   const p = useMemo(() => dayPanchang(city, today.y, today.m, today.d), [city, today.y, today.m, today.d])
   const deity = DEITIES.find((d) => d.id === last) ?? deityOfDay(date.getUTCDay())
@@ -43,6 +47,18 @@ export function HomeView({ go }: { go: Go }) {
       <CityLine date={`${dateLine} · ${p.masa.name[L]}, ${t(p.tithi.paksha === 'shukla' ? 'shukla' : 'krishna')} ${p.tithi.name[L]}`} />
       <div className="h4-body">
         <HeroShrine deity={deity} onDarshan={() => go('mandir', deity.id)} />
+        {occasions.length > 0 && (
+          <button className="flex w-full items-center gap-3 rounded-2xl bg-white p-3.5 text-left ring-1 ring-black/[0.07] active:scale-[0.99]" onClick={() => go('mandir')}>
+            <Diya lit size={34} />
+            <span className="min-w-0 flex-1">
+              <strong className="block font-display text-[1.15rem] leading-snug text-flame">
+                {occasions.map((o) => t(o.days === 0 ? 'fam_homeToday' : 'fam_homeTomorrow', { what: t(o.kind === 'bd' ? 'fam_bdayOf' : 'fam_annivOf', { name: o.member.name }) })).join(' · ')}
+              </strong>
+              <small className="text-[0.85rem] text-dim">{t('fam_homeLine')}</small>
+            </span>
+            <span aria-hidden="true" className="text-[1.3rem] text-flame">›</span>
+          </button>
+        )}
         <ul className="h4-grid h4-shortcuts">{shortcuts.map((s) => <li key={s.label}><PhotoTile label={s.label} img={s.img} onClick={s.action} /></li>)}</ul>
         {aarti && <button className="h4-row" onClick={() => go('aarti', aarti.id)}><img src="/art/home/lamp.webp" alt="" /><span><strong>{hi ? aarti.title_hi : aarti.title_en}</strong><small>{t('h4_todayAarti')}</small></span><span className="h4-arrow" aria-hidden="true">›</span></button>}
 
