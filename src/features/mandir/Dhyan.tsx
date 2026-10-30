@@ -3,8 +3,8 @@ import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { audio, ringGhanti } from '../../lib/audio/bell'
 
-/** Sounds to meditate with, each a free recording (CC0, Freesound) looped softly. */
-export const SOUNDS = ['om', 'rain', 'river', 'sea', 'birds', 'none'] as const
+/** Sounds to meditate with, each from free Freesound recordings (credited in the profile), looped softly. */
+export const SOUNDS = ['bowl', 'bowlwater', 'om', 'none'] as const
 export type Sound = (typeof SOUNDS)[number]
 
 /** Keeps the phone awake while meditating. */

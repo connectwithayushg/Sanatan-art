@@ -18,7 +18,9 @@ const DIYA_HALO: [string, string, string] = ['rgba(255,170,70,.55)', 'rgba(200,9
 export function DhyanBar({ trigger = 0, bare = false }: { trigger?: number; bare?: boolean }) {
   const { t, i18n } = useTranslation()
   const hi = i18n.language === 'hi'
-  const [pick, setPick] = useStored<Pick | null>('dhyanPick', null)
+  const [stored, setPick] = useStored<Pick | null>('dhyanPick', null)
+  // A sound saved before the sounds changed (rain, river, sea, birds) falls back to Om.
+  const pick = stored && !SOUNDS.includes(stored.sound) ? { ...stored, sound: 'om' as Sound } : stored
   const [sheet, setSheet] = useState(false)
   const [on, setOn] = useState<Pick | null>(null)
   const previousTrigger = useRef(0)
