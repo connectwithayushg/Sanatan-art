@@ -297,6 +297,8 @@ h1, h2, h3 { text-wrap: balance; }
 .deity-tile > img { aspect-ratio: 1; object-position: center 22%; background: radial-gradient(ellipse at 50% 35%, #ffe9bb, #e6bb7e); }
 .deity-tile[aria-pressed=true] { outline: 2px solid #b34700; outline-offset: 2px; }
 .deity-photo { background: #fff1d9; object-fit: cover; object-position: top; }
+.deity-photo.deity-face { object-fit: contain; object-position: center bottom; }
+.deity-tile > img.deity-face { object-position: center bottom; }
 .library-search { display: flex; align-items: center; gap: 10px; min-height: 56px; padding: 6px 13px; background: #fff; border: 1px solid #e9dccc; border-radius: 15px; box-shadow: 0 2px 7px #623c1007; }
 .library-search:focus-within { outline: 2px solid #b34700; outline-offset: 2px; }
 .library-search input { min-width: 0; width: 100%; font-size: 1.05rem; outline: none; background: transparent; }

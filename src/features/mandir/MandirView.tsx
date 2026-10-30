@@ -32,19 +32,8 @@ const PATHS: Record<string, { to: string; hi: string; en: string }[]> = {
 }
 const MANTRA_PATH = { to: 'path/mantra', hi: 'रोज़ के मंत्र', en: 'Everyday mantras' }
 
-/** The halo behind each deity, in a colour of their own: [centre, middle, rays]. */
-export const HALO: Record<string, [string, string, string]> = {
-  ganesh: ['rgba(255,168,80,1)', 'rgba(235,96,32,.65)', 'rgba(200,70,20,.45)'], // sindoor
-  shiv: ['rgba(255,240,205,1)', 'rgba(232,196,140,.7)', 'rgba(176,140,90,.45)'], // chandan, vibhuti
-  hanuman: ['rgba(255,200,110,1)', 'rgba(244,140,40,.7)', 'rgba(206,110,20,.45)'], // saffron
-  vishnu: ['rgba(255,232,120,1)', 'rgba(242,196,40,.7)', 'rgba(200,150,10,.45)'], // pitambar
-  lakshmi: ['rgba(255,214,200,1)', 'rgba(240,130,150,.6)', 'rgba(214,150,40,.45)'], // kamal and gold
-  durga: ['rgba(255,170,150,1)', 'rgba(214,40,50,.6)', 'rgba(180,20,30,.45)'], // kumkum
-  krishna: ['rgba(255,230,130,1)', 'rgba(240,190,50,.65)', 'rgba(20,110,120,.4)'], // pitambar, mor-pankh
-  ram: ['rgba(255,226,140,1)', 'rgba(246,176,60,.65)', 'rgba(120,150,190,.4)'], // pitambar, megh-shyam
-  kali: ['rgba(255,190,170,1)', 'rgba(200,40,40,.6)', 'rgba(40,40,90,.45)'], // japa flower, night
-  khatu: ['rgba(255,214,150,1)', 'rgba(236,120,90,.6)', 'rgba(30,120,110,.4)'], // gende, gulab, mor-pankh
-}
+import { HALO } from '../../content/halo'
+export { HALO }
 
 /** The home mandir: choose a deity, light the diya, offer flowers, ring the bell, and count jap on a rudraksh mala. */
 export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: string, deity: string) => void; openPath?: (path: string, deity: string) => void; initial?: string }) {
@@ -227,7 +216,7 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
         {formSwitch && <div className="mandir-form-switch" role="group" aria-label={t(formSwitch.label)}>{[false, true].map((on) => <button key={String(on)} aria-pressed={formSwitch.on === on} onClick={() => { formSwitch.set(on); setPetals(0) }}>{t(on ? formSwitch.b : formSwitch.a)}</button>)}</div>}
         <p className="mandir-mantra">{deity.mantra}</p>
         <div className="mandir-quiet-actions"><button onClick={music} aria-pressed={playing}>{t('music')} · {t(playing ? 'pause' : 'play')}</button><button onClick={meditate}><DhyanIcon size={22} /> {t('dhyan')}</button></div>
-        <ul className="mandir-deity-list" aria-label={t('chooseDeity')}>{order.map(form).map((d) => <li key={d.id}><button onClick={() => pick(d.id)} aria-pressed={d.id === deity.id}><img src={d.face ?? d.thumb} alt="" /><span>{hi ? d.name_hi : d.name_en}</span></button></li>)}</ul>
+        <ul className="mandir-deity-list" aria-label={t('chooseDeity')}>{order.map(form).map((d) => <li key={d.id}><button onClick={() => pick(d.id)} aria-pressed={d.id === deity.id}><img src={d.face ?? d.thumb} alt="" style={HALO[d.id] ? { background: `radial-gradient(circle at 50% 40%, ${HALO[d.id][0]}, ${HALO[d.id][1]})` } : undefined} /><span>{hi ? d.name_hi : d.name_en}</span></button></li>)}</ul>
         <section id="mandir-mala" className="mala-card">
           <h2>{t('malaTitle')}</h2><div className="mala-targets">{TARGETS.map((n) => <button key={n} onClick={() => chooseTarget(n)} aria-pressed={n === target}>{n}</button>)}</div>
           <button onClick={count} aria-label={t('japCount', { count: japToday.count })} className="mala-counter"><Mala count={japToday.count} beads={target} malas={japToday.malas} /><span><strong>{japToday.count}</strong><small>/ {target}</small></span></button>
