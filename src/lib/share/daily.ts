@@ -2,7 +2,7 @@ import { ymd } from '../../content/festivals'
 import { load, save } from '../storage'
 
 /** A random id kept on this phone, so each person gets their own daily picks. */
-function phoneSeed(): string {
+export function phoneSeed(): string {
   let seed = load('cardSeed', '')
   if (!seed) {
     seed = Math.random().toString(36).slice(2, 10)

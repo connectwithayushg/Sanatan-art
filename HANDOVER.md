@@ -162,3 +162,14 @@ Layout 1 also supports direct taps on the large flower thali near the deity and 
 - The daily opener (DailyOpener, `dailyOpener.ts`) was REMOVED on Ayush's word ("mandir only, no other opener"). Cold launch still opens the Mandir (doors once a day). The `dailyOpenerDay` storage key is no longer written. Wallpaper save stays off.
 - Hero pictures: `public/art/home/hero.webp` is the original Option 4 Shiva; `hero-<id>.webp` for the other forms are crops of the approved Mandir shrine scenes (same ivory frame). Missing: no Shiv weekday variants, no new art was generated.
 - Removed: QuickHome, MonthCard (home calendar tile). New: `useSuprabhat` hook shared by the card page and Aaj; `nextEkadashi` in `lib/panchang/month.ts`.
+
+## Mandir artwork v2 (31 Oct 2026, NOT live)
+- New scenes for all 12 forms; Shiv ji and Hanuman ji change by weekday (Sunday to Saturday). Other ten are static until their weekday sets exist. See `docs/redesign/mandir-artwork-v2/README.md`.
+## Greeting maker, shared by Suprabhat and festival cards (30 Oct 2026, NOT live)
+- One component, `src/features/greet/GreetingMaker.tsx`, now powers the Suprabhat card (`SuprabhatCard.tsx`) and every festival card (`diwali/CardMaker.tsx` is a thin adapter, call sites unchanged).
+- Finished card on top; three optional controls (चित्र बदलें, संदेश बदलें, अपना नाम); one native share button (कार्ड साझा करें) and a secondary save. Canvas drawing is `src/lib/share/greeting.ts`.
+- Picture rotation (`src/lib/share/rotation.ts`, from the Codex handoff) stores in the new key `greetingRotation:v1`; a picture is committed only after a successful render. All earlier keys (`cardName`, `cardSeed`, `*CardPicture`) are kept.
+- Only existing approved card pictures are used. No Mandir art, no wallpapers, no new photographs.
+- Pending: Ayush must review the 6 new Suprabhat wishes (`src/content/greetingMessages.ts`); real-phone share test; wallpaper library and rights catalogue are not built.
+- Name sheet has a switch, Name only / Name and family (new key `cardWithFamily`, boolean). Card text: just "आयुष" or "आयुष और परिवार" (no "स्नेह सहित"). Card never shows an address.
+- Known, pre-existing: the festival tab strip overflows horizontally by 3 px at 320 px wide.

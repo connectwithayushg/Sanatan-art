@@ -88,7 +88,7 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
   const box = useCutBox(picture)
   const here = (offered_.day === today ? offered_.d : {})[deity.id] ?? {}
   const lit = !!here.lit
-  const scenePhoto = scene?.base ?? '/art/redesign/mandir-offerings-v2/empty.webp'
+  const scenePhoto = (scene && 'week' in scene ? scene.week?.[weekday] : undefined) ?? scene?.base ?? '/art/redesign/mandir-offerings-v2/empty.webp'
   const igniting = ignition === `${today}/${deity.id}`
   const mark = (patch: { lit?: boolean; flowers?: boolean }) => setOffered({ day: today, d: { ...(offered_.day === today ? offered_.d : {}), [deity.id]: { ...here, ...patch } } })
   const hinted = (k: 'diya' | 'bell' | 'bowl') => {
@@ -182,7 +182,7 @@ export function MandirView({ initial, openAarti, openPath }: { openAarti?: (id: 
     <main className="tab-page mandir-page">
       <header className="mandir-heading">
         <h1>{t('r_myMandir')}</h1>
-        <label className="mandir-current-deity"><span className="sr-only">{t('chooseDeity')}</span>{deity.id === 'shiv' ? <svg width="20" height="26" viewBox="0 0 24 30" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M12 2v26M5 4v6a7 7 0 0 0 14 0V4M3 5l2-3 2 3m10 0 2-3 2 3M10 5l2-3 2 3" /></svg> : <img src={deity.face ?? deity.thumb} alt="" />}<select value={deity.id} onChange={(e) => pick(e.target.value)}>{order.map((d) => <option key={d.id} value={d.id}>{hi ? d.name_hi : d.name_en}{d.id === todayId ? ` · ${t('cal_today')}` : ''}</option>)}</select><span aria-hidden="true">⌄</span></label>
+        <label className="mandir-current-deity"><span className="sr-only">{t('chooseDeity')}</span>{deity.id === 'shiv' ? <svg width="20" height="26" viewBox="0 0 24 30" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M12 2v26M5 4v6a7 7 0 0 0 14 0V4M3 5l2-3 2 3m10 0 2-3 2 3M10 5l2-3 2 3" /></svg> : <img src={deity.face ?? deity.thumb} alt="" />}<select value={deity.id} onChange={(e) => pick(e.target.value)}>{order.map((o) => { const d = o.id === deity.id ? deity : o; return <option key={d.id} value={d.id}>{hi ? d.name_hi : d.name_en}{d.id === todayId ? ` · ${t('cal_today')}` : ''}</option> })}</select><span aria-hidden="true">⌄</span></label>
       </header>
       <div ref={stage} className={`mandir-shrine shrine ${lit ? 'is-lit' : ''}`} style={{ '--h1': h1, '--h2': h2, '--hr': hr, '--flower-rise': `${sz.h * .63}px` } as CSSProperties}
         onTouchStart={(e) => { swipeFrom.current = [e.touches[0].clientX, e.touches[0].clientY] }}

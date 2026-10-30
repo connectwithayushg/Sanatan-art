@@ -1,10 +1,35 @@
 import { useTranslation } from 'react-i18next'
-import { ShareControls } from './ShareControls'
-import { useSuprabhat } from './useSuprabhat'
+import { DEITIES, deityOfDay } from '../../content/deities'
+import { SUPRABHAT_WISHES } from '../../content/greetingMessages'
+import { SUPRABHAT } from '../../content/suprabhat'
+import { CARD_PICTURES } from '../../lib/share/card'
+import { GreetingMaker, type GreetingMessage } from './GreetingMaker'
 
-/** Sharing lives on this detail page, reached from the quiet home entry. */
+/** Groups that hold several pictures of one deity, so the daily card can change from week to week. */
+const DEITY_GROUPS = ['ganesh', 'krishna', 'lakshmi']
+
+/** Good morning card: today's deity photograph, a short wish, and the deity's own well-known stuti as another message. */
 export function SuprabhatCard() {
   const { t } = useTranslation()
-  const { deity, title, name, setName, preview, file, notice, hi } = useSuprabhat()
-  return <main className="tab-page greeting-detail"><button className="back-link" onClick={() => history.back()}>‹ {t('back')}</button><h1>{t('sup_heading')}</h1><div className="morning-preview">{preview ? <img src={preview} alt={`${title} · ${hi ? deity.name_hi : deity.name_en}`} /> : <p role="status">{t('loading')}</p>}</div><label><span>{t('sup_nameLabel')}</span><input value={name} maxLength={40} autoComplete="off" onChange={(e) => setName(e.target.value)} placeholder={t('namePlaceholder')} className="mt-2 block min-h-14 w-full rounded-xl border border-[#dcc4a2] bg-white px-4 text-xl" /></label><ShareControls file={file} title={title} />{notice && <p role="status">{notice}</p>}</main>
+  const india = new Date(Date.now() + 330 * 60000)
+  const deity = deityOfDay(india.getUTCDay())
+  const own = CARD_PICTURES.find((p) => p.src === (deity.card ?? DEITIES[0].card))
+  const pool = own && DEITY_GROUPS.includes(own.group) ? CARD_PICTURES.filter((p) => p.group === own.group).map((p) => p.id) : own ? [own.id] : undefined
+  const words = SUPRABHAT[deity.id] ?? SUPRABHAT.ganesh
+  const messages: GreetingMessage[] = [
+    ...SUPRABHAT_WISHES,
+    { hi: words.verse.join('\n'), en: words.verse.join('\n'), blessing: words.close },
+  ]
+  return (
+    <GreetingMaker
+      heading={{ title: t('gm_suprabhatHeading'), subtitle: t('gm_suprabhatSub') }}
+      title={{ hi: 'सुप्रभात', en: 'Suprabhat' }}
+      messages={messages}
+      groups={['devta', 'ganesh', 'krishna', 'lakshmi', 'diya']}
+      defaultPicture={own?.id}
+      pool={pool}
+      fileName={`suprabhat-${deity.id}.png`}
+      storeKey="suprabhatCardPicture"
+    />
+  )
 }
